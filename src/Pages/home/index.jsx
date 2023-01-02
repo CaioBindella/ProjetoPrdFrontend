@@ -1,16 +1,22 @@
 import React from 'react';
-import { Container, Button } from './style';
-import { Text } from 'react-native';
+import { Container, Button, Text } from './Style';
+import { StatusBar } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 
 const Home = () => {
 	return (
-		<Text>Oi</Text>
-		// <Container>
-		// 	{/* <Button>
-		// 		<Text>Cadastrar Aterro</Text>
-		// 	</Button> */}
-		// 	{/* <Button title='Meus Aterro' /> */}
-		// </Container>
+		// <Text>Oi</Text>
+		<NavigationContainer>
+			{
+				<Container>
+					<StatusBar />
+					<Button onPress={() => navigation.navigate('Cadastro')}>
+						<Text>Cadastrar Aterro</Text>
+					</Button>
+					{/* <Button title='Meus Aterro' /> */}
+				</Container>
+			}
+		</NavigationContainer>
 	);
 };
 

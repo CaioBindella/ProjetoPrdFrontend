@@ -10,10 +10,19 @@ export const Container = styled.View`
 `;
 
 export const Button = styled.TouchableOpacity`
-    color: red;
+    background-color: #381704;
+    width: 60%;
+    height: 30px;
+    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
+    
     /* margin-top: 5%; */
 `;
 
 export const Text = styled.Text`
-
+    color: #fff;
+    font-size: 20px;
+    /* font-family: Inter;
+    font-weight: 3300; */
 `;
