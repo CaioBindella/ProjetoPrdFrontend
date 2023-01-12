@@ -47,6 +47,8 @@ const Cadastro = () => {
 	return (
 		<ScrollView style={{ width: '100%', marginBottom: 100 }}>
 			<Container>
+
+
 				<InputGroup>
 					<Text>Aterro: </Text>
 					<Input onChangeText={setAterro} value={aterro} />

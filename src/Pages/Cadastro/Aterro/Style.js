@@ -1,6 +1,5 @@
 import styled from 'styled-components/native'
 
-
 export const Container = styled.View`
     background-color: #fff;
     width: 100%;
@@ -8,7 +7,6 @@ export const Container = styled.View`
     align-items: center;
     justify-content: center;
 `;
-
 
 export const Text = styled.Text`
     color: #000;

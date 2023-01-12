@@ -6,7 +6,7 @@ export const Container = styled.View`
 
 export const Header = styled.View`
 	background-color: #381704;
-	height: 40px;
+	height: 50px;
 	align-items: flex-end;
 	justify-content: center;
 	border-bottom-right-radius: 8px;
@@ -27,7 +27,7 @@ export const Button = styled.TouchableOpacity`
 	border: 3px solid #736262;
 	justify-content: center;
 	align-items: center;
-	border: 1px solid #736262;
+	border: 2px solid #736262;
 	margin-top: 30px;
 `;
 
@@ -65,4 +65,5 @@ export const SubTitle = styled.View`
 
 export const SubTitleText = styled.Text`
 	font-size: 12px;
+	color: #908A8A;
 `;

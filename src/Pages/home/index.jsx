@@ -44,7 +44,7 @@ const Home = ({ navigation }) => {
 
 				<ButtonsHome>
 
-					<Button onPress={() => navigation.navigate('Cadastro')}>
+					<Button onPress={() => navigation.navigate('CadastroMunicipio')}>
 						<Text>Cadastrar Aterro</Text>
 					</Button>
 
