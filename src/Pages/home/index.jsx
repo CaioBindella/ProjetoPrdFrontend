@@ -1,13 +1,58 @@
 import React from 'react';
-import { Container, Button, Text } from './Style';
-import { StatusBar } from 'react-native';
-import Cadastro from '../Cadastro/Index';
+import {
+	Container,
+	Button,
+	Text,
+	Title,
+	ButtonsHome,
+	Header,
+	Main,
+	TextView,
+	SubTitle,
+	SubTitleText,
+} from './Style';
+import { StatusBar, Image, View } from 'react-native';
+import { EvilIcons } from '@expo/vector-icons';
 
-const Home = () => {
+const Home = ({ navigation }) => {
 	return (
 		<Container>
 			<StatusBar />
-			<Cadastro />
+
+			<Header>
+				<EvilIcons name='gear' size={35} color='white' />
+			</Header>
+
+			<Main>
+				<Image
+					style={{ width: 150, height: 150 }}
+					source={require('../../Assets/heavy-machinery.png')}
+				/>
+
+
+				<TextView>
+
+					<Title>ISOAS</Title>
+
+					<SubTitle>
+						<SubTitleText>
+							índice de sustentabilidade operacional de aterros sanitários
+						</SubTitleText>
+					</SubTitle>
+
+				</TextView>
+
+				<ButtonsHome>
+
+					<Button onPress={() => navigation.navigate('Cadastro')}>
+						<Text>Cadastrar Aterro</Text>
+					</Button>
+
+					<Button onPress={() => {}}>
+						<Text>Meus Aterros</Text>
+					</Button>
+				</ButtonsHome>
+			</Main>
 		</Container>
 	);
 };

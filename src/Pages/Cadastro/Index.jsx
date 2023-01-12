@@ -13,32 +13,37 @@ const Cadastro = () => {
 	const [Latitude, setLatitude] = useState(40);
 	const [Longitude, setLongitude] = useState(40);
 
-	function enviaAterro() {
+	async function enviaAterro() {
 		const DadosAterro = {
 			Nome: aterro,
 			Endereco: endereco,
 			Bacia_Hidrografica: baciaHidrografica,
-			Recebimento_Bruto: recebimentoBruto,
-			Recebimento_Gerado: recebimentoGerado,
+			Recebimento_Bruto: parseFloat(recebimentoBruto),
+			Recebimento_Gerado: parseFloat(recebimentoGerado),
 			Condicao_Climatica: CondicaoClimatica,
-			Longitude: Longitude,
-			Latitude: Latitude,
+			Longitude: parseFloat(Longitude),
+			Latitude: parseFloat(Latitude),
 		};
-		// console.log(DadosAterro);
-		// .get('http://10.0.10.143:3030/aterros')
-		axios
-			.post('http://10.0.10.143:3030/aterro', DadosAterro,
-			// {headers:{
-			// 	"Access-Control-Allow-Origin": "*",
-			// 	"Access-Control-Allow-Headers": "Authorization",
-			// 	"Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE" ,
-			// 	// "Content-Type": "application/json;charset=UTF-8"
-			// 	'Content-Type': 'application/x-www-form-urlencoded',
-			// }},
-			)
-			.then((response) => console.log(response))
-			.catch(error => console.log(JSON.stringify(error)));
+
+		if (
+			Nome &&
+			Endereco &&
+			Bacia_Hidrografica &&
+			Recebimento_Bruto &&
+			Recebimento_Gerado &&
+			Condicao_Climatica &&
+			Longitude &&
+			Latitude
+		) {
+			await axios
+				.post('http://10.0.10.143:3030/aterro', DadosAterro)
+				.then((response) => console.log(response))
+				.catch((error) => console.log(JSON.stringify(error)));
+		} else {
+			alert('Há campos vazios');
+		}
 	}
+
 	return (
 		<ScrollView style={{ width: '100%', marginBottom: 100 }}>
 			<Container>
