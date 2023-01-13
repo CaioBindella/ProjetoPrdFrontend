@@ -1,20 +1,35 @@
 import React, { useState } from 'react';
-import { Container, Text, InputGroup, Input, Button } from './Style';
+import {
+	Container,
+	Text,
+	InputGroup,
+	Input,
+	Button,
+	Header,
+	HeaderTitle,
+	Title,
+	ViewTitle,
+	ButtonGroup,
+	TextButton,
+} from './Style';
+
 import { ScrollView } from 'react-native';
 import axios from 'axios';
 
-const Cadastro = () => {
-	const [aterro, setAterro] = useState('nsei');
-	const [endereco, setEndereco] = useState('nseis');
-	const [baciaHidrografica, setBaciaHidrografica] = useState('teste');
-	const [recebimentoBruto, setRecebimentoBruto] = useState(50);
-	const [recebimentoGerado, setRecebimentoGerado] = useState(50);
-	const [CondicaoClimatica, setCondicaoClimatica] = useState('chuvoso');
-	const [Latitude, setLatitude] = useState(40);
-	const [Longitude, setLongitude] = useState(40);
+import { Entypo } from '@expo/vector-icons';
 
-	async function enviaAterro() {
-		const DadosAterro = {
+const Cadastro = ({ navigation }) => {
+	const [aterro, setAterro] = useState('');
+	const [endereco, setEndereco] = useState('');
+	const [baciaHidrografica, setBaciaHidrografica] = useState('');
+	const [recebimentoBruto, setRecebimentoBruto] = useState(0);
+	const [recebimentoGerado, setRecebimentoGerado] = useState(0);
+	const [CondicaoClimatica, setCondicaoClimatica] = useState('');
+	const [Latitude, setLatitude] = useState(0);
+	const [Longitude, setLongitude] = useState(0);
+
+	async function createAterro() {
+		const data = {
 			Nome: aterro,
 			Endereco: endereco,
 			Bacia_Hidrografica: baciaHidrografica,
@@ -26,18 +41,21 @@ const Cadastro = () => {
 		};
 
 		if (
-			Nome &&
-			Endereco &&
-			Bacia_Hidrografica &&
-			Recebimento_Bruto &&
-			Recebimento_Gerado &&
-			Condicao_Climatica &&
+			aterro &&
+			endereco &&
+			baciaHidrografica &&
+			recebimentoBruto &&
+			recebimentoGerado &&
+			CondicaoClimatica &&
 			Longitude &&
 			Latitude
 		) {
 			await axios
-				.post('http://10.0.10.143:3030/aterro', DadosAterro)
-				.then((response) => console.log(response))
+				.post('http://10.0.10.143:3030/aterro', data)
+				.then((response) => {
+					console.log(response);
+					navigation.navigate('Profissional');
+				})
 				.catch((error) => console.log(JSON.stringify(error)));
 		} else {
 			alert('Há campos vazios');
@@ -45,23 +63,42 @@ const Cadastro = () => {
 	}
 
 	return (
-		<ScrollView style={{ width: '100%', marginBottom: 100 }}>
+		<ScrollView
+			style={{
+				width: '100%',
+			}}>
 			<Container>
+				<Header>
+					<HeaderTitle>Cadastrar Aterro</HeaderTitle>
+				</Header>
 
+				<ViewTitle>
+					<Title>Preencha os dados referente ao Aterro</Title>
+					<Entypo name='home' size={46} color='black' />
+				</ViewTitle>
 
 				<InputGroup>
 					<Text>Aterro: </Text>
-					<Input onChangeText={setAterro} value={aterro} />
+					<Input
+						placeholder='Digite aqui o nome do aterro'
+						onChangeText={setAterro}
+						value={aterro}
+					/>
 				</InputGroup>
 
 				<InputGroup>
 					<Text>Endereço: </Text>
-					<Input onChangeText={setEndereco} value={endereco} />
+					<Input
+						placeholder='Digite aqui o endereço do aterro'
+						onChangeText={setEndereco}
+						value={endereco}
+					/>
 				</InputGroup>
 
 				<InputGroup>
 					<Text>Bacia Hidrografica: </Text>
 					<Input
+						placeholder='Digite aqui a bacia hidrográfica'
 						onChangeText={setBaciaHidrografica}
 						value={baciaHidrografica}
 					/>
@@ -69,12 +106,17 @@ const Cadastro = () => {
 
 				<InputGroup>
 					<Text>Recebimento Bruto: </Text>
-					<Input onChangeText={setRecebimentoBruto} value={recebimentoBruto} />
+					<Input
+						placeholder='Digite aqui o recebimento bruto'
+						onChangeText={setRecebimentoBruto}
+						value={recebimentoBruto}
+					/>
 				</InputGroup>
 
 				<InputGroup>
 					<Text>Recebimento Gerado: </Text>
 					<Input
+						placeholder='Digite aqui o recebimento gerado'
 						onChangeText={setRecebimentoGerado}
 						value={recebimentoGerado}
 					/>
@@ -83,6 +125,7 @@ const Cadastro = () => {
 				<InputGroup>
 					<Text>Condição Climática: </Text>
 					<Input
+						placeholder='Digite aqui a condição climática'
 						onChangeText={setCondicaoClimatica}
 						value={CondicaoClimatica}
 					/>
@@ -90,16 +133,33 @@ const Cadastro = () => {
 
 				<InputGroup>
 					<Text>Longitude: </Text>
-					<Input onChangeText={setLongitude} value={Longitude} />
+					<Input
+						placeholder='Digite aqui a longitude'
+						onChangeText={setLongitude}
+						value={Longitude}
+					/>
 				</InputGroup>
 
 				<InputGroup>
 					<Text>Latitude: </Text>
-					<Input onChangeText={setLatitude} value={Latitude} />
+					<Input
+						placeholder='Digite aqui a latitude'
+						onChangeText={setLatitude}
+						value={Latitude}
+					/>
 				</InputGroup>
-				<Button>
-					<Text onPress={() => enviaAterro()}>Enviar</Text>
-				</Button>
+
+				<ButtonGroup>
+					<Button onPress={() => navigation.goBack()}>
+						<TextButton>Retornar</TextButton>
+					</Button>
+					<Button
+						onPress={() => navigation.navigate('Profissional')}
+						// onPress={() => createAterro()}
+					>
+						<TextButton>Avançar</TextButton>
+					</Button>
+				</ButtonGroup>
 			</Container>
 		</ScrollView>
 	);

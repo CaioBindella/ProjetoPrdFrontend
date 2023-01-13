@@ -1,8 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Home from './src/Pages/home/Index';
-import Cadastro from './src/Pages/Cadastro/Aterro/Index';
+import Aterro from './src/Pages/Cadastro/Aterro/Index';
 import CadastroMunicipio from './src/Pages/Cadastro/Municipio/Index';
+import Profissional from './src/Pages/Cadastro/Profissional/Index';
+import Organizacao from './src/Pages/Cadastro/Organizacao/Index';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import { useFonts } from 'expo-font';
@@ -27,10 +30,24 @@ export default function App() {
 					component={Home}
 					options={{ headerShown: false }}
 				/>
-				<Stack.Screen name='Cadastro' component={Cadastro} />
+				<Stack.Screen
+					name='Aterro'
+					component={Aterro}
+					options={{ headerShown: false }}
+				/>
 				<Stack.Screen
 					name='CadastroMunicipio'
 					component={CadastroMunicipio}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='Profissional'
+					component={Profissional}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='Organizacao'
+					component={Organizacao}
 					options={{ headerShown: false }}
 				/>
 			</Stack.Navigator>
