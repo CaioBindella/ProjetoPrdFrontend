@@ -6,6 +6,7 @@ import CadastroMunicipio from './src/Pages/Cadastro/Municipio/Index';
 import Profissional from './src/Pages/Cadastro/Profissional/Index';
 import Organizacao from './src/Pages/Cadastro/Organizacao/Index';
 import MeusAterros from './src/Pages/MeusAterros/Index';
+import UmAterro from './src/Pages/UmAterro/Index';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -54,7 +55,12 @@ export default function App() {
 				<Stack.Screen
 					name='MeusAterros'
 					component={MeusAterros}
-					// options={{ headerShown: false }}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='UmAterro'
+					component={UmAterro}
+					options={{ headerShown: false }}
 				/>
 			</Stack.Navigator>
 		</NavigationContainer>

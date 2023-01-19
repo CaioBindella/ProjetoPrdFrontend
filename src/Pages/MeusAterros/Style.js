@@ -27,3 +27,4 @@ export const Aterro = styled.View`
 export const Title = styled.Text`
 	font-weight: 700;
 `;
+

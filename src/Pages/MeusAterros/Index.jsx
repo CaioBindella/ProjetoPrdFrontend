@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { ContainerAterros, Aterro, Title, Container } from './Style';
+import {
+	ContainerAterros,
+	Aterro,
+	Title,
+	Container,
+} from './Style';
 import { Feather } from '@expo/vector-icons';
 import Header from '../Components/Header/Index';
 import {
 	StatusBar,
-	Image,
 	View,
 	Text,
 	FlatList,
-	ScrollView,
+	TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
+import { Touchable } from 'react-native';
 
-const Item = ({ Endereco, Latitude, Longitude, Nome }) => (
-	<ContainerAterros>
-		<Feather name='home' size={44} color='black' />
-		<Aterro>
-			<Title>{Nome}</Title>
-			<Text>Endereço: {Endereco}</Text>
-			<Text>Latitude: {Latitude}</Text>
-			<Text>Longitude: {Longitude}</Text>
-		</Aterro>
-	</ContainerAterros>
+const Item = ({ Endereco, Latitude, Longitude, Nome,item,navigation }) => (
+	<TouchableOpacity onPress={()=> navigation.navigate('UmAterro',{item: item})}>
+		<ContainerAterros>
+			<Feather name='home' size={44} color='black' />
+			<Aterro>
+				<Title>{Nome}</Title>
+				<Text>Endereço: {Endereco}</Text>
+				<Text>Latitude: {Latitude}</Text>
+				<Text>Longitude: {Longitude}</Text>
+			</Aterro>
+		</ContainerAterros>
+	</TouchableOpacity>
 );
 
 const MeusAterros = ({ navigation }) => {
@@ -39,6 +46,7 @@ const MeusAterros = ({ navigation }) => {
 		<Container>
 			<StatusBar />
 			<Header />
+
 			<FlatList
 				data={data}
 				renderItem={({ item }) => (
@@ -47,6 +55,8 @@ const MeusAterros = ({ navigation }) => {
 						Nome={item.Nome}
 						Latitude={item.Latitude}
 						Longitude={item.Longitude}
+						item={item}
+						navigation={navigation}
 					/>
 				)}
 				keyExtractor={(item) => item.Cod_Aterro}

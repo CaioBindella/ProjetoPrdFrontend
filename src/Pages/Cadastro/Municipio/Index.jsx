@@ -13,7 +13,7 @@ import {
 	ButtonGroup,
 	TextButton,
 } from './Style';
-import { StatusBar, Image, View, Text } from 'react-native';
+import { StatusBar, Image, View, Text,ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import axios from 'axios';
 
@@ -33,13 +33,7 @@ const CadastroMunicipio = ({ navigation }) => {
 			Precip_Med_Anual: parseFloat(precipMedAnual),
 		};
 
-		if (
-			nome &&
-			nome2 &&
-			tamPop &&
-			taxGerPerCap &&
-			precipMedAnual
-		) {
+		if (nome && nome2 && tamPop && taxGerPerCap && precipMedAnual) {
 			await axios
 				.post('http://10.0.10.143:3030/municipio', data)
 				.then((response) => {
@@ -57,70 +51,70 @@ const CadastroMunicipio = ({ navigation }) => {
 			<Header>
 				<HeaderTitle>Cadastrar Aterro</HeaderTitle>
 			</Header>
+			<ScrollView>
+				<ViewTitle>
+					<Title>Preencha os dados referente ao Município</Title>
+					<FontAwesome5 name='city' size={50} color='black' />
+				</ViewTitle>
 
-			<ViewTitle>
-				<Title>Preencha os dados referente ao Município</Title>
-				<FontAwesome5 name='city' size={50} color='black' />
-			</ViewTitle>
+				<ContainerInputGroup>
+					<InputGroup>
+						<Text>Município 1 </Text>
+						<Input
+							placeholder='Digite aqui o município do aterro'
+							onChangeText={setNome}
+							value={nome}
+						/>
+					</InputGroup>
 
-			<ContainerInputGroup>
-				<InputGroup>
-					<Text>Município 1 </Text>
-					<Input
-						placeholder='Digite aqui o município do aterro'
-						onChangeText={setNome}
-						value={nome}
-					/>
-				</InputGroup>
+					<InputGroup>
+						<Text>Município 2 (opcional) </Text>
+						<Input
+							placeholder='Digite aqui o município do aterro'
+							onChangeText={setNome2}
+							value={nome2}
+						/>
+					</InputGroup>
 
-				<InputGroup>
-					<Text>Município 2 (opcional) </Text>
-					<Input
-						placeholder='Digite aqui o município do aterro'
-						onChangeText={setNome2}
-						value={nome2}
-					/>
-				</InputGroup>
+					<InputGroup>
+						<Text>Tamanho da População </Text>
+						<Input
+							placeholder='Digite aqui o Tamanho da população local'
+							onChangeText={setTamPop}
+							value={tamPop}
+						/>
+					</InputGroup>
 
-				<InputGroup>
-					<Text>Tamanho da População </Text>
-					<Input
-						placeholder='Digite aqui o Tamanho da população local'
-						onChangeText={setTamPop}
-						value={tamPop}
-					/>
-				</InputGroup>
+					<InputGroup>
+						<Text>Taxa de Geração PerCapita </Text>
+						<Input
+							placeholder='Digite aqui a taxa de Geração PerCapita'
+							onChangeText={setTaxGerPerCap}
+							value={taxGerPerCap}
+						/>
+					</InputGroup>
 
-				<InputGroup>
-					<Text>Taxa de Geração PerCapita </Text>
-					<Input
-						placeholder='Digite aqui a taxa de Geração PerCapita'
-						onChangeText={setTaxGerPerCap}
-						value={taxGerPerCap}
-					/>
-				</InputGroup>
+					<InputGroup>
+						<Text>Taxa de Precipitação Anual </Text>
+						<Input
+							placeholder='Digite aqui a taxa de Precipitação Anual'
+							onChangeText={setPrecipMedAnual}
+							value={precipMedAnual}
+						/>
+					</InputGroup>
+				</ContainerInputGroup>
 
-				<InputGroup>
-					<Text>Taxa de Precipitação Anual </Text>
-					<Input
-						placeholder='Digite aqui a taxa de Precipitação Anual'
-						onChangeText={setPrecipMedAnual}
-						value={precipMedAnual}
-					/>
-				</InputGroup>
-			</ContainerInputGroup>
-
-			<ButtonGroup>
-				<Button onPress={() => navigation.goBack()}>
-					<TextButton>Retornar</TextButton>
-				</Button>
-				<Button
-					// onPress={() => navigation.navigate('Aterro')}
-					onPress={() => createMunicipio()}
-				>
-					<TextButton>Avançar</TextButton>
-				</Button>
-			</ButtonGroup>
+				<ButtonGroup>
+					<Button onPress={() => navigation.goBack()}>
+						<TextButton>Retornar</TextButton>
+					</Button>
+					<Button
+						// onPress={() => navigation.navigate('Aterro')}
+						onPress={() => createMunicipio()}>
+						<TextButton>Avançar</TextButton>
+					</Button>
+				</ButtonGroup>
+			</ScrollView>
 		</Container>
 	);
 };
