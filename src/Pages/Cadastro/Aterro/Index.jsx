@@ -154,8 +154,8 @@ const Cadastro = ({ navigation }) => {
 						<TextButton>Retornar</TextButton>
 					</Button>
 					<Button
-						onPress={() => navigation.navigate('Profissional')}
-						// onPress={() => createAterro()}
+						// onPress={() => navigation.navigate('Profissional')}
+						onPress={() => createAterro()}
 					>
 						<TextButton>Avançar</TextButton>
 					</Button>

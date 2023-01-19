@@ -115,8 +115,8 @@ const CadastroMunicipio = ({ navigation }) => {
 					<TextButton>Retornar</TextButton>
 				</Button>
 				<Button
-					onPress={() => navigation.navigate('Aterro')}
-					// onPress={() => createMunicipio()}
+					// onPress={() => navigation.navigate('Aterro')}
+					onPress={() => createMunicipio()}
 				>
 					<TextButton>Avançar</TextButton>
 				</Button>

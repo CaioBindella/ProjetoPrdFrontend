@@ -163,8 +163,8 @@ const Profissional = ({ navigation }) => {
 					<TextButton>Retornar</TextButton>
 				</Button>
 				<Button 
-                onPress={() => navigation.navigate('Organizacao')}
-                // onPress={() => createProfissional()}
+                // onPress={() => navigation.navigate('Organizacao')}
+                onPress={() => createProfissional()}
                 >
 					<TextButton>Avançar</TextButton>
 				</Button>
