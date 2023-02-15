@@ -10,7 +10,7 @@ import {
 	TextView,
 	SubTitle,
 	SubTitleText,
-} from './Style';
+} from './style';
 import { StatusBar, Image, View } from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
 

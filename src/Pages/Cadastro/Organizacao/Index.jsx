@@ -8,7 +8,7 @@ import {
 	ContainerInputGroup,
 	InputGroup,
 	Input,
-} from './Style';
+} from './style';
 
 import { ScrollView, Text } from 'react-native';
 import axios from 'axios';

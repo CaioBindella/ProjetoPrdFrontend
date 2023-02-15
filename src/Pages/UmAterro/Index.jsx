@@ -12,7 +12,7 @@ import {
 	ModalButtonGroup,
 	ModalButton,
 	ModalButtonText,
-} from './Style';
+} from './style';
 import { Feather } from '@expo/vector-icons';
 import Header from '../Components/Header/Index';
 import {

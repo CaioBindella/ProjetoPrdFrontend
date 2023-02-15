@@ -12,7 +12,7 @@ import {
 	Button,
 	ButtonGroup,
 	TextButton,
-} from './Style';
+} from './style';
 import { StatusBar, Image, View, Text,ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import axios from 'axios';

@@ -11,7 +11,7 @@ import {
 	ViewTitle,
 	ButtonGroup,
 	TextButton,
-} from './Style';
+} from './style';
 
 import { ScrollView } from 'react-native';
 import axios from 'axios';

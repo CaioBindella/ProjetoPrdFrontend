@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Home from './src/Pages/home/Index';
-import Aterro from './src/Pages/Cadastro/Aterro/Index';
-import CadastroMunicipio from './src/Pages/Cadastro/Municipio/Index';
-import Profissional from './src/Pages/Cadastro/Profissional/Index';
-import Organizacao from './src/Pages/Cadastro/Organizacao/Index';
-import MeusAterros from './src/Pages/MeusAterros/Index';
-import UmAterro from './src/Pages/UmAterro/Index';
+import Home from './src/Pages/home';
+import Aterro from './src/Pages/Cadastro/Aterro';
+import CadastroMunicipio from './src/Pages/Cadastro/Municipio';
+import Profissional from './src/Pages/Cadastro/Profissional';
+import Organizacao from './src/Pages/Cadastro/Organizacao';
+import MeusAterros from './src/Pages/MeusAterros';
+import UmAterro from './src/Pages/UmAterro';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
