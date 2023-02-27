@@ -11,9 +11,10 @@ import {
 	ViewTitle,
 	ButtonGroup,
 	TextButton,
-} from './style';
+} from './Style';
 
 import { ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 import { Entypo } from '@expo/vector-icons';
@@ -50,13 +51,18 @@ const Cadastro = ({ navigation }) => {
 			Longitude &&
 			Latitude
 		) {
-			await axios
-				.post('http://10.0.10.143:3030/aterro', data)
-				.then((response) => {
-					console.log(response);
-					navigation.navigate('Profissional');
-				})
-				.catch((error) => console.log(JSON.stringify(error)));
+			// await axios
+			// 	.post('http://10.0.10.143:3030/aterro', data)
+			// 	.then((response) => {
+			// 		console.log(response);
+			// 		navigation.navigate('Profissional');
+			// 	})
+			// 	.catch((error) => console.log(JSON.stringify(error)));
+
+			const stringData = JSON.stringify(data)
+
+			await AsyncStorage.setItem('dataAterro', stringData)
+			navigation.navigate('Profissional')
 		} else {
 			alert('Há campos vazios');
 		}

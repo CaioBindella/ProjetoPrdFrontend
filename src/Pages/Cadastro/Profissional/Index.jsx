@@ -8,9 +8,10 @@ import {
 	ContainerInputGroup,
 	InputGroup,
 	Input,
-} from './style';
+} from './Style';
 
 import { ScrollView, Text } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -55,13 +56,18 @@ const Profissional = ({ navigation }) => {
 			emailAvaliador &&
 			contatoAvaliador
 		) {
-			await axios
-				.post('http://10.0.10.143:3030/profissional', data)
-				.then((response) => {
-					console.log(response);
-					navigation.navigate('Organizacao');
-				})
-				.catch((error) => console.log(JSON.stringify(error)));
+			// await axios
+			// 	.post('http://10.0.10.143:3030/profissional', data)
+			// 	.then((response) => {
+			// 		console.log(response);
+			// 		navigation.navigate('Organizacao');
+			// 	})
+			// 	.catch((error) => console.log(JSON.stringify(error)));
+
+			const stringData = JSON.stringify(data)
+
+			await AsyncStorage.setItem('dataProfissionais', stringData)
+			navigation.navigate('Organizacao');
 		} else {
 			alert('Há campos vazios');
 		}

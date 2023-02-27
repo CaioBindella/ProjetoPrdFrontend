@@ -12,10 +12,11 @@ import {
 	Button,
 	ButtonGroup,
 	TextButton,
-} from './style';
+} from './Style';
 import { StatusBar, Image, View, Text,ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// import axios from 'axios';
 
 const CadastroMunicipio = ({ navigation }) => {
 	const [nome, setNome] = useState('');
@@ -34,13 +35,17 @@ const CadastroMunicipio = ({ navigation }) => {
 		};
 
 		if (nome && nome2 && tamPop && taxGerPerCap && precipMedAnual) {
-			await axios
-				.post('http://10.0.10.143:3030/municipio', data)
-				.then((response) => {
-					console.log(response);
-					navigation.navigate('Aterro');
-				})
-				.catch((error) => console.log(JSON.stringify(error)));
+			// await axios
+			// 	.post('http://10.0.10.143:3030/municipio', data)
+			// 	.then((response) => {
+			// 		console.log(response);
+			// 		navigation.navigate('Aterro');
+			// 	})
+			// 	.catch((error) => console.log(JSON.stringify(error)));
+			const stringData = JSON.stringify(data)
+
+			await AsyncStorage.setItem('dataMunicipio', stringData)
+			navigation.navigate('Aterro');
 		} else {
 			alert('Há campos vazios');
 		}

@@ -8,10 +8,11 @@ import {
 	ContainerInputGroup,
 	InputGroup,
 	Input,
-} from './style';
+} from './Style';
 
 import { ScrollView, Text } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -35,13 +36,18 @@ const Organizacao = ({ navigation }) => {
 		};
 
 		if (nome && CNPJ && contato && licencPrev && licencDeOperacao) {
-			await axios
-				.post('http://10.0.10.143:3030/organizacao', data)
-				.then((response) => {
-					console.log(response);
-					navigation.navigate('Home');
-				})
-				.catch((error) => console.log(JSON.stringify(error)));
+			// await axios
+			// 	.post('http://10.0.10.143:3030/organizacao', data)
+			// 	.then((response) => {
+			// 		console.log(response);
+			// 		navigation.navigate('Home');
+			// 	})
+			// 	.catch((error) => console.log(JSON.stringify(error)));
+			const stringData = JSON.stringify(data)
+
+			await AsyncStorage.setItem('dataOrganizacao', stringData)
+			navigation.navigate('Home')
+
 		} else {
 			alert('Há campos vazios');
 		}

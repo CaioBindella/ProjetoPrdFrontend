@@ -4,7 +4,7 @@ import {
 	Aterro,
 	Title,
 	Container,
-} from './style';
+} from './Style';
 import { Feather } from '@expo/vector-icons';
 import Header from '../Components/Header/Index';
 import {
@@ -13,8 +13,11 @@ import {
 	Text,
 	FlatList,
 	TouchableOpacity,
+	ScrollView,
 } from 'react-native';
+
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Touchable } from 'react-native';
 
 const Item = ({ Endereco, Latitude, Longitude, Nome,item,navigation }) => (
@@ -33,35 +36,66 @@ const Item = ({ Endereco, Latitude, Longitude, Nome,item,navigation }) => (
 
 const MeusAterros = ({ navigation }) => {
 	const [data, setData] = useState();
-	useEffect(() => {
-		axios
-			.get('http://10.0.10.143:3030/aterros')
-			.then((response) => {
-				setData(response.data);
+	useEffect( () => {
+		// axios
+		// 	.get('http://10.0.10.143:3030/aterros')
+		// 	.then((response) => {
+		// 		setData(response.data);
+		// 	})
+		// 	.catch((error) => console.log(JSON.stringify(error)));
+
+		// const dataAterro = await AsyncStorage.getItem('dataAterro')
+		// console.log(dataAterro)
+
+		const loadData = async () =>{
+			await AsyncStorage.getItem('dataAterro').then((valor) => {
+			  setData(JSON.parse(valor))
 			})
-			.catch((error) => console.log(JSON.stringify(error)));
+		  }
+	
+		loadData()
 	}, []);
+
 
 	return (
 		<Container>
 			<StatusBar />
 			<Header />
 
-			<FlatList
-				data={data}
-				renderItem={({ item }) => (
+			<ScrollView>
+				{data ?
 					<Item
-						Endereco={item.Endereco}
-						Nome={item.Nome}
-						Latitude={item.Latitude}
-						Longitude={item.Longitude}
-						item={item}
+						Endereco={data.Endereco}
+						Nome={data.Nome}
+						Latitude={data.Latitude}
+						Longitude={data.Longitude}
+						item={data}
 						navigation={navigation}
 					/>
-				)}
-				keyExtractor={(item) => item.Cod_Aterro}
-				showsVerticalScrollIndicator={false}
-			/>
+					:
+					null
+				}
+			</ScrollView>
+
+			{/* {data ?
+				<FlatList
+					data={data}
+					renderItem={({ item }) => (
+						<Item
+							Endereco={item.Endereco}
+							Nome={item.Nome}
+							Latitude={item.Latitude}
+							Longitude={item.Longitude}
+							item={item}
+							navigation={navigation}
+						/>
+					)}
+					keyExtractor={(item) => item.Nome}
+					showsVerticalScrollIndicator={false}
+				/>
+				:
+				null
+			} */}
 		</Container>
 	);
 };
