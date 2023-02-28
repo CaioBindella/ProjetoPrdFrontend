@@ -26,6 +26,8 @@ const CadastroMunicipio = ({ navigation }) => {
 	const [precipMedAnual, setPrecipMedAnual] = useState(0);
 
 	async function createMunicipio() {
+		
+
 		const data = {
 			Nome: nome,
 			Nome2: nome2,
@@ -33,6 +35,11 @@ const CadastroMunicipio = ({ navigation }) => {
 			Taxa_Ger_Per_Cap: parseFloat(taxGerPerCap),
 			Precip_Med_Anual: parseFloat(precipMedAnual),
 		};
+
+		const response = await AsyncStorage.getItem('dataMunicipio')
+		const previousData = response ? JSON.parse(response) : [];
+
+		const newData = [...previousData, data]
 
 		if (nome && nome2 && tamPop && taxGerPerCap && precipMedAnual) {
 			// await axios
@@ -42,7 +49,7 @@ const CadastroMunicipio = ({ navigation }) => {
 			// 		navigation.navigate('Aterro');
 			// 	})
 			// 	.catch((error) => console.log(JSON.stringify(error)));
-			const stringData = JSON.stringify(data)
+			const stringData = JSON.stringify(newData)
 
 			await AsyncStorage.setItem('dataMunicipio', stringData)
 			navigation.navigate('Aterro');

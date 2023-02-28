@@ -20,8 +20,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Touchable } from 'react-native';
 
-const Item = ({ Endereco, Latitude, Longitude, Nome,item,navigation }) => (
-	<TouchableOpacity onPress={()=> navigation.navigate('UmAterro',{item: item})}>
+const Item = ({ Endereco, Latitude, Longitude, Nome, item, navigation, index }) => (
+	<TouchableOpacity onPress={()=> navigation.navigate('UmAterro',{item: item, index:index})}>
 		<ContainerAterros>
 			<Feather name='home' size={44} color='black' />
 			<Aterro>
@@ -35,7 +35,7 @@ const Item = ({ Endereco, Latitude, Longitude, Nome,item,navigation }) => (
 );
 
 const MeusAterros = ({ navigation }) => {
-	const [data, setData] = useState();
+	const [data, setData] = useState([]);
 	useEffect( () => {
 		// axios
 		// 	.get('http://10.0.10.143:3030/aterros')
@@ -48,13 +48,15 @@ const MeusAterros = ({ navigation }) => {
 		// console.log(dataAterro)
 
 		const loadData = async () =>{
-			await AsyncStorage.getItem('dataAterro').then((valor) => {
-			  setData(JSON.parse(valor))
-			})
+			const response = await AsyncStorage.getItem('dataAterro')
+			const data = response ? JSON.parse(response) : []
+			setData(data)
 		  }
 	
 		loadData()
 	}, []);
+
+	// console.log(data)
 
 
 	return (
@@ -63,7 +65,7 @@ const MeusAterros = ({ navigation }) => {
 			<Header />
 
 			<ScrollView>
-				{data ?
+				{/* {data ?
 					<Item
 						Endereco={data.Endereco}
 						Nome={data.Nome}
@@ -72,6 +74,25 @@ const MeusAterros = ({ navigation }) => {
 						item={data}
 						navigation={navigation}
 					/>
+					:
+					null
+				} */}
+
+				{	data ?
+					data.map((itData, index) => {
+						return(
+							<Item
+								Endereco={itData.Endereco}
+								Nome={itData.Nome}
+								Latitude={itData.Latitude}
+								Longitude={itData.Longitude}
+								item={itData}
+								key={index}
+								navigation={navigation}
+								index={index}
+							/>
+						)
+					})
 					:
 					null
 				}

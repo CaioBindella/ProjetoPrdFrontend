@@ -16,6 +16,7 @@ import {
 import { ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import uuid from "react-native-uuid"
 
 import { Entypo } from '@expo/vector-icons';
 
@@ -30,7 +31,10 @@ const Cadastro = ({ navigation }) => {
 	const [Longitude, setLongitude] = useState(0);
 
 	async function createAterro() {
+
+		const id = uuid.v4()
 		const data = {
+			Id: id,
 			Nome: aterro,
 			Endereco: endereco,
 			Bacia_Hidrografica: baciaHidrografica,
@@ -40,6 +44,10 @@ const Cadastro = ({ navigation }) => {
 			Longitude: parseFloat(Longitude),
 			Latitude: parseFloat(Latitude),
 		};
+		const response = await AsyncStorage.getItem('dataAterro')
+		const previousData = response ? JSON.parse(response) : [];
+
+		const newData = [...previousData, data]
 
 		if (
 			aterro &&
@@ -59,7 +67,7 @@ const Cadastro = ({ navigation }) => {
 			// 	})
 			// 	.catch((error) => console.log(JSON.stringify(error)));
 
-			const stringData = JSON.stringify(data)
+			const stringData = JSON.stringify(newData)
 
 			await AsyncStorage.setItem('dataAterro', stringData)
 			navigation.navigate('Profissional')

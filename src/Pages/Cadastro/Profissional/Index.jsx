@@ -45,6 +45,11 @@ const Profissional = ({ navigation }) => {
 			ContatoAvaliador: contatoAvaliador,
 		};
 
+		const response = await AsyncStorage.getItem('dataProfissionais')
+		const previousData = response ? JSON.parse(response) : [];
+
+		const newData = [...previousData, data]
+
 		if (
 			nomeGerente &&
 			emailGerente &&
@@ -64,7 +69,7 @@ const Profissional = ({ navigation }) => {
 			// 	})
 			// 	.catch((error) => console.log(JSON.stringify(error)));
 
-			const stringData = JSON.stringify(data)
+			const stringData = JSON.stringify(newData)
 
 			await AsyncStorage.setItem('dataProfissionais', stringData)
 			navigation.navigate('Organizacao');

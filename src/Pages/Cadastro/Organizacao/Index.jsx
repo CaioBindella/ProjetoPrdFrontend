@@ -35,6 +35,11 @@ const Organizacao = ({ navigation }) => {
 			LicencDeOperacao: licencDeOperacao,
 		};
 
+		const response = await AsyncStorage.getItem('dataOrganizacao')
+		const previousData = response ? JSON.parse(response) : [];
+
+		const newData = [...previousData, data]
+
 		if (nome && CNPJ && contato && licencPrev && licencDeOperacao) {
 			// await axios
 			// 	.post('http://10.0.10.143:3030/organizacao', data)
@@ -43,7 +48,7 @@ const Organizacao = ({ navigation }) => {
 			// 		navigation.navigate('Home');
 			// 	})
 			// 	.catch((error) => console.log(JSON.stringify(error)));
-			const stringData = JSON.stringify(data)
+			const stringData = JSON.stringify(newData)
 
 			await AsyncStorage.setItem('dataOrganizacao', stringData)
 			navigation.navigate('Home')
