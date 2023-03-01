@@ -15,6 +15,7 @@ export const ContainerAterros = styled.View`
 	border-radius: 20px;
 	border: 1px solid black;
 	margin-top: 10px;
+	height: 140px;
 `;
 
 export const Aterro = styled.View`

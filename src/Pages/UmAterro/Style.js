@@ -5,10 +5,11 @@ export const Button = styled.TouchableOpacity`
 	height: 40px;
 	border: 1px solid black;
 	border-radius: 10px;
-	justify-content: center;
+	justify-content: space-evenly;
 	width: 70%;
 	align-items: center;
 	margin-bottom: 20px;
+	flex-direction: row;
 `;
 
 export const Container = styled.View`

@@ -14,6 +14,7 @@ import {
 	ModalButtonText,
 } from './Style';
 import { Feather } from '@expo/vector-icons';
+
 import Header from '../Components/Header/Index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -24,6 +25,8 @@ import {
 	Modal,
 	TouchableOpacity,
 } from 'react-native';
+
+import { AntDesign } from '@expo/vector-icons';
 
 const UmAterro = ({ navigation, route }) => {
 	const [modalVisible, setModalVisible] = useState(false);
@@ -56,22 +59,24 @@ const UmAterro = ({ navigation, route }) => {
 		await AsyncStorage.setItem('dataMunicipio', stringData3)
 	}
 
-	console.log(index)
 
 	return (
 		<Container>
 			<StatusBar />
 			<Header />
 			<Content>
-				<Button>
+				<Button onPress={() => navigation.navigate('UpdateAterro', {index:index, item: Item})}>
+					<AntDesign name="reload1" size={24} color="blue" />
 					<Text>Atualizar dados do Aterro</Text>
 				</Button>
 
 				<Button>
+					<AntDesign name="plus" size={24} color="green" />
 					<Text>Cadastrar Indicadores</Text>
 				</Button>
 
 				<Button onPress={() => setModalVisible(!modalVisible)}>
+					<AntDesign name="delete" size={24} color="red" />
 					<Text>Excluir Aterro {Item.Nome}</Text>
 				</Button>
 			</Content>
