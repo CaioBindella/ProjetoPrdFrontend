@@ -62,7 +62,7 @@ const MeusAterros = ({ navigation }) => {
 	return (
 		<Container>
 			<StatusBar />
-			<Header />
+			<Header title="Meus Aterros"/>
 
 			<ScrollView>
 				{/* {data ?

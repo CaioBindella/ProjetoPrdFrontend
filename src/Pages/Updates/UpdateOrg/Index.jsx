@@ -72,7 +72,7 @@ const UpdateOrg = ({ navigation, route }) => {
 	}
 	return (
 		<ScrollView style={{ width: '100%', backgroundColor: 'white' }}>
-			<Header />
+			<Header title="Atualizar Organização"/>
 
 			<ViewTitle>
 				<Title>Preencha os dados referente a Organização responsável </Title>

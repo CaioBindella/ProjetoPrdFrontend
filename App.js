@@ -12,6 +12,8 @@ import UpdateUmAterro from './src/Pages/Updates/UpdateUmAterro/Index';
 import UpdateUmMunicipio from './src/Pages/Updates/UpdateUmMunicipio/Index';
 import UpdateOrg from './src/Pages/Updates/UpdateOrg/Index';
 import UpdateProf from './src/Pages/Updates/UpdateProf/Index';
+import IndicesOptions from './src/Pages/IndicesOptions/Index';
+import IndicadorTecnico from './src/Pages/IndicesOptions/IndicadorTecnico/Index';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -91,6 +93,16 @@ export default function App() {
 				<Stack.Screen
 					name='UpdateProf'
 					component={UpdateProf}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='IndicesOptions'
+					component={IndicesOptions}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='IndiceTecnico'
+					component={IndicadorTecnico}
 					options={{ headerShown: false }}
 				/>
 			</Stack.Navigator>

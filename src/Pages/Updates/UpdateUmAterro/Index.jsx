@@ -6,8 +6,7 @@ import {
 	InputGroup,
 	Input,
 	Button,
-	Header,
-	HeaderTitle,
+
 	Title,
 	ViewTitle,
 	ButtonGroup,
@@ -17,6 +16,8 @@ import {
 import { ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from "react-native-uuid"
+
+import Header from '../../Components/Header/Index';
 
 import { Entypo } from '@expo/vector-icons';
 
@@ -98,9 +99,7 @@ const UpdateUmAterro = ({ navigation, route }) => {
 				width: '100%',
 			}}>
 			<Container>
-				<Header>
-					<HeaderTitle>Atualizar Aterro</HeaderTitle>
-				</Header>
+				<Header title="Atualizar Aterro"/>
 
 				<ViewTitle>
 					<Title>Preencha os dados referente a Atualização Aterro</Title>
@@ -180,6 +179,9 @@ const UpdateUmAterro = ({ navigation, route }) => {
 				</InputGroup>
 
 				<ButtonGroup>
+					<Button onPress={() => navigation.goBack()}>
+						<TextButton>Cancelar</TextButton>
+					</Button>
 					<Button
 						// onPress={() => navigation.navigate('Profissional')}
 						onPress={() => {

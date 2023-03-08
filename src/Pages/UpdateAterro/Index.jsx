@@ -25,7 +25,7 @@ const UpdateAterro = ({ navigation, route }) => {
 
     return(
 		<Container>
-			<Header/>
+			<Header title="Atualizar Cadastro"/>
             <Content>
 
                 <Button onPress={() => navigation.navigate('UpdateUmAterro', {index:index})}>

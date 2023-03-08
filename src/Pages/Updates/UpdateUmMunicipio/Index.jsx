@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
 	Container,
-	Header,
-	HeaderTitle,
 	ContainerInputGroup,
 	Title,
 	TitleIMG,
@@ -16,6 +14,8 @@ import {
 import { StatusBar, Image, View, Text,ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import Header from '../../Components/Header/Index';
 
 const UpdateUmMunicipio = ({ navigation, route }) => {
 	const [nome, setNome] = useState('');
@@ -71,9 +71,7 @@ const UpdateUmMunicipio = ({ navigation, route }) => {
 	return (
 		<Container>
 			<StatusBar />
-			<Header>
-				<HeaderTitle>Cadastrar Aterro</HeaderTitle>
-			</Header>
+			<Header title="Atualizar Município" />
 			<ScrollView>
 				<ViewTitle>
 					<Title>Preencha os dados referente ao Município</Title>

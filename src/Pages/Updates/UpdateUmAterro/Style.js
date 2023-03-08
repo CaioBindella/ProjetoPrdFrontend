@@ -29,22 +29,6 @@ export const Input = styled.TextInput`
 	background-color: #e8e8e8;
 `;
 
-
-export const Header = styled.View`
-    background-color: #381704;
-	height: 50px;
-	align-items: center;
-	justify-content: center;
-	border-bottom-right-radius: 8px;
-	border-bottom-left-radius: 8px;
-    width: 100%;
-`;
-
-export const HeaderTitle = styled.Text`
-    color: white;
-    font-size: 25px;  
-`;
-
 export const Title = styled.Text`
     width: 60%;
 	font-weight: 500;

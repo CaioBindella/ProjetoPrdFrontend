@@ -96,7 +96,7 @@ const Profissional = ({ navigation, route }) => {
 	}
 	return (
 		<ScrollView style={{ width: '100%', backgroundColor: 'white' }}>
-			<Header />
+			<Header title="Atualizar Profissionais"/>
 
 			<ViewTitle>
 				<Title>Preencha os dados referente aos Profissionais</Title>

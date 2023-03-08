@@ -63,14 +63,14 @@ const UmAterro = ({ navigation, route }) => {
 	return (
 		<Container>
 			<StatusBar />
-			<Header />
+			<Header title={`Aterro ${Item.Nome}`}/>
 			<Content>
 				<Button onPress={() => navigation.navigate('UpdateAterro', {index:index, item: Item})}>
 					<AntDesign name="reload1" size={24} color="blue" />
 					<Text>Atualizar dados do Aterro</Text>
 				</Button>
 
-				<Button>
+				<Button onPress={() => navigation.navigate('IndicesOptions', {item: Item})}>
 					<AntDesign name="plus" size={24} color="green" />
 					<Text>Cadastrar Indicadores</Text>
 				</Button>

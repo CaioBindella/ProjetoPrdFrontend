@@ -5,7 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { EvilIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-const Header = () => {
+const Header = ({title}) => {
     const navigation = useNavigation();
 	return (
 		<HeaderView>
@@ -13,7 +13,7 @@ const Header = () => {
 				<AntDesign name='arrowleft' size={24} color='white' />
 			</TouchableOpacity>
 
-			<HeaderTitle>Meus Aterros</HeaderTitle>
+			<HeaderTitle>{title}</HeaderTitle>
 
             <EvilIcons name='gear' size={30} color='white' />
 			
