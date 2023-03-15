@@ -2,7 +2,9 @@ import styled from 'styled-components/native';
 
 export const Container = styled.View`
 	width: 100%;
+	flex: 1;
 	align-items: center;
+	justify-content: center;
 `;
 
 export const ContainerAterros = styled.View`
@@ -29,3 +31,14 @@ export const Title = styled.Text`
 	font-weight: 700;
 `;
 
+export const Button = styled.TouchableOpacity`
+	background: #e8e8e8;
+	height: 40px;
+	border: 1px solid black;
+	border-radius: 10px;
+	justify-content: space-evenly;
+	width: 70%;
+	align-items: center;
+	margin-bottom: 20px;
+	flex-direction: row;
+`;

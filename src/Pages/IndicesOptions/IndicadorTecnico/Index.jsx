@@ -7,7 +7,7 @@ import {
 import Header from "../../Components/Header/Index";
 import IndiceCard from "../../Components/IndiceCard/Index";
 
-import { indiceTecnicoData } from "../../../Services/indiceTecnicoData";
+import { indiceTecnicoData } from "../../../Services/frontEndData/indiceTecnicoData";
 
 function IndicadorTecnico() {
     return(

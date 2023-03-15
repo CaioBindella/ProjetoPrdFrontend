@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Home from './src/Pages/home/Index';
 import Aterro from './src/Pages/Cadastro/Aterro/Index';
+import CadastrosBasicos from './src/Pages/CadastrosBasicos/Index';
 import CadastroMunicipio from './src/Pages/Cadastro/Municipio/Index';
 import Profissional from './src/Pages/Cadastro/Profissional/Index';
 import Organizacao from './src/Pages/Cadastro/Organizacao/Index';
@@ -14,6 +15,8 @@ import UpdateOrg from './src/Pages/Updates/UpdateOrg/Index';
 import UpdateProf from './src/Pages/Updates/UpdateProf/Index';
 import IndicesOptions from './src/Pages/IndicesOptions/Index';
 import IndicadorTecnico from './src/Pages/IndicesOptions/IndicadorTecnico/Index';
+import Porte from './src/Pages/Cadastro/Porte/Index';
+import AterroFinal from './src/Pages/Cadastro/Aterro/AterroFinal/Index';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -41,8 +44,18 @@ export default function App() {
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
+					name='CadastrosBasicos'
+					component={CadastrosBasicos}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
 					name='Aterro'
 					component={Aterro}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='AterroFinal'
+					component={AterroFinal}
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
@@ -58,6 +71,11 @@ export default function App() {
 				<Stack.Screen
 					name='Organizacao'
 					component={Organizacao}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='Porte'
+					component={Porte}
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen

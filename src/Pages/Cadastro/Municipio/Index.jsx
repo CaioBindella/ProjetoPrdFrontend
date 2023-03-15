@@ -15,33 +15,25 @@ import {
 } from './Style';
 import { StatusBar, Image, View, Text,ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import municipio from '../../../Services/SqlTables/municipio';
 // import axios from 'axios';
 
 const CadastroMunicipio = ({ navigation }) => {
 	const [nome, setNome] = useState('');
-	const [nome2, setNome2] = useState('');
 	const [tamPop, setTamPop] = useState(0);
 	const [taxGerPerCap, setTaxGerPerCap] = useState(0);
 	const [precipMedAnual, setPrecipMedAnual] = useState(0);
 
 	async function createMunicipio() {
-		
-
+	
 		const data = {
 			Nome: nome,
-			Nome2: nome2,
 			Tam_Pop: parseInt(tamPop),
 			Taxa_Ger_Per_Cap: parseFloat(taxGerPerCap),
 			Precip_Med_Anual: parseFloat(precipMedAnual),
 		};
 
-		const response = await AsyncStorage.getItem('dataMunicipio')
-		const previousData = response ? JSON.parse(response) : [];
-
-		const newData = [...previousData, data]
-
-		if (nome && nome2 && tamPop && taxGerPerCap && precipMedAnual) {
+		if (nome && tamPop && taxGerPerCap && precipMedAnual) {
 			// await axios
 			// 	.post('http://10.0.10.143:3030/municipio', data)
 			// 	.then((response) => {
@@ -49,10 +41,12 @@ const CadastroMunicipio = ({ navigation }) => {
 			// 		navigation.navigate('Aterro');
 			// 	})
 			// 	.catch((error) => console.log(JSON.stringify(error)));
-			const stringData = JSON.stringify(newData)
-
-			await AsyncStorage.setItem('dataMunicipio', stringData)
-			navigation.navigate('Aterro');
+			
+			municipio.create(data)
+				.then( id => console.log('Municipio created with id: '+ id) )
+				.catch( err => console.log(err) )
+				
+			navigation.navigate('Home');
 		} else {
 			alert('Há campos vazios');
 		}
@@ -61,7 +55,7 @@ const CadastroMunicipio = ({ navigation }) => {
 		<Container>
 			<StatusBar />
 			<Header>
-				<HeaderTitle>Cadastrar Aterro</HeaderTitle>
+				<HeaderTitle>Cadastrar Município</HeaderTitle>
 			</Header>
 			<ScrollView>
 				<ViewTitle>
@@ -71,7 +65,7 @@ const CadastroMunicipio = ({ navigation }) => {
 
 				<ContainerInputGroup>
 					<InputGroup>
-						<Text>Município 1 </Text>
+						<Text>Município</Text>
 						<Input
 							placeholder='Digite aqui o município do aterro'
 							onChangeText={setNome}
@@ -80,36 +74,28 @@ const CadastroMunicipio = ({ navigation }) => {
 					</InputGroup>
 
 					<InputGroup>
-						<Text>Município 2 (opcional) </Text>
+						<Text>Tamanho da População</Text>
 						<Input
-							placeholder='Digite aqui o município do aterro'
-							onChangeText={setNome2}
-							value={nome2}
-						/>
-					</InputGroup>
-
-					<InputGroup>
-						<Text>Tamanho da População </Text>
-						<Input
-							placeholder='Digite aqui o Tamanho da população local'
+							placeholder='Digite aqui o tamanho da população'
 							onChangeText={setTamPop}
 							value={tamPop}
 						/>
 					</InputGroup>
+					
 
 					<InputGroup>
-						<Text>Taxa de Geração PerCapita </Text>
+						<Text>Taxa de Geração PerCap</Text>
 						<Input
-							placeholder='Digite aqui a taxa de Geração PerCapita'
+							placeholder='Digite aqui a taxa de Geração PerCap'
 							onChangeText={setTaxGerPerCap}
 							value={taxGerPerCap}
 						/>
 					</InputGroup>
-
+				
 					<InputGroup>
-						<Text>Taxa de Precipitação Anual </Text>
+						<Text>Precipitação média anual</Text>
 						<Input
-							placeholder='Digite aqui a taxa de Precipitação Anual'
+							placeholder='Digite aqui a precipitação média anual'
 							onChangeText={setPrecipMedAnual}
 							value={precipMedAnual}
 						/>
@@ -117,13 +103,13 @@ const CadastroMunicipio = ({ navigation }) => {
 				</ContainerInputGroup>
 
 				<ButtonGroup>
-					<Button onPress={() => navigation.goBack()}>
-						<TextButton>Retornar</TextButton>
+					<Button onPress={() => navigation.navigate('Home')}>
+						<TextButton>Cancelar</TextButton>
 					</Button>
 					<Button
 						// onPress={() => navigation.navigate('Aterro')}
 						onPress={() => createMunicipio()}>
-						<TextButton>Avançar</TextButton>
+						<TextButton>Cadastrar</TextButton>
 					</Button>
 				</ButtonGroup>
 			</ScrollView>

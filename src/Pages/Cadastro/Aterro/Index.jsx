@@ -14,14 +14,11 @@ import {
 } from './Style';
 
 import { ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import uuid from "react-native-uuid"
 
 import { Entypo } from '@expo/vector-icons';
 
 const Cadastro = ({ navigation }) => {
-	const [aterro, setAterro] = useState('');
+	const [nome, setNome] = useState('');
 	const [endereco, setEndereco] = useState('');
 	const [baciaHidrografica, setBaciaHidrografica] = useState('');
 	const [recebimentoBruto, setRecebimentoBruto] = useState(0);
@@ -30,12 +27,9 @@ const Cadastro = ({ navigation }) => {
 	const [Latitude, setLatitude] = useState(0);
 	const [Longitude, setLongitude] = useState(0);
 
-	async function createAterro() {
-
-		const id = uuid.v4()
+	function nextPage() {
 		const data = {
-			Id: id,
-			Nome: aterro,
+			Nome: nome,
 			Endereco: endereco,
 			Bacia_Hidrografica: baciaHidrografica,
 			Recebimento_Bruto: parseFloat(recebimentoBruto),
@@ -44,13 +38,9 @@ const Cadastro = ({ navigation }) => {
 			Longitude: parseFloat(Longitude),
 			Latitude: parseFloat(Latitude),
 		};
-		const response = await AsyncStorage.getItem('dataAterro')
-		const previousData = response ? JSON.parse(response) : [];
-
-		const newData = [...previousData, data]
-
+		
 		if (
-			aterro &&
+			nome &&
 			endereco &&
 			baciaHidrografica &&
 			recebimentoBruto &&
@@ -59,22 +49,13 @@ const Cadastro = ({ navigation }) => {
 			Longitude &&
 			Latitude
 		) {
-			// await axios
-			// 	.post('http://10.0.10.143:3030/aterro', data)
-			// 	.then((response) => {
-			// 		console.log(response);
-			// 		navigation.navigate('Profissional');
-			// 	})
-			// 	.catch((error) => console.log(JSON.stringify(error)));
-
-			const stringData = JSON.stringify(newData)
-
-			await AsyncStorage.setItem('dataAterro', stringData)
-			navigation.navigate('Profissional')
+			navigation.navigate('AterroFinal', {Data: data})
 		} else {
 			alert('Há campos vazios');
 		}
 	}
+
+	
 
 	return (
 		<ScrollView
@@ -95,8 +76,8 @@ const Cadastro = ({ navigation }) => {
 					<Text>Aterro: </Text>
 					<Input
 						placeholder='Digite aqui o nome do aterro'
-						onChangeText={setAterro}
-						value={aterro}
+						onChangeText={setNome}
+						value={nome}
 					/>
 				</InputGroup>
 
@@ -163,15 +144,15 @@ const Cadastro = ({ navigation }) => {
 					/>
 				</InputGroup>
 
+
 				<ButtonGroup>
-					<Button onPress={() => navigation.goBack()}>
-						<TextButton>Retornar</TextButton>
+					<Button onPress={() => navigation.navigate('Home')}>
+						<TextButton>Cancelar</TextButton>
 					</Button>
 					<Button
-						// onPress={() => navigation.navigate('Profissional')}
-						onPress={() => createAterro()}
+						onPress={() => nextPage()}
 					>
-						<TextButton>Avançar</TextButton>
+						<TextButton>Próximo</TextButton>
 					</Button>
 				</ButtonGroup>
 			</Container>
