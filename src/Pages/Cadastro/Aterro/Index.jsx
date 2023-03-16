@@ -23,20 +23,24 @@ const Cadastro = ({ navigation }) => {
 	const [baciaHidrografica, setBaciaHidrografica] = useState('');
 	const [recebimentoBruto, setRecebimentoBruto] = useState(0);
 	const [recebimentoGerado, setRecebimentoGerado] = useState(0);
-	const [CondicaoClimatica, setCondicaoClimatica] = useState('');
-	const [Latitude, setLatitude] = useState(0);
-	const [Longitude, setLongitude] = useState(0);
+	const [condicaoClimatica, setCondicaoClimatica] = useState('');
+	const [latitude, setLatitude] = useState(0);
+	const [longitude, setLongitude] = useState(0);
+	const [licenPrev, setLicenPrev] = useState(0);
+	const [licenOp, setLicenOp] = useState(0);
 
 	function nextPage() {
 		const data = {
 			Nome: nome,
 			Endereco: endereco,
-			Bacia_Hidrografica: baciaHidrografica,
-			Recebimento_Bruto: parseFloat(recebimentoBruto),
-			Recebimento_Gerado: parseFloat(recebimentoGerado),
-			Condicao_Climatica: CondicaoClimatica,
-			Longitude: parseFloat(Longitude),
-			Latitude: parseFloat(Latitude),
+			BaciaHidrografica: baciaHidrografica,
+			RecebimentoBruto: parseFloat(recebimentoBruto),
+			RecebimentoGerado: parseFloat(recebimentoGerado),
+			CondicaoClimatica: condicaoClimatica,
+			Longitude: parseFloat(longitude),
+			Latitude: parseFloat(latitude),
+			LicencaPrevia: licenPrev,
+			LicencaOperacional: licenOp
 		};
 		
 		if (
@@ -45,9 +49,11 @@ const Cadastro = ({ navigation }) => {
 			baciaHidrografica &&
 			recebimentoBruto &&
 			recebimentoGerado &&
-			CondicaoClimatica &&
-			Longitude &&
-			Latitude
+			condicaoClimatica &&
+			longitude &&
+			latitude &&
+			licenPrev &&
+			licenOp
 		) {
 			navigation.navigate('AterroFinal', {Data: data})
 		} else {
@@ -122,7 +128,7 @@ const Cadastro = ({ navigation }) => {
 					<Input
 						placeholder='Digite aqui a condição climática'
 						onChangeText={setCondicaoClimatica}
-						value={CondicaoClimatica}
+						value={condicaoClimatica}
 					/>
 				</InputGroup>
 
@@ -131,7 +137,7 @@ const Cadastro = ({ navigation }) => {
 					<Input
 						placeholder='Digite aqui a longitude'
 						onChangeText={setLongitude}
-						value={Longitude}
+						value={longitude}
 					/>
 				</InputGroup>
 
@@ -140,7 +146,25 @@ const Cadastro = ({ navigation }) => {
 					<Input
 						placeholder='Digite aqui a latitude'
 						onChangeText={setLatitude}
-						value={Latitude}
+						value={latitude}
+					/>
+				</InputGroup>
+
+				<InputGroup>
+					<Text>Licença Prévia: </Text>
+					<Input
+						placeholder='Digite aqui a Licença Prev'
+						onChangeText={setLicenPrev}
+						value={licenPrev}
+					/>
+				</InputGroup>
+
+				<InputGroup>
+					<Text>Licença de Operação: </Text>
+					<Input
+						placeholder='Digite aqui a Lecença de Operação'
+						onChangeText={setLicenOp}
+						value={licenOp}
 					/>
 				</InputGroup>
 

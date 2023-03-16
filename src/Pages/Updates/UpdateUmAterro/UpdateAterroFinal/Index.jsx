@@ -11,7 +11,7 @@ import {
 } from './Style'
 
 import DropDownPicker from 'react-native-dropdown-picker';
-import Header from "../../Components/Header";
+import Header from "../../../Cadastro/Components/Header";
 
 import aterro from "../../../../Services/SqlTables/aterro";
 import municipio from "../../../../Services/SqlTables/municipio";
@@ -19,21 +19,21 @@ import organizacao from "../../../../Services/SqlTables/organizacao";
 import porte from "../../../../Services/SqlTables/porte";
 
 
-function AterroFinal({navigation, route}) {
+function UpdateAterroFinal({navigation, route}) {
+    const Item = route.params.item
     const [openMunicipio, setOpenMunicipio] = useState(false);
-	const [valueMunicipio, setValueMunicipio] = useState(null);
+	const [valueMunicipio, setValueMunicipio] = useState(Item.Municipio);
 	const [itemsMunicipio, setItemsMunicipio] = useState([]);
 
     const [openOrganizacao, setOpenOrganizacao] = useState(false);
-	const [valueOrganizacao, setValueOrganizacao] = useState(null);
+	const [valueOrganizacao, setValueOrganizacao] = useState(Item.Organizacao);
 	const [itemsOrganizacao, setItemsOrganizacao] = useState([]);
 
     const [openPorte, setOpenPorte] = useState(false);
-	const [valuePorte, setValuePorte] = useState(null);
+	const [valuePorte, setValuePorte] = useState(Item.Porte);
 	const [itemsPorte, setItemsPorte] = useState([]);
 
     async function loadDataPicker (dataType, setFunction) {
-
         const data = await dataType.all()
         let itemModel = []
         
@@ -50,8 +50,8 @@ function AterroFinal({navigation, route}) {
         loadDataPicker(porte, setItemsPorte)
     }, [])
 
-    async function createAterro() {
-        let data = route.params.Data;
+    async function updateAterro() {
+        let data = route.params.data;
 		if (
 			data && valueMunicipio && valueOrganizacao && valuePorte
 		) {
@@ -62,8 +62,8 @@ function AterroFinal({navigation, route}) {
                 Porte: valuePorte
             }
 
-			aterro.create(data)
-				.then( id => console.log('Aterro created with id: '+ id) )
+			await aterro.update(Item.id, data)
+				.then( id => console.log('Aterro updated with id: '+ id) )
 				.catch( err => console.log(err) )
 
 			navigation.navigate('Home')
@@ -120,17 +120,20 @@ function AterroFinal({navigation, route}) {
             </Content>
 
             <ButtonGroup>
-                <Button onPress={() => navigation.navigate('Home')}>
-                    <TextButton>Cancelar</TextButton>
+                <Button onPress={() => navigation.goBack()}>
+                    <TextButton>Voltar</TextButton>
                 </Button>
                 <Button
-                    onPress={() => createAterro()}
+                    onPress={() => {
+                        updateAterro()
+                        alert('Atualizado'); 
+                    }}
                 >
-                    <TextButton>Cadastrar</TextButton>
+                    <TextButton>Atualizar</TextButton>
                 </Button>
             </ButtonGroup>
         </Container>
     );
 };
 
-export default AterroFinal
+export default UpdateAterroFinal

@@ -17,9 +17,9 @@ import {
 	ScrollView,
 } from 'react-native';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Touchable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import aterro from '../../Services/SqlTables/aterro';
 
 const Item = ({ Endereco, Latitude, Longitude, Nome, item, navigation, index }) => (
 	<TouchableOpacity onPress={()=> navigation.navigate('UmAterro',{item: item, index:index})}>
@@ -37,17 +37,16 @@ const Item = ({ Endereco, Latitude, Longitude, Nome, item, navigation, index }) 
 
 const MeusAterros = ({ navigation }) => {
 	const [data, setData] = useState([]);
+
+	async function loadData () {
+		const response = await aterro.all().catch(e => console.log(e))
+
+		setData(response)
+	}
+
 	useEffect( () => {
-		const loadData = async () =>{
-			const response = await AsyncStorage.getItem('dataAterro')
-			const data = response ? JSON.parse(response) : []
-			setData(data)
-		  }
-	
 		loadData()
 	}, []);
-
-	// console.log(data)
 
 
 	return (
@@ -57,18 +56,17 @@ const MeusAterros = ({ navigation }) => {
 
 			<ScrollView>
 
-				{	data ?
-					data.map((itData, index) => {
+				{data ?
+					data.map((eachData, index) => {
 						return(
 							<Item
-								Endereco={itData.Endereco}
-								Nome={itData.Nome}
-								Latitude={itData.Latitude}
-								Longitude={itData.Longitude}
-								item={itData}
+								Endereco={eachData.Endereco}
+								Nome={eachData.Nome}
+								Latitude={eachData.Latitude}
+								Longitude={eachData.Longitude}
+								item={eachData}
 								key={index}
 								navigation={navigation}
-								index={index}
 							/>
 						)
 					})

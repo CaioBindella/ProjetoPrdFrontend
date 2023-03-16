@@ -15,8 +15,8 @@ import {
 } from './Style';
 import { Feather } from '@expo/vector-icons';
 
+import aterro from '../../Services/SqlTables/aterro';
 import Header from '../Components/Header/Index';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
 	StatusBar,
 	Image,
@@ -31,32 +31,9 @@ import { AntDesign } from '@expo/vector-icons';
 const UmAterro = ({ navigation, route }) => {
 	const [modalVisible, setModalVisible] = useState(false);
 	const Item = route.params.item;
-	const index = route.params.index;
 
-	const deleteAterro = async () => {
-		const response = await AsyncStorage.getItem('dataAterro')
-		const data = response ? JSON.parse(response) : []
-		data.splice(index, 1)
-		const stringData = JSON.stringify(data)
-		await AsyncStorage.setItem('dataAterro', stringData)
-
-		const response1 = await AsyncStorage.getItem('dataOrganizacao')
-		const data1 = response1 ? JSON.parse(response1) : []
-		data1.splice(index, 1)
-		const stringData1 = JSON.stringify(data1)
-		await AsyncStorage.setItem('dataOrganizacao', stringData1)
-
-		const response2 = await AsyncStorage.getItem('dataProfissionais')
-		const data2 = response2 ? JSON.parse(response2) : []
-		data2.splice(index, 1)
-		const stringData2 = JSON.stringify(data2)
-		await AsyncStorage.setItem('dataProfissionais', stringData2)
-
-		const response3 = await AsyncStorage.getItem('dataMunicipio')
-		const data3 = response3 ? JSON.parse(response3) : []
-		data3.splice(index, 1)
-		const stringData3 = JSON.stringify(data3)
-		await AsyncStorage.setItem('dataMunicipio', stringData3)
+	async function deleteAterro () {
+		await aterro.remove(Item.id).catch(e => console.log(e))
 	}
 
 
@@ -65,7 +42,7 @@ const UmAterro = ({ navigation, route }) => {
 			<StatusBar />
 			<Header title={`Aterro ${Item.Nome}`}/>
 			<Content>
-				<Button onPress={() => navigation.navigate('UpdateAterro', {index:index, item: Item})}>
+				<Button onPress={() => navigation.navigate('UpdateUmAterro', {item: Item})}>
 					<AntDesign name="reload1" size={24} color="blue" />
 					<Text>Atualizar dados do Aterro</Text>
 				</Button>

@@ -15,79 +15,51 @@ import {
 
 import { ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import uuid from "react-native-uuid"
 
 import Header from '../../Components/Header/Index';
 
 import { Entypo } from '@expo/vector-icons';
 
 const UpdateUmAterro = ({ navigation, route }) => {
-	const [aterro, setAterro] = useState('');
-	const [endereco, setEndereco] = useState('');
-	const [baciaHidrografica, setBaciaHidrografica] = useState('');
-	const [recebimentoBruto, setRecebimentoBruto] = useState('');
-	const [recebimentoGerado, setRecebimentoGerado] = useState('');
-	const [CondicaoClimatica, setCondicaoClimatica] = useState('');
-	const [Latitude, setLatitude] = useState('');
-	const [Longitude, setLongitude] = useState('');
+	const Item = route.params.item;
+	const [aterro, setAterro] = useState(Item.Nome);
+	const [endereco, setEndereco] = useState(Item.Endereco);
+	const [baciaHidrografica, setBaciaHidrografica] = useState(Item.BaciaHidrografica);
+	const [recebimentoBruto, setRecebimentoBruto] = useState(String(Item.RecebimentoBruto));
+	const [recebimentoGerado, setRecebimentoGerado] = useState(String(Item.RecebimentoGerado));
+	const [condicaoClimatica, setCondicaoClimatica] = useState(Item.CondicaoClimatica);
+	const [latitude, setLatitude] = useState(String(Item.Latitude));
+	const [longitude, setLongitude] = useState(String(Item.Longitude));
+	const [licenPrev, setLicenPrev] = useState(String(Item.LicencaPrevia));
+	const [licenOp, setLicenOp] = useState(String(Item.LicencaOperacional));
 
-	const index = route.params.index;
-	
-	useEffect( () => {
-	
-		const loadData = async () =>{
-			const response = await AsyncStorage.getItem('dataAterro')
-			const data = response ? JSON.parse(response) : []
-			const chosenData = data[index]
-
-			setAterro(chosenData.Nome)
-			setEndereco(chosenData.Endereco)
-			setBaciaHidrografica(chosenData.Bacia_Hidrografica)
-			setRecebimentoBruto(String(chosenData.Recebimento_Bruto))
-			setRecebimentoGerado(String(chosenData.Recebimento_Gerado))
-			setCondicaoClimatica(chosenData.Condicao_Climatica)
-			setLatitude(String(chosenData.Latitude))
-			setLongitude(String(chosenData.Longitude))
-		}
-	
-		loadData()
-		
-	}, []);
-
-	
-
-	async function UpAterro() {
-
-		const id = uuid.v4()
+	async function nextPage() {
 		const data = {
-			Id: id,
 			Nome: aterro,
 			Endereco: endereco,
-			Bacia_Hidrografica: baciaHidrografica,
-			Recebimento_Bruto: parseFloat(recebimentoBruto),
-			Recebimento_Gerado: parseFloat(recebimentoGerado),
-			Condicao_Climatica: CondicaoClimatica,
-			Longitude: parseFloat(Longitude),
-			Latitude: parseFloat(Latitude),
+			BaciaHidrografica: baciaHidrografica,
+			RecebimentoBruto: parseFloat(recebimentoBruto),
+			RecebimentoGerado: parseFloat(recebimentoGerado),
+			CondicaoClimatica: condicaoClimatica,
+			Longitude: parseFloat(longitude),
+			Latitude: parseFloat(latitude),
+			LicencaPrevia: licenPrev,
+			LicencaOperacional: licenOp
 		};
-		const response = await AsyncStorage.getItem('dataAterro')
-		const previousData = response ? JSON.parse(response) : [];
-
+		
 		if (
 			aterro &&
 			endereco &&
 			baciaHidrografica &&
 			recebimentoBruto &&
 			recebimentoGerado &&
-			CondicaoClimatica &&
-			Longitude &&
-			Latitude
+			condicaoClimatica &&
+			longitude &&
+			latitude &&
+			licenOp &&
+			licenPrev
 		) {
-			previousData.splice(index, 1, data)
-			const stringData = JSON.stringify(previousData)
-
-			await AsyncStorage.setItem('dataAterro', stringData)
-			navigation.navigate('Home')
+			navigation.navigate('UpdateAterroFinal', {data: data, item: Item})
 		} else {
 			alert('Há campos vazios');
 		}
@@ -156,7 +128,7 @@ const UpdateUmAterro = ({ navigation, route }) => {
 					<Input
 						placeholder='Digite aqui a condição climática'
 						onChangeText={setCondicaoClimatica}
-						value={CondicaoClimatica}
+						value={condicaoClimatica}
 					/>
 				</InputGroup>
 
@@ -165,7 +137,7 @@ const UpdateUmAterro = ({ navigation, route }) => {
 					<Input
 						placeholder='Digite aqui a longitude'
 						onChangeText={setLongitude}
-						value={Longitude}
+						value={longitude}
 					/>
 				</InputGroup>
 
@@ -174,7 +146,25 @@ const UpdateUmAterro = ({ navigation, route }) => {
 					<Input
 						placeholder='Digite aqui a latitude'
 						onChangeText={setLatitude}
-						value={Latitude}
+						value={latitude}
+					/>
+				</InputGroup>
+
+				<InputGroup>
+					<Text>Licença Prévia: </Text>
+					<Input
+						placeholder='Digite aqui a Licença Prévia'
+						onChangeText={setLicenPrev}
+						value={licenPrev}
+					/>
+				</InputGroup>
+
+				<InputGroup>
+					<Text>Licença de Operação: </Text>
+					<Input
+						placeholder='Digite aqui a Licença de Operação'
+						onChangeText={setLicenOp}
+						value={licenOp}
 					/>
 				</InputGroup>
 
@@ -183,14 +173,10 @@ const UpdateUmAterro = ({ navigation, route }) => {
 						<TextButton>Cancelar</TextButton>
 					</Button>
 					<Button
-						// onPress={() => navigation.navigate('Profissional')}
-						onPress={() => {
-							UpAterro()
-							alert('Atualizado'); }
-						}
+						onPress={() => nextPage()}
 						
 					>
-						<TextButton>Atualizar</TextButton>
+						<TextButton>Proximo</TextButton>
 					</Button>
 				</ButtonGroup>
 			</Container>

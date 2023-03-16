@@ -6,11 +6,11 @@ import db from "./sqliteDb";
  */
 db.transaction((tx) => {
   //<<<<<<<<<<<<<<<<<<<<<<<< USE ISSO APENAS DURANTE OS TESTES!!! >>>>>>>>>>>>>>>>>>>>>>>
-  //tx.executeSql("DROP TABLE cars;");
+  // tx.executeSql("DROP TABLE porte;");
   //<<<<<<<<<<<<<<<<<<<<<<<< USE ISSO APENAS DURANTE OS TESTES!!! >>>>>>>>>>>>>>>>>>>>>>>
 
   tx.executeSql(
-    "CREATE TABLE IF NOT EXISTS porte (id INTEGER PRIMARY KEY AUTOINCREMENT, classe TEXT);"
+    "CREATE TABLE IF NOT EXISTS porte (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT);"
   );
 });
 
@@ -26,7 +26,7 @@ const create = (obj) => {
     db.transaction((tx) => {
       //comando SQL modificável
       tx.executeSql(
-        "INSERT INTO porte (classe) values (?);",
+        "INSERT INTO porte (nome) values (?);",
         [obj.Porte],
         //-----------------------
         (_, { rowsAffected, insertId }) => {
@@ -51,7 +51,7 @@ const update = (id, obj) => {
     db.transaction((tx) => {
       //comando SQL modificável
       tx.executeSql(
-        "UPDATE porte SET classe=? WHERE id=?;",
+        "UPDATE porte SET nome=? WHERE id=?;",
         [obj.Porte, id],
         //-----------------------
         (_, { rowsAffected }) => {

@@ -6,11 +6,11 @@ import db from "./sqliteDb";
  */
 db.transaction((tx) => {
   //<<<<<<<<<<<<<<<<<<<<<<<< USE ISSO APENAS DURANTE OS TESTES!!! >>>>>>>>>>>>>>>>>>>>>>>
-  //tx.executeSql("DROP TABLE cars;");
+  // tx.executeSql("DROP TABLE aterro;");
   //<<<<<<<<<<<<<<<<<<<<<<<< USE ISSO APENAS DURANTE OS TESTES!!! >>>>>>>>>>>>>>>>>>>>>>>
 
   tx.executeSql(
-    "CREATE TABLE IF NOT EXISTS aterro (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, endereco TEXT, baciaHidrografica TEXT, recebimentoBruto FLOAT, recebimentoGerado FLOAT, condicaoClimatica TEXT, latitude FLOAT, longitude FLOAT);"
+    "CREATE TABLE IF NOT EXISTS aterro (id INTEGER PRIMARY KEY AUTOINCREMENT, Nome TEXT, Endereco TEXT, BaciaHidrografica TEXT, RecebimentoBruto FLOAT, RecebimentoGerado FLOAT, CondicaoClimatica TEXT, Latitude FLOAT, Longitude FLOAT, LicencaPrevia TEXT, LicencaOperacional TEXT, Municipio TEXT, Organizacao TEXT, Porte TEXT);"
   );
 });
 
@@ -26,8 +26,8 @@ const create = (obj) => {
     db.transaction((tx) => {
       //comando SQL modificável
       tx.executeSql(
-        "INSERT INTO aterro (nome, endereco, baciaHidrografica, recebimentoBruto, recebimentoGerado, condicaoClimatica, latitude, longitude) values (?, ?, ?, ?, ?, ?, ?, ?);",
-        [obj.Nome, obj.Endereco, obj.Bacia_Hidrografica, obj.Recebimento_Bruto, obj.Recebimento_Gerado, obj.Condicao_Climatica, obj.Longitude, obj.Latitude],
+        "INSERT INTO aterro (Nome, Endereco, BaciaHidrografica, RecebimentoBruto, RecebimentoGerado, CondicaoClimatica, Latitude, Longitude, LicencaPrevia, LicencaOperacional, Municipio, Organizacao, Porte) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        [obj.Nome, obj.Endereco, obj.BaciaHidrografica, obj.RecebimentoBruto, obj.RecebimentoGerado, obj.CondicaoClimatica, obj.Latitude, obj.Longitude, obj.LicencaPrevia, obj.LicencaOperacional, obj.Municipio, obj.Organizacao, obj.Porte],
         //-----------------------
         (_, { rowsAffected, insertId }) => {
           if (rowsAffected > 0) resolve(insertId);
@@ -51,8 +51,8 @@ const update = (id, obj) => {
     db.transaction((tx) => {
       //comando SQL modificável
       tx.executeSql(
-        "UPDATE aterro SET nome=?, endereco=?, baciaHidrografica=?, recebimentoBruto=?, recebimentoGerado=?, condicaoClimatica=?, latitude=?, longitude=? WHERE id=?;",
-        [obj.Nome, obj.Endereco, obj.Bacia_Hidrografica, obj.Recebimento_Bruto, obj.Recebimento_Gerado, obj.Condicao_Climatica, obj.Longitude, obj.Latitude, id],
+        "UPDATE aterro SET Nome=?, Endereco=?, BaciaHidrografica=?, RecebimentoBruto=?, RecebimentoGerado=?, CondicaoClimatica=?, Latitude=?, Longitude=?, LicencaPrevia=?, LicencaOperacional=?, Municipio=?, Organizacao=?, Porte=? WHERE id=?;",
+        [obj.Nome, obj.Endereco, obj.BaciaHidrografica, obj.RecebimentoBruto, obj.RecebimentoGerado, obj.CondicaoClimatica, obj.Latitude, obj.Longitude, obj.LicencaPrevia, obj.LicencaOperacional, obj.Municipio, obj.Organizacao, obj.Porte, id],
         //-----------------------
         (_, { rowsAffected }) => {
           if (rowsAffected > 0) resolve(rowsAffected);

@@ -26,13 +26,6 @@ function Porte({navigation}) {
 		};
 
 		if (nomePorte) {
-			// await axios
-			// 	.post('http://10.0.10.143:3030/organizacao', data)
-			// 	.then((response) => {
-			// 		console.log(response);
-			// 		navigation.navigate('Home');
-			// 	})
-			// 	.catch((error) => console.log(JSON.stringify(error)));
 			
 			porte.create(data)
 				.then( id => console.log('Porte created with id: '+ id) )
