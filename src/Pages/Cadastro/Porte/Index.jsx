@@ -14,7 +14,7 @@ import {
 import { ScrollView, Text } from 'react-native';
 import Header from '../../Components/Header/Index';
 
-import porte from '../../../Services/SqlTables/porte';
+import { inclui } from '../../../Services/Networks/inclui';
 
 function Porte({navigation}) {
 
@@ -26,10 +26,7 @@ function Porte({navigation}) {
 		};
 
 		if (nomePorte) {
-			
-			porte.create(data)
-				.then( id => console.log('Porte created with id: '+ id) )
-				.catch( err => console.log(err) )
+			inclui('porte', data)
 			
 			navigation.navigate('Home')
 		} else {

@@ -8,15 +8,14 @@ import {
     Button,
     ButtonGroup,
     TextButton,
+    Text,
 } from './Style'
 
 import DropDownPicker from 'react-native-dropdown-picker';
 import Header from "../../Components/Header";
 
-import aterro from "../../../../Services/SqlTables/aterro";
-import municipio from "../../../../Services/SqlTables/municipio";
-import organizacao from "../../../../Services/SqlTables/organizacao";
-import porte from "../../../../Services/SqlTables/porte";
+import { consulta } from "../../../../Services/Networks/consulta";
+import { inclui } from "../../../../Services/Networks/inclui";
 
 
 function AterroFinal({navigation, route}) {
@@ -32,9 +31,9 @@ function AterroFinal({navigation, route}) {
 	const [valuePorte, setValuePorte] = useState(null);
 	const [itemsPorte, setItemsPorte] = useState([]);
 
-    async function loadDataPicker (dataType, setFunction) {
+    async function loadDataPicker (table, setFunction) {
 
-        const data = await dataType.all()
+        const data = await consulta(table)
         let itemModel = []
         
         data.map((eachData) => {
@@ -45,9 +44,9 @@ function AterroFinal({navigation, route}) {
     }
 
     useEffect(() => {
-        loadDataPicker(municipio, setItemsMunicipio)
-        loadDataPicker(organizacao, setItemsOrganizacao)
-        loadDataPicker(porte, setItemsPorte)
+        loadDataPicker('municipio', setItemsMunicipio)
+        loadDataPicker('organizacao', setItemsOrganizacao)
+        loadDataPicker('porte', setItemsPorte)
     }, [])
 
     async function createAterro() {
@@ -62,9 +61,7 @@ function AterroFinal({navigation, route}) {
                 Porte: valuePorte
             }
 
-			aterro.create(data)
-				.then( id => console.log('Aterro created with id: '+ id) )
-				.catch( err => console.log(err) )
+			inclui('aterro', data)
 
 			navigation.navigate('Home')
 		} else {
@@ -78,6 +75,7 @@ function AterroFinal({navigation, route}) {
             <Content>
                 <PickerContainer>
                     <ContentPicker>
+                        <Text>Município do Aterro:</Text>
                         <DropDownPicker
                             open={openMunicipio}
                             value={valueMunicipio}
@@ -91,6 +89,7 @@ function AterroFinal({navigation, route}) {
                         />
                     </ContentPicker>
                     <ContentPicker>
+                        <Text>Organização do Aterro:</Text>
                         <DropDownPicker
                             open={openOrganizacao}
                             value={valueOrganizacao}
@@ -104,6 +103,7 @@ function AterroFinal({navigation, route}) {
                         />
                     </ContentPicker>
                     <ContentPicker>
+                        <Text>Porte do Aterro:</Text>
                         <DropDownPicker
                             open={openPorte}
                             value={valuePorte}
@@ -120,8 +120,8 @@ function AterroFinal({navigation, route}) {
             </Content>
 
             <ButtonGroup>
-                <Button onPress={() => navigation.navigate('Home')}>
-                    <TextButton>Cancelar</TextButton>
+                <Button onPress={() => navigation.goBack()}>
+                    <TextButton>Voltar</TextButton>
                 </Button>
                 <Button
                     onPress={() => createAterro()}

@@ -15,8 +15,8 @@ import {
 } from './Style';
 import { StatusBar, Image, View, Text,ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import municipio from '../../../Services/SqlTables/municipio';
-// import axios from 'axios';
+
+import { inclui } from '../../../Services/Networks/inclui';
 
 const CadastroMunicipio = ({ navigation }) => {
 	const [nome, setNome] = useState('');
@@ -34,17 +34,7 @@ const CadastroMunicipio = ({ navigation }) => {
 		};
 
 		if (nome && tamPop && taxGerPerCap && precipMedAnual) {
-			// await axios
-			// 	.post('http://10.0.10.143:3030/municipio', data)
-			// 	.then((response) => {
-			// 		console.log(response);
-			// 		navigation.navigate('Aterro');
-			// 	})
-			// 	.catch((error) => console.log(JSON.stringify(error)));
-			
-			municipio.create(data)
-				.then( id => console.log('Municipio created with id: '+ id) )
-				.catch( err => console.log(err) )
+			inclui('municipio', data)
 				
 			navigation.navigate('Home');
 		} else {

@@ -7,7 +7,7 @@ export const Container = styled.View`
 	justify-content: center;
 `;
 
-export const ContainerAterros = styled.View`
+export const ItemContainer = styled.View`
 	background-color: #d9d9d9;
 	width: 100%;
 	display: flex;
@@ -20,7 +20,7 @@ export const ContainerAterros = styled.View`
 	height: 140px;
 `;
 
-export const Aterro = styled.View`
+export const Card = styled.View`
 	border-radius: 10px;
 	margin-left: 20px;
 	padding: 20px;

@@ -42,3 +42,8 @@ export const Button = styled.TouchableOpacity`
 	border-radius: 10px;
     justify-content: center;
 `;
+
+export const Text = styled.Text`
+	font-size: 20px;
+    margin: 0px;
+`;

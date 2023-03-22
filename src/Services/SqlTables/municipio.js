@@ -6,11 +6,11 @@ import db from "./sqliteDb";
  */
 db.transaction((tx) => {
   //<<<<<<<<<<<<<<<<<<<<<<<< USE ISSO APENAS DURANTE OS TESTES!!! >>>>>>>>>>>>>>>>>>>>>>>
-  //tx.executeSql("DROP TABLE cars;");
+  // tx.executeSql("DROP TABLE municipio;");
   //<<<<<<<<<<<<<<<<<<<<<<<< USE ISSO APENAS DURANTE OS TESTES!!! >>>>>>>>>>>>>>>>>>>>>>>
 
   tx.executeSql(
-    "CREATE TABLE IF NOT EXISTS municipio (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, tamPop INT, taxGerPerCapita FLOAT, precipMedAnual FLOAT);"
+    "CREATE TABLE IF NOT EXISTS municipio (id INTEGER PRIMARY KEY AUTOINCREMENT, Nome TEXT, TamPop INT, TaxGerPerCapita FLOAT, PrecipMedAnual FLOAT);"
   );
 });
 
@@ -26,7 +26,7 @@ const create = (obj) => {
     db.transaction((tx) => {
       //comando SQL modificável
       tx.executeSql(
-        "INSERT INTO municipio (nome, tamPop, taxGerPerCapita, precipMedAnual) values (?, ?, ?, ?);",
+        "INSERT INTO municipio (Nome, TamPop, TaxGerPerCapita, PrecipMedAnual) values (?, ?, ?, ?);",
         [obj.Nome, obj.Tam_Pop, obj.Taxa_Ger_Per_Cap, obj.Precip_Med_Anual],
         //-----------------------
         (_, { rowsAffected, insertId }) => {
@@ -51,7 +51,7 @@ const update = (id, obj) => {
     db.transaction((tx) => {
       //comando SQL modificável
       tx.executeSql(
-        "UPDATE municipio SET nome=?, tamPop=?, taxGerPerCapita=?, precipMedAnual=? WHERE id=?;",
+        "UPDATE municipio SET Nome=?, TamPop=?, TaxGerPerCapita=?, PrecipMedAnual=? WHERE id=?;",
         [obj.Nome, obj.Tam_Pop, obj.Taxa_Ger_Per_Cap, obj.Precip_Med_Anual, id],
         //-----------------------
         (_, { rowsAffected }) => {

@@ -11,8 +11,8 @@ import {
 } from './Style';
 
 import { ScrollView, Text } from 'react-native';
-// import axios from 'axios';
-import organizacao from '../../../Services/SqlTables/organizacao';
+import { inclui } from '../../../Services/Networks/inclui';
+
 
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -34,17 +34,7 @@ const Organizacao = ({ navigation }) => {
 		};
 
 		if (nome && CNPJ && contato) {
-			// await axios
-			// 	.post('http://10.0.10.143:3030/organizacao', data)
-			// 	.then((response) => {
-			// 		console.log(response);
-			// 		navigation.navigate('Home');
-			// 	})
-			// 	.catch((error) => console.log(JSON.stringify(error)));
-			
-			organizacao.create(data)
-				.then( id => console.log('Organização created with id: '+ id) )
-				.catch( err => console.log(err) )
+			inclui('organizacao', data)
 			
 			navigation.navigate('Home')
 		} else {

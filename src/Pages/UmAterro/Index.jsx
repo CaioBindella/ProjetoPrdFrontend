@@ -15,7 +15,6 @@ import {
 } from './Style';
 import { Feather } from '@expo/vector-icons';
 
-import aterro from '../../Services/SqlTables/aterro';
 import Header from '../Components/Header/Index';
 import {
 	StatusBar,
@@ -27,13 +26,14 @@ import {
 } from 'react-native';
 
 import { AntDesign } from '@expo/vector-icons';
+import { excluir } from '../../Services/Networks/excluir';
 
 const UmAterro = ({ navigation, route }) => {
 	const [modalVisible, setModalVisible] = useState(false);
 	const Item = route.params.item;
 
 	async function deleteAterro () {
-		await aterro.remove(Item.id).catch(e => console.log(e))
+		excluir(Item.id, 'aterro')
 	}
 
 

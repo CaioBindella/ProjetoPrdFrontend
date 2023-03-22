@@ -13,10 +13,8 @@ import {
 import DropDownPicker from 'react-native-dropdown-picker';
 import Header from "../../../Cadastro/Components/Header";
 
-import aterro from "../../../../Services/SqlTables/aterro";
-import municipio from "../../../../Services/SqlTables/municipio";
-import organizacao from "../../../../Services/SqlTables/organizacao";
-import porte from "../../../../Services/SqlTables/porte";
+import { consulta } from "../../../../Services/Networks/consulta";
+import { atualiza } from "../../../../Services/Networks/atualiza";
 
 
 function UpdateAterroFinal({navigation, route}) {
@@ -33,8 +31,8 @@ function UpdateAterroFinal({navigation, route}) {
 	const [valuePorte, setValuePorte] = useState(Item.Porte);
 	const [itemsPorte, setItemsPorte] = useState([]);
 
-    async function loadDataPicker (dataType, setFunction) {
-        const data = await dataType.all()
+    async function loadDataPicker (table, setFunction) {
+        const data = await consulta(table)
         let itemModel = []
         
         data.map((eachData) => {
@@ -45,9 +43,9 @@ function UpdateAterroFinal({navigation, route}) {
     }
 
     useEffect(() => {
-        loadDataPicker(municipio, setItemsMunicipio)
-        loadDataPicker(organizacao, setItemsOrganizacao)
-        loadDataPicker(porte, setItemsPorte)
+        loadDataPicker('municipio', setItemsMunicipio)
+        loadDataPicker('organizacao', setItemsOrganizacao)
+        loadDataPicker('porte', setItemsPorte)
     }, [])
 
     async function updateAterro() {
@@ -62,9 +60,7 @@ function UpdateAterroFinal({navigation, route}) {
                 Porte: valuePorte
             }
 
-			await aterro.update(Item.id, data)
-				.then( id => console.log('Aterro updated with id: '+ id) )
-				.catch( err => console.log(err) )
+			atualiza(Item.id, 'aterro', data)
 
 			navigation.navigate('Home')
 		} else {

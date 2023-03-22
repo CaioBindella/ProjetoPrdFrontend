@@ -6,7 +6,7 @@ import CadastrosBasicos from './src/Pages/CadastrosBasicos/Index';
 import CadastroMunicipio from './src/Pages/Cadastro/Municipio/Index';
 import Profissional from './src/Pages/Cadastro/Profissional/Index';
 import Organizacao from './src/Pages/Cadastro/Organizacao/Index';
-import MeusAterros from './src/Pages/MeusAterros/Index';
+import MeusAterros from './src/Pages/ListaDados/MeusAterros/Index';
 import UmAterro from './src/Pages/UmAterro/Index';
 import UpdateUmAterro from './src/Pages/Updates/UpdateUmAterro/Index';
 import UpdateUmMunicipio from './src/Pages/Updates/UpdateUmMunicipio/Index';
@@ -17,6 +17,7 @@ import IndicadorTecnico from './src/Pages/IndicesOptions/IndicadorTecnico/Index'
 import Porte from './src/Pages/Cadastro/Porte/Index';
 import AterroFinal from './src/Pages/Cadastro/Aterro/AterroFinal/Index';
 import UpdateAterroFinal from './src/Pages/Updates/UpdateUmAterro/UpdateAterroFinal/Index';
+import MeusMunicipios from './src/Pages/ListaDados/MeusMunicipios/Index';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -121,6 +122,11 @@ export default function App() {
 				<Stack.Screen
 					name='UpdateAterroFinal'
 					component={UpdateAterroFinal}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='MeusMunicipios'
+					component={MeusMunicipios}
 					options={{ headerShown: false }}
 				/>
 			</Stack.Navigator>

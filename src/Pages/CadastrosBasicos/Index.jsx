@@ -17,7 +17,7 @@ function CadastrosBasicos({navigation}){
             <Content>
                 <ButtonsHome>
 
-                    <Button onPress={() => navigation.navigate('CadastroMunicipio')}>
+                    <Button onPress={() => navigation.navigate('MeusMunicipios')}>
                         <Text>Cadastrar Município</Text>
                     </Button>
 

@@ -60,3 +60,20 @@ null
 // 		navigation.navigate('Home');
 // 	})
 // 	.catch((error) => console.log(JSON.stringify(error)));
+
+
+// await axios
+    // 	.post('http://10.0.10.143:3030/municipio', data)
+    // 	.then((response) => {
+    // 		console.log(response);
+    // 		navigation.navigate('Aterro');
+    // 	})
+    // 	.catch((error) => console.log(JSON.stringify(error)));
+
+// await axios
+    // 	.post('http://10.0.10.143:3030/organizacao', data)
+    // 	.then((response) => {
+    // 		console.log(response);
+    // 		navigation.navigate('Home');
+    // 	})
+    // 	.catch((error) => console.log(JSON.stringify(error)));
