@@ -6,11 +6,11 @@ import db from "./sqliteDb";
  */
 db.transaction((tx) => {
   //<<<<<<<<<<<<<<<<<<<<<<<< USE ISSO APENAS DURANTE OS TESTES!!! >>>>>>>>>>>>>>>>>>>>>>>
-  //tx.executeSql("DROP TABLE cars;");
+  // tx.executeSql("DROP TABLE organizacao;");
   //<<<<<<<<<<<<<<<<<<<<<<<< USE ISSO APENAS DURANTE OS TESTES!!! >>>>>>>>>>>>>>>>>>>>>>>
 
   tx.executeSql(
-    "CREATE TABLE IF NOT EXISTS organizacao (id INTEGER PRIMARY KEY AUTOINCREMENT, Nome TEXT, Cnpj INT, Contato INT);"
+    "CREATE TABLE IF NOT EXISTS organizacao (id INTEGER PRIMARY KEY AUTOINCREMENT, Nome TEXT, Cnpj INT, Contato INT, UNIQUE(Nome));"
   );
 });
 

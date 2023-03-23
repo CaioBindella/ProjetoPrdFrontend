@@ -19,7 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Header from '../../Components/Header/Index';
 import Buttons from '../../Cadastro/Components/Buttons';
 
-const Profissional = ({ navigation, route }) => {
+const UpdateProfissional = ({ navigation, route }) => {
 	const [nomeGerente, setNomeGerente] = useState('');
 	const [emailGerente, setEmailGerente] = useState('');
 	const [contatoGerente, setContatoGerente] = useState('');
@@ -204,4 +204,4 @@ const Profissional = ({ navigation, route }) => {
 	);
 };
 
-export default Profissional;
+export default UpdateProfissional;

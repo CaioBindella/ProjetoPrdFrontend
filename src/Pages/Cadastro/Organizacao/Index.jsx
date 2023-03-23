@@ -17,7 +17,7 @@ import { inclui } from '../../../Services/Networks/inclui';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import Header from '../Components/Header/index';
+import Header from '../../Components/Header/Index';
 import Buttons from '../Components/Buttons/index';
 
 
@@ -35,15 +35,16 @@ const Organizacao = ({ navigation }) => {
 
 		if (nome && CNPJ && contato) {
 			inclui('organizacao', data)
+				.then(() => navigation.navigate('Home'))
+				.catch((e) => alert("Organização já cadastrada"))
 			
-			navigation.navigate('Home')
 		} else {
 			alert('Há campos vazios');
 		}
 	}
 	return (
 		<ScrollView style={{ width: '100%', backgroundColor: 'white' }}>
-			<Header />
+			<Header title="Cadastrar Organização" />
 
 			<ViewTitle>
 				<Title>Preencha os dados referente a Organização responsável </Title>

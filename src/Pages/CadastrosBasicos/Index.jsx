@@ -21,11 +21,11 @@ function CadastrosBasicos({navigation}){
                         <Text>Cadastrar Município</Text>
                     </Button>
 
-                    <Button onPress={() => navigation.navigate('Organizacao')}>
+                    <Button onPress={() => navigation.navigate('MinhasOrganizacoes')}>
                         <Text>Cadastrar Organização</Text>
                     </Button>
 
-                    <Button onPress={() => navigation.navigate('Porte')}>
+                    <Button onPress={() => navigation.navigate('MeusPortes')}>
                         <Text>Cadastrar Porte</Text>
                     </Button>
 

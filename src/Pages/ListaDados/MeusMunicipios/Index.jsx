@@ -22,8 +22,8 @@ import { consulta } from '../../../Services/Networks/consulta';
 import { Touchable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-const Item = ({ Nome, TamPop, TaxGerPerCapita, PrecipMedAnual, item, navigation, index }) => (
-	<TouchableOpacity onPress={()=> navigation.navigate('UmAterro',{item: item, index:index})}>
+const Item = ({ Nome, TamPop, TaxGerPerCapita, PrecipMedAnual, item, navigation }) => (
+	<TouchableOpacity onPress={()=> navigation.navigate('PainelBasicos', {item: item, table: 'municipio'})}>
 		<ItemContainer>
 			<Feather name='home' size={44} color='black' />
 			<Card>

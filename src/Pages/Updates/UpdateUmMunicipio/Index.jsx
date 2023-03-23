@@ -13,57 +13,32 @@ import {
 } from './Style';
 import { StatusBar, Image, View, Text,ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Header from '../../Components/Header/Index';
 
+import { atualiza } from '../../../Services/Networks/atualiza';
+
 const UpdateUmMunicipio = ({ navigation, route }) => {
-	const [nome, setNome] = useState('');
-	const [nome2, setNome2] = useState('');
-	const [tamPop, setTamPop] = useState(0);
-	const [taxGerPerCap, setTaxGerPerCap] = useState(0);
-	const [precipMedAnual, setPrecipMedAnual] = useState(0);
+	const Item = route.params.item
+	const [nome, setNome] = useState(Item.Nome);
+	const [tamPop, setTamPop] = useState(String(Item.TamPop));
+	const [taxGerPerCap, setTaxGerPerCap] = useState(String(Item.TaxGerPerCap));
+	const [precipMedAnual, setPrecipMedAnual] = useState(String(Item.PrecipMedAnual));
 
-    const index = route.params.index;
-
-    useEffect( () => {
-	
-		const loadData = async () =>{
-			const response = await AsyncStorage.getItem('dataMunicipio')
-			const data = response ? JSON.parse(response) : []
-			const chosenData = data[index]
-
-			setNome(chosenData.Nome)
-			setNome2(chosenData.Nome2)
-			setTamPop(String(chosenData.Tam_Pop))
-			setTaxGerPerCap(String(chosenData.Taxa_Ger_Per_Cap))
-			setPrecipMedAnual(String(chosenData.Precip_Med_Anual))
-		}
-	
-		loadData()
-		
-	}, []);
-
+    
 
 	async function UpUmMunicipio() {
-		
 		const data = {
 			Nome: nome,
-			Nome2: nome2,
 			Tam_Pop: parseInt(tamPop),
 			Taxa_Ger_Per_Cap: parseFloat(taxGerPerCap),
 			Precip_Med_Anual: parseFloat(precipMedAnual),
 		};
 
-		const response = await AsyncStorage.getItem('dataMunicipio')
-		const previousData = response ? JSON.parse(response) : [];
-
-		if (nome && nome2 && tamPop && taxGerPerCap && precipMedAnual) {
-            previousData.splice(index, 1, data);
-			const stringData = JSON.stringify(previousData)
-
-			await AsyncStorage.setItem('dataMunicipio', stringData)
-			navigation.navigate('Home');
+		if (nome && tamPop && taxGerPerCap && precipMedAnual) {
+			atualiza(Item.id, 'municipio', data)
+			
+			navigation.navigate('Home')
 		} else {
 			alert('Há campos vazios');
 		}
@@ -80,20 +55,11 @@ const UpdateUmMunicipio = ({ navigation, route }) => {
 
 				<ContainerInputGroup>
 					<InputGroup>
-						<Text>Município 1 </Text>
+						<Text>Município</Text>
 						<Input
 							placeholder='Digite aqui o município do aterro'
 							onChangeText={setNome}
 							value={nome}
-						/>
-					</InputGroup>
-
-					<InputGroup>
-						<Text>Município 2 (opcional) </Text>
-						<Input
-							placeholder='Digite aqui o município do aterro'
-							onChangeText={setNome2}
-							value={nome2}
 						/>
 					</InputGroup>
 
@@ -135,7 +101,7 @@ const UpdateUmMunicipio = ({ navigation, route }) => {
                             UpUmMunicipio()
                             alert('Atualizado');
                         }}>
-						<TextButton>Avançar</TextButton>
+						<TextButton>Atualizar</TextButton>
 					</Button>
 				</ButtonGroup>
 			</ScrollView>

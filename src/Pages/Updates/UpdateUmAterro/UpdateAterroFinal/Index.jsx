@@ -36,7 +36,7 @@ function UpdateAterroFinal({navigation, route}) {
         let itemModel = []
         
         data.map((eachData) => {
-            itemModel = [...itemModel, {label: eachData.nome, value: eachData.nome}]
+            itemModel = [...itemModel, {label: eachData.Nome, value: eachData.Nome}]
         })
 
         setFunction(itemModel)

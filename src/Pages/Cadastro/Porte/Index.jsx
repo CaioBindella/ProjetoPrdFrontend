@@ -27,8 +27,8 @@ function Porte({navigation}) {
 
 		if (nomePorte) {
 			inclui('porte', data)
-			
-			navigation.navigate('Home')
+				.then(() => navigation.navigate('Home'))
+				.catch((e) => alert("Porte já cadastrado"))
 		} else {
 			alert('Há campos vazios');
 		}
@@ -51,7 +51,7 @@ function Porte({navigation}) {
 			</ContainerInputGroup>
 
 			<ButtonGroup>
-				<Button onPress={() => navigation.navigate('Porte')}>
+				<Button onPress={() => navigation.goBack()}>
 					<TextButton>Cancelar</TextButton>
 				</Button>
 				<Button

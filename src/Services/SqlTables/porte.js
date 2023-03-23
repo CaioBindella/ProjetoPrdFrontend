@@ -10,7 +10,7 @@ db.transaction((tx) => {
   //<<<<<<<<<<<<<<<<<<<<<<<< USE ISSO APENAS DURANTE OS TESTES!!! >>>>>>>>>>>>>>>>>>>>>>>
 
   tx.executeSql(
-    "CREATE TABLE IF NOT EXISTS porte (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT);"
+    "CREATE TABLE IF NOT EXISTS porte (id INTEGER PRIMARY KEY AUTOINCREMENT, Nome TEXT, UNIQUE(Nome));"
   );
 });
 
@@ -26,7 +26,7 @@ const create = (obj) => {
     db.transaction((tx) => {
       //comando SQL modificável
       tx.executeSql(
-        "INSERT INTO porte (nome) values (?);",
+        "INSERT INTO porte (Nome) values (?);",
         [obj.Porte],
         //-----------------------
         (_, { rowsAffected, insertId }) => {
@@ -51,7 +51,7 @@ const update = (id, obj) => {
     db.transaction((tx) => {
       //comando SQL modificável
       tx.executeSql(
-        "UPDATE porte SET nome=? WHERE id=?;",
+        "UPDATE porte SET Nome=? WHERE id=?;",
         [obj.Porte, id],
         //-----------------------
         (_, { rowsAffected }) => {

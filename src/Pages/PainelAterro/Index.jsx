@@ -28,11 +28,11 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import { excluir } from '../../Services/Networks/excluir';
 
-const UmAterro = ({ navigation, route }) => {
+const PainelAterro = ({ navigation, route }) => {
 	const [modalVisible, setModalVisible] = useState(false);
 	const Item = route.params.item;
 
-	async function deleteAterro () {
+	async function deleteData () {
 		excluir(Item.id, 'aterro')
 	}
 
@@ -44,7 +44,7 @@ const UmAterro = ({ navigation, route }) => {
 			<Content>
 				<Button onPress={() => navigation.navigate('UpdateUmAterro', {item: Item})}>
 					<AntDesign name="reload1" size={24} color="blue" />
-					<Text>Atualizar dados do Aterro</Text>
+					<Text>Atualizar dados</Text>
 				</Button>
 
 				<Button onPress={() => navigation.navigate('IndicesOptions', {item: Item})}>
@@ -81,7 +81,7 @@ const UmAterro = ({ navigation, route }) => {
 								style={{ backgroundColor: 'red' }}
 								onPress={() => {
 									setModalVisible(!modalVisible);
-									deleteAterro();
+									deleteData();
 									alert('Excluido');
 									navigation.navigate('Home')
 								}}>
@@ -95,4 +95,4 @@ const UmAterro = ({ navigation, route }) => {
 	);
 };
 
-export default UmAterro;
+export default PainelAterro;

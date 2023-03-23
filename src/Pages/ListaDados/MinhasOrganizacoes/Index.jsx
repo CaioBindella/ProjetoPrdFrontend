@@ -22,25 +22,24 @@ import { consulta } from '../../../Services/Networks/consulta';
 import { Touchable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-const Item = ({ Endereco, Latitude, Longitude, Nome, item, navigation }) => (
-	<TouchableOpacity onPress={()=> navigation.navigate('PainelAterro',{item: item})}>
+const Item = ({ Nome, Cnpj, Contato, item, navigation, index }) => (
+	<TouchableOpacity onPress={()=> navigation.navigate('UmAterro',{item: item, index:index})}>
 		<ItemContainer>
 			<Feather name='home' size={44} color='black' />
 			<Card>
 				<Title>{Nome}</Title>
-				<Text>Endereço: {Endereco}</Text>
-				<Text>Latitude: {Latitude}</Text>
-				<Text>Longitude: {Longitude}</Text>
+				<Text>CNPJ: {Cnpj}</Text>
+				<Text>Contato: {Contato}</Text>
 			</Card>
 		</ItemContainer>
 	</TouchableOpacity>
 );
 
-const MeusAterros = ({ navigation }) => {
+const MinhasOrganizacoes = ({ navigation }) => {
 	const [data, setData] = useState([]);
 
 	async function loadData () {
-		const response = await consulta('aterro')
+		const response = await consulta('organizacao')
 
 		setData(response)
 	}
@@ -53,7 +52,7 @@ const MeusAterros = ({ navigation }) => {
 	return (
 		<Container>
 			<StatusBar />
-			<Header title="Meus Aterros"/>
+			<Header title="Minhas Organizações"/>
 
 			<ScrollView>
 
@@ -61,10 +60,9 @@ const MeusAterros = ({ navigation }) => {
 					data.map((eachData, index) => {
 						return(
 							<Item
-								Endereco={eachData.Endereco}
 								Nome={eachData.Nome}
-								Latitude={eachData.Latitude}
-								Longitude={eachData.Longitude}
+								Cnpj={eachData.Cnpj}
+								Contato={eachData.Contato}
 								item={eachData}
 								key={index}
 								navigation={navigation}
@@ -76,9 +74,9 @@ const MeusAterros = ({ navigation }) => {
 				}
 			</ScrollView>
 
-			<Button onPress={() => navigation.navigate('Aterro')}>
+			<Button onPress={() => navigation.navigate('Organizacao')}>
 				<AntDesign name="plus" size={24} color="black" />
-				<Text>Incluir novo Aterro</Text>
+				<Text>Incluir nova Organização</Text>
 			</Button>
 
 			
@@ -86,4 +84,4 @@ const MeusAterros = ({ navigation }) => {
 	);
 };
 
-export default MeusAterros;
+export default MinhasOrganizacoes;
