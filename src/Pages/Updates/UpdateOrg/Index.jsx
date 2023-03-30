@@ -12,58 +12,27 @@ import {
 
 import { ScrollView, Text } from 'react-native';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { atualiza } from '../../../Services/Networks/atualiza'
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Header from '../../Components/Header/Index';
 
 const UpdateOrg = ({ navigation, route }) => {
-    const [nome, setNome] = useState('');
-    const [CNPJ, setCNPJ] = useState('');
-    const [contato, setContato] = useState('');
-    const [licencPrev, setLicencPrev] = useState('');
-    const [licencDeOperacao, setLicencDeOperacao] = useState('');
-
-    const index = route.params.index;
-	
-	useEffect( () => {
-	
-		const loadData = async () =>{
-			const response = await AsyncStorage.getItem('dataOrganizacao')
-			const data = response ? JSON.parse(response) : []
-			const chosenData = data[index]
-
-			setNome(chosenData.Nome)
-			setCNPJ(String(chosenData.CNPJ))
-			setContato(String(chosenData.Contato))
-			setLicencPrev(String(chosenData.LicenPrev))
-			setLicencDeOperacao(String(chosenData.LicencDeOperacao))
-		}
-	
-		loadData()
-		
-	}, []);
+	const Item = route.params.item;
+    const [nome, setNome] = useState(Item.Nome);
+    const [CNPJ, setCNPJ] = useState(String(Item.Cnpj));
+    const [contato, setContato] = useState(String(Item.Contato));
 
 	async function UpOrganizacao() {
 		const data = {
 			Nome: nome,
 			CNPJ: CNPJ,
 			Contato: contato,
-			LicenPrev: licencPrev,
-			LicencDeOperacao: licencDeOperacao,
 		};
 
-		const response = await AsyncStorage.getItem('dataOrganizacao')
-		const previousData = response ? JSON.parse(response) : [];
-
-
-		if (nome && CNPJ && contato && licencPrev && licencDeOperacao) {
-            previousData.splice(index, 1, data);
-
-			const stringData = JSON.stringify(previousData)
-
-			await AsyncStorage.setItem('dataOrganizacao', stringData)
+		if (nome && CNPJ && contato) {
+			atualiza(Item.id, 'organizacao', data)
 			navigation.navigate('Home')
 
 		} else {
@@ -108,24 +77,6 @@ const UpdateOrg = ({ navigation, route }) => {
 						placeholder='Digite aqui o CNPJ '
 						onChangeText={setCNPJ}
 						value={CNPJ}
-					/>
-				</InputGroup>
-
-				<InputGroup>
-					<Text>Licença Prev</Text>
-					<Input
-						placeholder='Digite aqui a licença prev '
-						onChangeText={setLicencPrev}
-						value={licencPrev}
-					/>
-				</InputGroup>
-
-				<InputGroup>
-					<Text>Licença de Operação</Text>
-					<Input
-						placeholder='Digite aqui a licença de operação '
-						onChangeText={setLicencDeOperacao}
-						value={licencDeOperacao}
 					/>
 				</InputGroup>
 			</ContainerInputGroup>

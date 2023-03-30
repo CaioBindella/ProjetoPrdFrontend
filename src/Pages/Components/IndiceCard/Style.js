@@ -32,7 +32,9 @@ export const ContentOptions = styled.View`
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     border: 1px solid black;
     background-color: #D9D9D9;
     width: 85%;

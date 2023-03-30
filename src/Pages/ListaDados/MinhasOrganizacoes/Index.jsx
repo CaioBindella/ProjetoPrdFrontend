@@ -23,7 +23,7 @@ import { Touchable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 const Item = ({ Nome, Cnpj, Contato, item, navigation, index }) => (
-	<TouchableOpacity onPress={()=> navigation.navigate('UmAterro',{item: item, index:index})}>
+	<TouchableOpacity onPress={()=> navigation.navigate('PainelBasicos', {item: item, table: 'organizacao'})}>
 		<ItemContainer>
 			<Feather name='home' size={44} color='black' />
 			<Card>

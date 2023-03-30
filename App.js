@@ -11,6 +11,7 @@ import UpdateUmAterro from './src/Pages/Updates/UpdateUmAterro/Index';
 import UpdateUmMunicipio from './src/Pages/Updates/UpdateUmMunicipio/Index';
 import UpdateOrg from './src/Pages/Updates/UpdateOrg/Index';
 import UpdateProf from './src/Pages/Updates/UpdateProf/Index';
+import UpdatePorte from './src/Pages/Updates/UpdatePorte/Index'
 import IndicesOptions from './src/Pages/IndicesOptions/Index';
 import IndicadorTecnico from './src/Pages/IndicesOptions/IndicadorTecnico/Index';
 import Porte from './src/Pages/Cadastro/Porte/Index';
@@ -100,6 +101,11 @@ export default function App() {
 				<Stack.Screen
 					name='UpdateOrg'
 					component={UpdateOrg}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='UpdatePorte'
+					component={UpdatePorte}
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen

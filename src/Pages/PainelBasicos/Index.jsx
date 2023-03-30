@@ -40,9 +40,14 @@ const PainelBasicos = ({ navigation, route }) => {
 
 	switch(table){
 		case 'organizacao':
-			updateRoute = "UpdateOrg"
+			updateRoute = "UpdateOrg";
+			break;
 		case 'municipio':
-			updateRoute = "UpdateUmMunicipio"
+			updateRoute = "UpdateUmMunicipio";
+			break;
+		case 'porte':
+			updateRoute = "UpdatePorte";
+			break;
 	}
 
 
