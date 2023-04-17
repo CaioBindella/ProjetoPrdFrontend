@@ -76,7 +76,7 @@ const MeusMunicipios = ({ navigation }) => {
 				}
 			</ScrollView>
 
-			<Button onPress={() => navigation.navigate('Aterro')}>
+			<Button onPress={() => navigation.navigate('CadastroMunicipio')}>
 				<AntDesign name="plus" size={24} color="black" />
 				<Text>Incluir novo Municipio</Text>
 			</Button>

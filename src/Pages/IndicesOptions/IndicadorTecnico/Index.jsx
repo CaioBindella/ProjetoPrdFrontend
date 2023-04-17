@@ -2,23 +2,35 @@ import React from "react";
 
 import {
     Container,
+    Button,
+    Text,
+    Content,
 } from './Style'
 
 import { ScrollView } from "react-native";
 
 import Header from "../../Components/Header/Index";
-import IndiceCard from "../../Components/IndiceCard/Index";
 
-import { TecCategoria2Grupo2 } from "../../../Services/frontEndData/IndiceTecnico/Categoria2/Grupo2";
-
-function IndicadorTecnico() {
+function IndicadorTecnico({navigation}) {
     return(
         <Container>
             <ScrollView>
             <Header title="Índice Técnico" />
-                {TecCategoria2Grupo2.map((eachData, index) => {
-                    return(<IndiceCard key={index} title={eachData.title} description={eachData.description} options={eachData.options} optionValue={eachData.valuesOptions}/>)
-                })}
+                
+            <Content>
+                <Button onPress={() => navigation.navigate('CaractLocacionais')}>
+                    <Text>Cadastrar Características Locacionais</Text>
+                </Button>
+
+                <Button>
+                    <Text>Cadastrar Infraestrutura Implantada</Text>
+                </Button>
+
+                <Button>
+                    <Text>Cadastrar Condições Operacionais</Text>
+                </Button>
+            </Content>
+
             </ScrollView>
         </Container>
     );

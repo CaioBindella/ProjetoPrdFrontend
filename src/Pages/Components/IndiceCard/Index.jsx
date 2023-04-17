@@ -12,7 +12,7 @@ import {
 import {TouchableOpacity, Text, View} from 'react-native';
 import { RadioButton } from 'react-native-paper';
 
-function IndiceCard({title, description, options, optionValue}){
+function IndiceCard ({title, description, options, optionValue}){
 
     const [checked, setChecked] = useState(null);
 
@@ -26,7 +26,7 @@ function IndiceCard({title, description, options, optionValue}){
                 <Description>{description}</Description>
             </ContentTitle> 
 
-            <ContentOptions style={{borderTopWidth:0}}>
+            {/* <ContentOptions style={{borderTopWidth:0}}>
                 {options.map((eachOption, index) => {
                     return(
                         <InputContainer key={index}>
@@ -40,7 +40,7 @@ function IndiceCard({title, description, options, optionValue}){
                         </InputContainer>
                     )
                 })}
-            </ContentOptions>
+            </ContentOptions> */}
 
         </Container>
     );

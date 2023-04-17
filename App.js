@@ -22,9 +22,13 @@ import MinhasOrganizacoes from './src/Pages/ListaDados/MinhasOrganizacoes/Index'
 import MeusPortes from './src/Pages/ListaDados/MeusPortes/Index'
 import PainelAterro from './src/Pages/PainelAterro/Index';
 import PainelBasicos from './src/Pages/PainelBasicos/Index';
+import CaractLocacionais from './src/Pages/IndicesOptions/IndicadorTecnico/Categorias/CaractLocacionais/Index';
+
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useEffect } from 'react';
+
 
 // import { useFonts } from 'expo-font';
 // import { Loading } from 'expo-app-loading';
@@ -151,6 +155,11 @@ export default function App() {
 				<Stack.Screen
 					name='PainelBasicos'
 					component={PainelBasicos}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='CaractLocacionais'
+					component={CaractLocacionais}
 					options={{ headerShown: false }}
 				/>
 			</Stack.Navigator>
