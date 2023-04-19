@@ -77,3 +77,38 @@ null
     // 		navigation.navigate('Home');
     // 	})
     // 	.catch((error) => console.log(JSON.stringify(error)));
+
+// let lastTitle = response[0].Titulo;
+        // let lastDescription = response[0].DescInd;
+        // responses.push(response[0].Desc)
+          
+        // for (let i = 1; i < response.length; i++) {
+            
+        //     if (response[i].Titulo === lastTitle) {
+        //         lastTitle = response[i].Titulo;
+        //         lastDescription = response[i].DescInd
+        //         responses.push(response[i].Desc)
+                
+        //     } 
+        //     else if(i === response.length-1){
+        //         responseObject.push({
+        //             Titulo: lastTitle,
+        //             DescInd: lastDescription,
+        //             Options: responses
+                    
+        //         })
+        //     }
+        //     else {
+        //         responseObject.push({
+        //             Titulo: lastTitle,
+        //             DescInd: lastDescription,
+        //             Options: responses
+                    
+        //         })
+        //         responses = []
+        //         lastTitle = response[i].Titulo;
+        //         lastDescription = response[i].DescInd
+        //     }
+        // }
+
+        // console.log(responseObject)
