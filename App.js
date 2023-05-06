@@ -22,7 +22,8 @@ import MinhasOrganizacoes from './src/Pages/ListaDados/MinhasOrganizacoes/Index'
 import MeusPortes from './src/Pages/ListaDados/MeusPortes/Index'
 import PainelAterro from './src/Pages/PainelAterro/Index';
 import PainelBasicos from './src/Pages/PainelBasicos/Index';
-import CaractLocacionais from './src/Pages/IndicesOptions/IndicadorTecnico/Categorias/CaractLocacionais/Index';
+import FormIndicador from './src/Pages/IndicesOptions/IndicadorTecnico/FormIndicador/Index';
+
 
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -158,8 +159,8 @@ export default function App() {
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
-					name='CaractLocacionais'
-					component={CaractLocacionais}
+					name='FormIndicador'
+					component={FormIndicador}
 					options={{ headerShown: false }}
 				/>
 			</Stack.Navigator>

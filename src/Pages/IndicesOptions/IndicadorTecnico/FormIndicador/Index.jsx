@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 
 import {
-    Container,
+    Container
 } from './Style'
 
 import { ScrollView } from "react-native";
 
-import Header from "../../../../Components/Header/Index";
-import IndiceCard from "../../../../Components/IndiceCard/Index";
-import { indiceDb } from "../../../../../Services/SqlTables/sqliteDb";
+import Header from "../../../Components/Header/Index";
+import IndiceCard from "../../../Components/IndiceCard/Index";
+import { indiceDb } from "../../../../Services/SqlTables/sqliteDb";
 
 
 const getQuestions = (subcat) => {
@@ -18,13 +18,13 @@ const getQuestions = (subcat) => {
         //comando SQL modificável
         tx.executeSql(
             `
-                SELECT I.Titulo, I.DescInd, A.Desc
-                from Categoria C
-                INNER JOIN SubCategoria SC ON SC.CodCat = C.CodCat
-                INNER JOIN Indicador I ON I.CodSubCat = SC.CodSubCat
-                INNER JOIN AvaliacaoPeso AP ON AP.CodInd = I.CodInd
-                INNER JOIN Avaliacao A ON A.CodAval = AP.CodAval
-                WHERE SC.DescSubCat = "${subcat}"
+            SELECT I.Titulo, I.DescInd, A.Desc, AP.Pontuacao 
+            from Categoria C                 
+            INNER JOIN SubCategoria SC ON SC.CodCat = C.CodCat                 
+            INNER JOIN Indicador I ON I.CodSubCat = SC.CodSubCat                 
+            INNER JOIN AvaliacaoPeso AP ON AP.CodInd = I.CodInd                 
+            INNER JOIN Avaliacao A ON A.CodAval = AP.CodAval                 
+            WHERE SC.DescSubCat = "${subcat}"
             `,
             [],
             //-----------------------
@@ -37,26 +37,29 @@ const getQuestions = (subcat) => {
 };
 
 
-function CaractLocacionais() {
+function FormIndicador({ route }) {
     const [data, setData] = useState([])
+    const subCat = route.params.subCategory;
 
     const loadData = async () => {
-        const response = await getQuestions("Características fisiográficas")
+        const response = await getQuestions(subCat)
 
         const differentDescriptions = {};
 
         for (let i = 0; i < response.length; i++) {
-            const { Titulo, DescInd, Desc} = response[i];
+            const { Titulo, DescInd, Desc, Pontuacao} = response[i];
             
             if (differentDescriptions[Titulo]) {
                 if (!differentDescriptions[Titulo].Desc.includes(Desc)) {
                     differentDescriptions[Titulo].Desc.push(Desc);
+                    differentDescriptions[Titulo].Pontuacao.push(Pontuacao)
                 }
             } else {
                 differentDescriptions[Titulo] = {
                     Titulo: Titulo,
                     DescInd: DescInd,
                     Desc: [Desc],
+                    Pontuacao: [Pontuacao]
                 };
             }
         }
@@ -67,14 +70,16 @@ function CaractLocacionais() {
     useEffect(() =>{
         loadData()
     }, [])
+    
+    
 
     return(
         <Container>
             <ScrollView>
-            <Header title="Índice Técnico - Características Locacionais" />
+            <Header title={subCat} />
                 
             {data.map((eachData, index) => {
-                return (<IndiceCard key={index} title={eachData.Titulo} description={eachData.DescInd} options={eachData.Desc} optionValue={[1, 2, 3]}/>)
+                return (<IndiceCard key={index} title={eachData.Titulo} description={eachData.DescInd} options={eachData.Desc} optionValue={eachData.Pontuacao}/>)
             })}
                 
             </ScrollView>
@@ -82,4 +87,4 @@ function CaractLocacionais() {
     );
 };
 
-export default CaractLocacionais;
+export default FormIndicador;
