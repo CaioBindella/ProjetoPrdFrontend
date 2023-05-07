@@ -22,24 +22,24 @@ function IndicadorTecnico({navigation}) {
         {
             category: "Características Locacionais",
             subCategories: [
-                "Características fisiográficas",
-                "Interface socioambiental",
-                "Sistema viário público de acesso"
+                {name: "Características fisiográficas", maxScore: 71},
+                {name: "Interface socioambiental", maxScore: 51},
+                {name: "Sistema viário público de acesso", maxScore: 40},
             ]
         },
         {
             category: "Infraestrutura Implantada",
             subCategories: [
-                "Avaliação da infraestrutura implantada",
-                "Avaliação do sistema de controle implantado"
+                {name: "Avaliação da infraestrutura implantada", maxScore: 72},
+                {name: "Avaliação do sistema de controle implantado", maxScore: 98}
             ]
         },
         {
             category: "Condições Operacionais",
             subCategories: [
-                "Caracteristicas operacionais",
-                "Avaliação da Eficiência dos Sistemas de Controle",
-                "Documentos básicos e diretrizes operacionais"
+                {name: "Caracteristicas operacionais", maxScore: 104},
+                {name: "Avaliação da Eficiência dos Sistemas de Controle", maxScore: 125},
+                {name: "Documentos básicos e diretrizes operacionais", maxScore: 77},
             ]
         }
     ]
@@ -64,11 +64,14 @@ function IndicadorTecnico({navigation}) {
     };
 
     useEffect(() => {
-        // const handleButtonPress = async () => {
-        //     const date = new Date();
-        //     await createAnalysis(date.toLocaleString())
-        //     // setCurrentDate(date.toLocaleString());   
-        // }
+        const handleButtonPress = async () => {
+            const date = new Date();
+            console.log(date.toLocaleString('pt-BR'))
+            // await createAnalysis(date.toLocaleString())
+            // setCurrentDate(date.toLocaleString());   
+        }
+
+        handleButtonPress()
 
 
     })
@@ -87,7 +90,7 @@ function IndicadorTecnico({navigation}) {
                             {eachCategory.subCategories.map((eachSubCategory, index) => {
                                 return (
                                     <Button key={index} onPress={() => navigation.navigate('FormIndicador', {subCategory: eachSubCategory})}>
-                                        <Text>{eachSubCategory}</Text>
+                                        <Text>{eachSubCategory.name}</Text>
                                     </Button>
                                 )
                             })}

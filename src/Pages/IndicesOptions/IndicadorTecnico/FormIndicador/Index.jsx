@@ -8,6 +8,7 @@ import { ScrollView } from "react-native";
 
 import Header from "../../../Components/Header/Index";
 import IndiceCard from "../../../Components/IndiceCard/Index";
+import Score from "../../../Components/Score/Index";
 import { indiceDb } from "../../../../Services/SqlTables/sqliteDb";
 
 
@@ -36,13 +37,33 @@ const getQuestions = (subcat) => {
     })
 };
 
+const createRegisters = () => {
+    return new Promise((resolve, reject) => {
+    indiceDb.then((data) => {
+        data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+            `
+            INSERT INTO AnaliseItem (CodAvPeso, CodInd, CodAnalise) (?, ?, ?)
+            `,
+            [],
+            //-----------------------
+            (_, { rows }) => resolve(rows._array),
+            (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+        });
+    });
+    })
+};
+
 
 function FormIndicador({ route }) {
     const [data, setData] = useState([])
     const subCat = route.params.subCategory;
 
+
     const loadData = async () => {
-        const response = await getQuestions(subCat)
+        const response = await getQuestions(subCat.name)
 
         const differentDescriptions = {};
 
@@ -76,7 +97,8 @@ function FormIndicador({ route }) {
     return(
         <Container>
             <ScrollView>
-            <Header title={subCat} />
+            <Header title={subCat.name} />
+            <Score scored={23} total={subCat.maxScore}/>
                 
             {data.map((eachData, index) => {
                 return (<IndiceCard key={index} title={eachData.Titulo} description={eachData.DescInd} options={eachData.Desc} optionValue={eachData.Pontuacao}/>)

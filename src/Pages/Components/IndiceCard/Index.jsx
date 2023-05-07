@@ -19,6 +19,7 @@ function IndiceCard ({title, description, options, optionValue}){
     useEffect(() => {
         console.log(checked)
     }, [checked])
+    
     return(
         <Container>
             <ContentTitle>
