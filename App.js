@@ -13,7 +13,6 @@ import UpdateOrg from './src/Pages/Updates/UpdateOrg/Index';
 import UpdateProf from './src/Pages/Updates/UpdateProf/Index';
 import UpdatePorte from './src/Pages/Updates/UpdatePorte/Index'
 import IndicesOptions from './src/Pages/IndicesOptions/Index';
-import IndicadorTecnico from './src/Pages/IndicesOptions/IndicadorTecnico/Index';
 import Porte from './src/Pages/Cadastro/Porte/Index';
 import AterroFinal from './src/Pages/Cadastro/Aterro/AterroFinal/Index';
 import UpdateAterroFinal from './src/Pages/Updates/UpdateUmAterro/UpdateAterroFinal/Index';
@@ -23,6 +22,8 @@ import MeusPortes from './src/Pages/ListaDados/MeusPortes/Index'
 import PainelAterro from './src/Pages/PainelAterro/Index';
 import PainelBasicos from './src/Pages/PainelBasicos/Index';
 import FormIndicador from './src/Pages/IndicesOptions/IndicadorTecnico/FormIndicador/Index';
+import MinhasAnalises from './src/Pages/ListaDados/MinhasAnalises/Index';
+import Indicador from './src/Pages/IndicesOptions/IndicadorTecnico/Index';
 
 
 
@@ -124,8 +125,8 @@ export default function App() {
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
-					name='IndiceTecnico'
-					component={IndicadorTecnico}
+					name='Indicador'
+					component={Indicador}
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
@@ -161,6 +162,11 @@ export default function App() {
 				<Stack.Screen
 					name='FormIndicador'
 					component={FormIndicador}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='MinhasAnalises'
+					component={MinhasAnalises}
 					options={{ headerShown: false }}
 				/>
 			</Stack.Navigator>

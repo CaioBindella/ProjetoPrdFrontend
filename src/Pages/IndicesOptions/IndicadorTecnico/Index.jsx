@@ -14,9 +14,8 @@ import { ScrollView } from "react-native";
 import Header from "../../Components/Header/Index";
 import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
 
-function IndicadorTecnico({navigation}) {
-
-    const [currentDate, setCurrentDate] = useState('');
+function Indicador({ navigation, route }) {
+    const indicadorType = route.params.type
 
     const indicadorData = [
         {
@@ -44,42 +43,11 @@ function IndicadorTecnico({navigation}) {
         }
     ]
 
-    const createAnalysis = (initialDate) => {
-        return new Promise((resolve, reject) => {
-        indiceDb.then((data) => {
-            data.transaction((tx) => {
-            //comando SQL modificável
-            tx.executeSql(
-                `
-                INSERT INTO Analise (DataIni) VALUES (?);
-                `,
-                [initialDate],
-                //-----------------------
-                (_, { rows }) => resolve(rows._array),
-                (_, error) => reject(error) // erro interno em tx.executeSql
-            );
-            });
-        });
-        })
-    };
-
-    useEffect(() => {
-        const handleButtonPress = async () => {
-            const date = new Date();
-            console.log(date.toLocaleString('pt-BR'))
-            // await createAnalysis(date.toLocaleString())
-            // setCurrentDate(date.toLocaleString());   
-        }
-
-        handleButtonPress()
-
-
-    })
 
     return(
         <Container>
             <ScrollView>
-            <Header title="Índice Técnico" />
+            <Header title={indicadorType} />
                 
             <Content>
 
@@ -104,4 +72,4 @@ function IndicadorTecnico({navigation}) {
     );
 };
 
-export default IndicadorTecnico;
+export default Indicador;

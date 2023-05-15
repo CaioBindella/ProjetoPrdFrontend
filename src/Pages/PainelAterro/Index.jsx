@@ -47,9 +47,9 @@ const PainelAterro = ({ navigation, route }) => {
 					<Text>Atualizar dados</Text>
 				</Button>
 
-				<Button onPress={() => navigation.navigate('IndicesOptions', {item: Item})}>
-					<AntDesign name="plus" size={24} color="green" />
-					<Text>Cadastrar Indicadores</Text>
+				<Button onPress={() => navigation.navigate('MinhasAnalises', {item: Item})}>
+					{/* <AntDesign name="plus" size={24} color="green" /> */}
+					<Text>Cadastrar ISOAS</Text>
 				</Button>
 
 				<Button onPress={() => setModalVisible(!modalVisible)}>

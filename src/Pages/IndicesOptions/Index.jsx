@@ -11,14 +11,13 @@ import { StatusBar, Image, View } from 'react-native';
 import Header from "../Components/Header/Index";
 
 function IndicesOptions({ navigation, route }) {
-
     const Item = route.params.item;
 
     return(
         <Container>
             <Header title={`Índices de ${Item.Nome}`}/>
             <Content>
-				<Button onPress={() => navigation.navigate('IndiceTecnico')}>
+				<Button onPress={() => navigation.navigate('Indicador', {type: "Técnico", item: Item})}>
 					<Text>Cadastrar Indicador Técnico</Text>
 				</Button>
 
@@ -28,10 +27,6 @@ function IndicesOptions({ navigation, route }) {
 
 				<Button>
 					<Text>Cadastrar Indicador Social</Text>
-				</Button>
-
-                <Button>
-					<Text>Visualizar históricos de Indicadores</Text>
 				</Button>
 			</Content>
         </Container>
