@@ -24,6 +24,7 @@ import PainelBasicos from './src/Pages/PainelBasicos/Index';
 import FormIndicador from './src/Pages/IndicesOptions/IndicadorTecnico/FormIndicador/Index';
 import MinhasAnalises from './src/Pages/ListaDados/MinhasAnalises/Index';
 import Indicador from './src/Pages/IndicesOptions/IndicadorTecnico/Index';
+import SelectDate from './src/Pages/IndicesOptions/SelectDate/Index';
 
 
 
@@ -167,6 +168,11 @@ export default function App() {
 				<Stack.Screen
 					name='MinhasAnalises'
 					component={MinhasAnalises}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='SelectDate'
+					component={SelectDate}
 					options={{ headerShown: false }}
 				/>
 			</Stack.Navigator>

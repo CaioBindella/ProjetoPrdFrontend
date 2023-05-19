@@ -10,6 +10,7 @@ import {
 import { StatusBar, Image, View } from 'react-native';
 import Header from "../Components/Header/Index";
 
+
 function IndicesOptions({ navigation, route }) {
     const Item = route.params.item;
 

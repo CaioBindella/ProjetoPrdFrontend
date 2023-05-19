@@ -37,24 +37,24 @@ const getQuestions = (subcat) => {
     })
 };
 
-const createRegisters = () => {
-    return new Promise((resolve, reject) => {
-    indiceDb.then((data) => {
-        data.transaction((tx) => {
-        //comando SQL modificável
-        tx.executeSql(
-            `
-            INSERT INTO AnaliseItem (CodAvPeso, CodInd, CodAnalise) (?, ?, ?)
-            `,
-            [],
-            //-----------------------
-            (_, { rows }) => resolve(rows._array),
-            (_, error) => reject(error) // erro interno em tx.executeSql
-        );
-        });
-    });
-    })
-};
+// const createRegisters = () => {
+//     return new Promise((resolve, reject) => {
+//     indiceDb.then((data) => {
+//         data.transaction((tx) => {
+//         //comando SQL modificável
+//         tx.executeSql(
+//             `
+//             INSERT INTO AnaliseItem (CodAvPeso, CodInd, CodAnalise) (?, ?, ?)
+//             `,
+//             [],
+//             //-----------------------
+//             (_, { rows }) => resolve(rows._array),
+//             (_, error) => reject(error) // erro interno em tx.executeSql
+//         );
+//         });
+//     });
+//     })
+// };
 
 
 function FormIndicador({ route }) {

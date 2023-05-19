@@ -10,6 +10,7 @@ async function openDatabase() {
   database._db.close()
 
   if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
+    
     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
   }
 

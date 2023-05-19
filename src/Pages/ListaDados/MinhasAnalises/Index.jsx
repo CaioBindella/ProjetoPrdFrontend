@@ -37,6 +37,7 @@ const ItemCard = ({ item, navigation, index }) => (
 const MinhasAnalises = ({ navigation, route }) => {
 	const Item = route.params.item
 	const codAterro = route.params.item.id
+	console.log(codAterro)
 	const [data, setData] = useState([]);
 
 	const createAnalysis = (initialDate) => {    
@@ -58,7 +59,7 @@ const MinhasAnalises = ({ navigation, route }) => {
 		})
     };
 
-	const getAnalysisDate = (initialDate, codAnalise) => {
+	const getAnalysisDate = (initialDate) => {
         return new Promise((resolve, reject) => {
             indiceDb.then((data) => {
                 data.transaction((tx) => {
@@ -80,14 +81,14 @@ const MinhasAnalises = ({ navigation, route }) => {
 	const handleButtonPress = async () => {
         const date = new Date();
         console.log(`${date.getMonth()+1}-${date.getFullYear()}`) 
-		const checkDate = await getAnalysisDate(`${date.getMonth()+1}-${date.getFullYear()}`, codAterro)
-
-		if(checkDate.length > 0){
-			console.log("existe algo")
-		}
-		else{
-			await createAnalysis(`${date.getMonth()+1}-${date.getFullYear()}`)
-		}
+		// const checkDate = await getAnalysisDate(`${date.getMonth()+1}-${date.getFullYear()}`, codAterro)
+		// console.log(checkDate)
+		// if(checkDate.length > 0){
+		// 	console.log("existe algo")
+		// }
+		// else{
+		// 	await createAnalysis(`${date.getMonth()+1}-${date.getFullYear()}`)
+		// }
     }
 
 	const getAnalysis = () => {
@@ -122,7 +123,7 @@ const MinhasAnalises = ({ navigation, route }) => {
 	return (
 		<Container>
 			<StatusBar />
-			<Header title="Minhas Análises"/>
+			<Header title={`Análise - ${Item.Nome}`}/>
 
 			<ScrollView>
 
@@ -142,7 +143,7 @@ const MinhasAnalises = ({ navigation, route }) => {
 			</ScrollView>
 
 			<Button onPress={async () => {
-				navigation.navigate('IndicesOptions', {item: Item})
+				navigation.navigate('SelectDate', {item: Item})
 				await handleButtonPress()
 			}}>
 				<AntDesign name="plus" size={24} color="black" />
