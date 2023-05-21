@@ -22,8 +22,8 @@ import { consulta } from '../../../Services/Networks/consulta';
 import { Touchable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-const Item = ({ Endereco, Latitude, Longitude, Nome, item, navigation }) => (
-	<TouchableOpacity onPress={()=> navigation.navigate('PainelAterro',{item: item})}>
+const Item = ({ Endereco, Latitude, Longitude, Nome, aterroData, navigation }) => (
+	<TouchableOpacity onPress={()=> navigation.navigate('PainelAterro',{aterroData: aterroData})}>
 		<ItemContainer>
 			<Feather name='home' size={44} color='black' />
 			<Card>
@@ -65,7 +65,7 @@ const MeusAterros = ({ navigation }) => {
 								Nome={eachData.Nome}
 								Latitude={eachData.Latitude}
 								Longitude={eachData.Longitude}
-								item={eachData}
+								aterroData={eachData}
 								key={index}
 								navigation={navigation}
 							/>

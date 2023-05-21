@@ -30,31 +30,31 @@ import { excluir } from '../../Services/Networks/excluir';
 
 const PainelAterro = ({ navigation, route }) => {
 	const [modalVisible, setModalVisible] = useState(false);
-	const Item = route.params.item;
+	const aterroData = route.params.aterroData;
 
 	async function deleteData () {
-		excluir(Item.id, 'aterro')
+		excluir(aterroData.id, 'aterro')
 	}
 
 
 	return (
 		<Container>
 			<StatusBar />
-			<Header title={`Aterro ${Item.Nome}`}/>
+			<Header title={`Aterro ${aterroData.Nome}`}/>
 			<Content>
-				<Button onPress={() => navigation.navigate('UpdateUmAterro', {item: Item})}>
+				<Button onPress={() => navigation.navigate('UpdateUmAterro', {aterroData: aterroData})}>
 					<AntDesign name="reload1" size={24} color="blue" />
 					<Text>Atualizar dados</Text>
 				</Button>
 
-				<Button onPress={() => navigation.navigate('MinhasAnalises', {item: Item})}>
+				<Button onPress={() => navigation.navigate('MinhasAnalises', {aterroData: aterroData})}>
 					{/* <AntDesign name="plus" size={24} color="green" /> */}
 					<Text>Cadastrar ISOAS</Text>
 				</Button>
 
 				<Button onPress={() => setModalVisible(!modalVisible)}>
 					<AntDesign name="delete" size={24} color="red" />
-					<Text>Excluir Aterro {Item.Nome}</Text>
+					<Text>Excluir Aterro {aterroData.Nome}</Text>
 				</Button>
 			</Content>
 

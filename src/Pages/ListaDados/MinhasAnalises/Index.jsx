@@ -22,74 +22,20 @@ import { indiceDb } from '../../../Services/SqlTables/sqliteDb';
 import { Touchable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-const ItemCard = ({ item, navigation, index }) => (
-	<TouchableOpacity>
+const ItemCard = ({ aterroData, analiseData, navigation, index }) => (
+	<TouchableOpacity onPress={() => navigation.navigate("IndicesOptions", {aterroData: aterroData, analiseData: analiseData})}>
 		<ItemContainer>
 			<Feather name='home' size={44} color='black' />
 			<Card>
-				<Title>Tipo: {item.TipoAnalise}</Title>
-				<Title>Data: {item.DataIni}</Title>
+				<Title>Data: {analiseData.DataIni}</Title>
 			</Card>
 		</ItemContainer>
 	</TouchableOpacity>
 );
 
 const MinhasAnalises = ({ navigation, route }) => {
-	const Item = route.params.item
-	const codAterro = route.params.item.id
-	console.log(codAterro)
+	const aterroData = route.params.aterroData
 	const [data, setData] = useState([]);
-
-	const createAnalysis = (initialDate) => {    
-        return new Promise((resolve, reject) => {
-			indiceDb.then((data) => {
-				data.transaction((tx) => {
-				//comando SQL modificável
-				tx.executeSql(
-					`
-					INSERT INTO Analise (DataIni, TipoAnalise, CodAterro) VALUES (?, ?, ?);
-					`,
-					[initialDate, "Técnico", codAterro],
-					//-----------------------
-					(_, { rows }) => resolve(rows._array),
-					(_, error) => reject(error) // erro interno em tx.executeSql
-				);
-				});
-			});
-		})
-    };
-
-	const getAnalysisDate = (initialDate) => {
-        return new Promise((resolve, reject) => {
-            indiceDb.then((data) => {
-                data.transaction((tx) => {
-                //comando SQL modificável
-                tx.executeSql(
-                    `SELECT DataIni FROM Analise
-                    WHERE DataIni = '${initialDate}' AND CodAterro = ${codAterro}`
-                    ,
-                    [initialDate, codAterro],
-                    //-----------------------
-					(_, { rows }) => resolve(rows._array),
-					(_, error) => reject(error) // erro interno em tx.executeSql
-				);
-				});
-			});
-		})
-    };
-
-	const handleButtonPress = async () => {
-        const date = new Date();
-        console.log(`${date.getMonth()+1}-${date.getFullYear()}`) 
-		// const checkDate = await getAnalysisDate(`${date.getMonth()+1}-${date.getFullYear()}`, codAterro)
-		// console.log(checkDate)
-		// if(checkDate.length > 0){
-		// 	console.log("existe algo")
-		// }
-		// else{
-		// 	await createAnalysis(`${date.getMonth()+1}-${date.getFullYear()}`)
-		// }
-    }
 
 	const getAnalysis = () => {
 		return new Promise((resolve, reject) => {
@@ -112,6 +58,7 @@ const MinhasAnalises = ({ navigation, route }) => {
 
 	const loadData = async () => {
 		const response = await getAnalysis()
+		console.log('estou aqui')
 		setData(response)
 	}
 
@@ -123,7 +70,7 @@ const MinhasAnalises = ({ navigation, route }) => {
 	return (
 		<Container>
 			<StatusBar />
-			<Header title={`Análise - ${Item.Nome}`}/>
+			<Header title={`Análise - ${aterroData.Nome}`}/>
 
 			<ScrollView>
 
@@ -131,7 +78,8 @@ const MinhasAnalises = ({ navigation, route }) => {
 					data.map((eachData, index) => {
 						return(
 							<ItemCard
-								item={eachData}
+								analiseData={eachData}
+								aterroData={aterroData}
 								key={index}
 								navigation={navigation}
 							/>
@@ -142,10 +90,7 @@ const MinhasAnalises = ({ navigation, route }) => {
 				}
 			</ScrollView>
 
-			<Button onPress={async () => {
-				navigation.navigate('SelectDate', {item: Item})
-				await handleButtonPress()
-			}}>
+			<Button onPress={async () => navigation.navigate('SelectDate', {aterroData: aterroData})}>
 				<AntDesign name="plus" size={24} color="black" />
 				<Text>Incluir nova analise </Text>
 			</Button>

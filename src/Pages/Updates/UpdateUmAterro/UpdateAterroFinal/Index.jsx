@@ -18,17 +18,18 @@ import { atualiza } from "../../../../Services/Networks/atualiza";
 
 
 function UpdateAterroFinal({navigation, route}) {
-    const Item = route.params.item
+    const aterroData = route.params.aterroData
+    console.log(aterroData)
     const [openMunicipio, setOpenMunicipio] = useState(false);
-	const [valueMunicipio, setValueMunicipio] = useState(Item.Municipio);
+	const [valueMunicipio, setValueMunicipio] = useState(aterroData.Municipio);
 	const [itemsMunicipio, setItemsMunicipio] = useState([]);
 
     const [openOrganizacao, setOpenOrganizacao] = useState(false);
-	const [valueOrganizacao, setValueOrganizacao] = useState(Item.Organizacao);
+	const [valueOrganizacao, setValueOrganizacao] = useState(aterroData.Organizacao);
 	const [itemsOrganizacao, setItemsOrganizacao] = useState([]);
 
     const [openPorte, setOpenPorte] = useState(false);
-	const [valuePorte, setValuePorte] = useState(Item.Porte);
+	const [valuePorte, setValuePorte] = useState(aterroData.Porte);
 	const [itemsPorte, setItemsPorte] = useState([]);
 
     async function loadDataPicker (table, setFunction) {
@@ -60,7 +61,7 @@ function UpdateAterroFinal({navigation, route}) {
                 Porte: valuePorte
             }
 
-			atualiza(Item.id, 'aterro', data)
+			atualiza(aterroData.id, 'aterro', data)
 
 			navigation.navigate('Home')
 		} else {

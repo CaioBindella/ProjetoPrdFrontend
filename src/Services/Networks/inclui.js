@@ -2,6 +2,7 @@ import aterro from '../SqlTables/aterro';
 import municipio from '../SqlTables/municipio'
 import organizacao from '../SqlTables/organizacao'
 import porte from '../SqlTables/porte'
+import analise from '../SqlTables/analise';
 
 import axios from 'axios';
 import { localStorage, baseUrl } from '../config';
@@ -58,6 +59,20 @@ export const inclui = async (table, data) => {
                 		console.log(response);
                 	})
                 	.catch((error) => console.log(JSON.stringify(error)));
+            }
+            break
+        case 'analise': 
+            if(localStorage){
+                return await analise.create(data)
+            }
+            else{
+                // Fazer quando tiver integração com a nuvem
+                // axios
+                // 	.get(`${baseUrl}/porte`, data)
+                // 	.then((response) => {
+                // 		console.log(response);
+                // 	})
+                // 	.catch((error) => console.log(JSON.stringify(error)));
             }
             break
         default:

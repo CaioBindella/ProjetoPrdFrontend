@@ -12,10 +12,11 @@ import {
 import { ScrollView } from "react-native";
 
 import Header from "../../Components/Header/Index";
-import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
 
 function Indicador({ navigation, route }) {
     const indicadorType = route.params.type
+    const aterroData = route.params.aterroData
+    const analiseData = route.params.analiseData
 
     const indicadorData = [
         {
@@ -57,7 +58,7 @@ function Indicador({ navigation, route }) {
                             <Title>{eachCategory.category}</Title>
                             {eachCategory.subCategories.map((eachSubCategory, index) => {
                                 return (
-                                    <Button key={index} onPress={() => navigation.navigate('FormIndicador', {subCategory: eachSubCategory})}>
+                                    <Button key={index} onPress={() => navigation.navigate('FormIndicador', {subCategory: eachSubCategory, aterroData: aterroData, analiseData: analiseData})}>
                                         <Text>{eachSubCategory.name}</Text>
                                     </Button>
                                 )

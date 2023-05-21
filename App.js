@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Home from './src/Pages/home/Index';
+import Home from './src/Pages/Home/Index';
 import Aterro from './src/Pages/Cadastro/Aterro/Index';
 import CadastrosBasicos from './src/Pages/CadastrosBasicos/Index';
 import CadastroMunicipio from './src/Pages/Cadastro/Municipio/Index';
@@ -21,9 +21,9 @@ import MinhasOrganizacoes from './src/Pages/ListaDados/MinhasOrganizacoes/Index'
 import MeusPortes from './src/Pages/ListaDados/MeusPortes/Index'
 import PainelAterro from './src/Pages/PainelAterro/Index';
 import PainelBasicos from './src/Pages/PainelBasicos/Index';
-import FormIndicador from './src/Pages/IndicesOptions/IndicadorTecnico/FormIndicador/Index';
+import FormIndicador from './src/Pages/IndicesOptions/Indicador/FormIndicador/Index';
 import MinhasAnalises from './src/Pages/ListaDados/MinhasAnalises/Index';
-import Indicador from './src/Pages/IndicesOptions/IndicadorTecnico/Index';
+import Indicador from './src/Pages/IndicesOptions/Indicador/Index';
 import SelectDate from './src/Pages/IndicesOptions/SelectDate/Index';
 
 

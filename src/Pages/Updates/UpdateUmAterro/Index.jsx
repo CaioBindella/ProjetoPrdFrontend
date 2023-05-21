@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import {
 	Container,
@@ -14,24 +14,21 @@ import {
 } from './Style';
 
 import { ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import Header from '../../Components/Header/Index';
-
 import { Entypo } from '@expo/vector-icons';
 
 const UpdateUmAterro = ({ navigation, route }) => {
-	const Item = route.params.item;
-	const [aterro, setAterro] = useState(Item.Nome);
-	const [endereco, setEndereco] = useState(Item.Endereco);
-	const [baciaHidrografica, setBaciaHidrografica] = useState(Item.BaciaHidrografica);
-	const [recebimentoBruto, setRecebimentoBruto] = useState(String(Item.RecebimentoBruto));
-	const [recebimentoGerado, setRecebimentoGerado] = useState(String(Item.RecebimentoGerado));
-	const [condicaoClimatica, setCondicaoClimatica] = useState(Item.CondicaoClimatica);
-	const [latitude, setLatitude] = useState(String(Item.Latitude));
-	const [longitude, setLongitude] = useState(String(Item.Longitude));
-	const [licenPrev, setLicenPrev] = useState(String(Item.LicencaPrevia));
-	const [licenOp, setLicenOp] = useState(String(Item.LicencaOperacional));
+	const aterroData = route.params.aterroData;
+	const [aterro, setAterro] = useState(aterroData.Nome);
+	const [endereco, setEndereco] = useState(aterroData.Endereco);
+	const [baciaHidrografica, setBaciaHidrografica] = useState(aterroData.BaciaHidrografica);
+	const [recebimentoBruto, setRecebimentoBruto] = useState(String(aterroData.RecebimentoBruto));
+	const [recebimentoGerado, setRecebimentoGerado] = useState(String(aterroData.RecebimentoGerado));
+	const [condicaoClimatica, setCondicaoClimatica] = useState(aterroData.CondicaoClimatica);
+	const [latitude, setLatitude] = useState(String(aterroData.Latitude));
+	const [longitude, setLongitude] = useState(String(aterroData.Longitude));
+	const [licenPrev, setLicenPrev] = useState(String(aterroData.LicencaPrevia));
+	const [licenOp, setLicenOp] = useState(String(aterroData.LicencaOperacional));
 
 	async function nextPage() {
 		const data = {
@@ -59,7 +56,7 @@ const UpdateUmAterro = ({ navigation, route }) => {
 			licenOp &&
 			licenPrev
 		) {
-			navigation.navigate('UpdateAterroFinal', {data: data, item: Item})
+			navigation.navigate('UpdateAterroFinal', {data: data, aterroData: aterroData})
 		} else {
 			alert('Há campos vazios');
 		}
