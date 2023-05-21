@@ -58,13 +58,15 @@ const MinhasAnalises = ({ navigation, route }) => {
 
 	const loadData = async () => {
 		const response = await getAnalysis()
-		console.log('estou aqui')
 		setData(response)
 	}
 
 	useEffect(() => {
-		loadData()
-	}, []);
+		// Evita renderizar dados antigos quando voltando para trás na navigation stack
+		navigation.addListener('focus', () => {
+		  loadData();
+		});
+	}, [navigation]);
 
 
 	return (
