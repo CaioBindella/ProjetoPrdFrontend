@@ -10,14 +10,13 @@ async function openDatabase() {
   database._db.close()
 
   if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
-    
     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
-
-    await FileSystem.downloadAsync(
-      Asset.fromModule(require('../../Assets/DatabaseFile/indicesDatabase.db')).uri,
-      FileSystem.documentDirectory + 'SQLite/indicesDatabase.db'
-    );
   }
+
+  await FileSystem.downloadAsync(
+    Asset.fromModule(require('../../Assets/DatabaseFile/indicesDatabase.db')).uri,
+    FileSystem.documentDirectory + 'SQLite/indicesDatabase.db'
+  );
   
   return SQLite.openDatabase('indicesDatabase.db');
 }

@@ -12,11 +12,50 @@ import {
 import { ScrollView } from "react-native";
 
 import Header from "../../Components/Header/Index";
+import Score from "../../Components/Score/Index";
+import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
+
+const getGlobalScore = (codAnalise) => {
+    console.log(codAnalise)
+    return new Promise((resolve, reject) => {
+      indiceDb.then((data) => {
+        data.transaction((tx) => {
+          //comando SQL modificável
+          tx.executeSql(
+              `
+                  SELECT SUM(Pontuacao) AS Pontuacao from AnaliseItem AI
+                  INNER JOIN AvaliacaoPeso AP ON AP.CodAvPeso = AI.CodAvPeso
+                  WHERE AI.CodAnalise = ?
+              `,
+            [codAnalise],
+            //-----------------------
+            (_, { rows }) => resolve(rows._array),
+            (_, error) => reject(error) // erro interno em tx.executeSql
+          );
+        });
+      });
+    });
+  }
 
 function Indicador({ navigation, route }) {
     const indicadorType = route.params.type
     const aterroData = route.params.aterroData
     const analiseData = route.params.analiseData
+    const maxScore = 638
+    const [selectedScore, setSelectedScore] = useState(0)
+
+    const loadScore = async () => {
+        const response = await getGlobalScore(analiseData.CodAnalise)
+
+        setSelectedScore(response[0].Pontuacao)
+    }
+
+    useEffect(() => {
+		// Evita renderizar dados antigos quando voltando para trás na navigation stack
+		navigation.addListener('focus', () => {
+		  loadScore();
+		});
+	}, [navigation]);
 
     const indicadorData = [
         {
@@ -48,8 +87,9 @@ function Indicador({ navigation, route }) {
     return(
         <Container>
             <ScrollView>
-            <Header title={indicadorType} />
-                
+            <Header title={`${indicadorType} - ${aterroData.Nome}`} />
+            <Score scored={selectedScore} total={maxScore} />
+
             <Content>
 
                 {indicadorData.map((eachCategory, index) => {

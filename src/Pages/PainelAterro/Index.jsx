@@ -40,7 +40,7 @@ const PainelAterro = ({ navigation, route }) => {
 	return (
 		<Container>
 			<StatusBar />
-			<Header title={`Aterro ${aterroData.Nome}`}/>
+			<Header title={`${aterroData.Nome}`}/>
 			<Content>
 				<Button onPress={() => navigation.navigate('UpdateUmAterro', {aterroData: aterroData})}>
 					<AntDesign name="reload1" size={24} color="blue" />

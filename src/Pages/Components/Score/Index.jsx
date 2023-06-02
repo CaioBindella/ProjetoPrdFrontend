@@ -13,7 +13,9 @@ const Score = ({scored, total}) => {
             <Text>{((scored / total) * 100).toFixed()} %</Text>
         </Content>
     </Container>
+    
+    
 );
-}
+} 
 
 export default Score;

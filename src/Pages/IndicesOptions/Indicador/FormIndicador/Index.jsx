@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Container } from "./Style";
+import { Container, Content } from "./Style";
 
 import { ScrollView } from "react-native";
 
@@ -187,26 +187,29 @@ function FormIndicador({ route }) {
   return (
     <Container>
       <ScrollView>
-        <Header title={subCat.name} />
+        <Header title={`${subCat.name} - ${aterroData.Nome}`} />
         <Score scored={score} total={subCat.maxScore} />
 
-        {data.map((eachData, index) => {
-          return (
-            <IndiceCard
-              key={index}
-              codInd={eachData.CodInd}
-              title={eachData.Titulo}
-              description={eachData.DescInd}
-              codAvPeso={eachData.CodAvPeso}
-              options={eachData.Desc}
-              optionValue={eachData.Pontuacao}
-              codAnalise={analiseData.CodAnalise}
-              data={data}
-              getScore={getScore}
-              setScore={setScore}
-            />
-          );
-        })}
+        <Content>
+          {data.map((eachData, index) => {
+            return (
+              <IndiceCard
+                key={index}
+                codInd={eachData.CodInd}
+                title={eachData.Titulo}
+                description={eachData.DescInd}
+                codAvPeso={eachData.CodAvPeso}
+                options={eachData.Desc}
+                optionValue={eachData.Pontuacao}
+                codAnalise={analiseData.CodAnalise}
+                data={data}
+                getScore={getScore}
+                setScore={setScore}
+              />
+            );
+          })}
+        </Content>
+        
       </ScrollView>
     </Container>
   );

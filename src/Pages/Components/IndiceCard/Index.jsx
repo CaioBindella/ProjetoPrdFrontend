@@ -7,6 +7,9 @@ import {
     ContentTitle,
     ContentOptions,
     InputContainer,
+    Button,
+    LinkText,
+    ButtonContainer,
 } from './Style'
 
 import { Text } from 'react-native';
@@ -119,6 +122,13 @@ function IndiceCard ({codInd, title, description, codAvPeso, options, optionValu
                     )
                 })}
             </ContentOptions>
+
+            <ButtonContainer>
+              <Button>
+                <LinkText>Link</LinkText>
+              </Button>
+            </ButtonContainer>
+            
 
         </Container>
     );

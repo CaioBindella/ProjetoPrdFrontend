@@ -29,9 +29,6 @@ export const Title = styled.Text`
 
 export const ContentOptions = styled.View`
     display: flex;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -39,6 +36,7 @@ export const ContentOptions = styled.View`
     background-color: #D9D9D9;
     width: 85%;
     justify-content: space-between;
+    border-bottom-width: 0px;
 `;
 
 export const InputContainer = styled.View`
@@ -48,3 +46,29 @@ export const InputContainer = styled.View`
     align-items: center;
 `;
 
+export const ButtonContainer = styled.View`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #9ca7ad;
+    width: 85%;
+    border: 1px solid black;
+    border-top: none;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+`;
+
+export const Button = styled.TouchableOpacity`
+    background: #24a0ed;
+    width: 40%;
+    border-radius: 5px;
+    padding: 10px 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+`;
+
+export const LinkText = styled.Text`
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+`;
