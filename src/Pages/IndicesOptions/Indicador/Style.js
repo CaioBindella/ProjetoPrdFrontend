@@ -44,3 +44,23 @@ export const Title = styled.Text`
 	border-top-left-radius: 10px;
 	padding: 3%;
 `;
+
+export const DashboardButton = styled.TouchableOpacity`
+    margin-top: 10px;
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	
+`;
+
+export const TextDashboard = styled.Text`
+	padding: 10px;
+	border-radius: 5px;
+	background-color: #24a0ed;
+	text-align: center;
+    color: #fff;
+    font-weight: bold;
+	border: 1px solid white;
+`;

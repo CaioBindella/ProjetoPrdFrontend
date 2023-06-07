@@ -7,6 +7,8 @@ import {
     Content,
     CardContainer,
     Title,
+    DashboardButton,
+    TextDashboard,
 } from './Style'
 
 import { ScrollView } from "react-native";
@@ -14,6 +16,7 @@ import { ScrollView } from "react-native";
 import Header from "../../Components/Header/Index";
 import Score from "../../Components/Score/Index";
 import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
+import Dashboard from "../Dashboard/Index";
 
 const getGlobalScore = (codAnalise) => {
     console.log(codAnalise)
@@ -108,7 +111,13 @@ function Indicador({ navigation, route }) {
                 })}
             </Content>
 
+            <DashboardButton onPress={() => navigation.navigate('Dashboard', {
+                aterroData: aterroData, analiseData: analiseData})}>
+                <TextDashboard>Gerar DashBoard</TextDashboard>
+            </DashboardButton>
+
             </ScrollView>
+
         </Container>
     );
 };

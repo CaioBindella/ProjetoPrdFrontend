@@ -25,6 +25,7 @@ import FormIndicador from './src/Pages/IndicesOptions/Indicador/FormIndicador/In
 import MinhasAnalises from './src/Pages/ListaDados/MinhasAnalises/Index';
 import Indicador from './src/Pages/IndicesOptions/Indicador/Index';
 import SelectDate from './src/Pages/IndicesOptions/SelectDate/Index';
+import Dashboard from './src/Pages/IndicesOptions/Dashboard/Index';
 
 
 
@@ -173,6 +174,11 @@ export default function App() {
 				<Stack.Screen
 					name='SelectDate'
 					component={SelectDate}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='Dashboard'
+					component={Dashboard}
 					options={{ headerShown: false }}
 				/>
 			</Stack.Navigator>

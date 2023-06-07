@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Container, Content } from "./Style";
+import { Container, Content, DashboardButton, Text } from "./Style";
 
 import { ScrollView } from "react-native";
 
@@ -209,8 +209,10 @@ function FormIndicador({ route }) {
             );
           })}
         </Content>
-        
+    
       </ScrollView>
+
+          
     </Container>
   );
 }
