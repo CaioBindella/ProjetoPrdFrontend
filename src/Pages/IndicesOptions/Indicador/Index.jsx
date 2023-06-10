@@ -16,10 +16,10 @@ import { ScrollView } from "react-native";
 import Header from "../../Components/Header/Index";
 import Score from "../../Components/Score/Index";
 import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
-import Dashboard from "../Dashboard/Index";
 
-const getGlobalScore = (codAnalise) => {
-    console.log(codAnalise)
+const getGlobalScore = (codAnalise, minInterval, maxInterval) => {
+    console.log(`Pegando Score Global entre: ${minInterval} e ${maxInterval} CodAnalise ${codAnalise}`)
+
     return new Promise((resolve, reject) => {
       indiceDb.then((data) => {
         data.transaction((tx) => {
@@ -28,9 +28,9 @@ const getGlobalScore = (codAnalise) => {
               `
                   SELECT SUM(Pontuacao) AS Pontuacao from AnaliseItem AI
                   INNER JOIN AvaliacaoPeso AP ON AP.CodAvPeso = AI.CodAvPeso
-                  WHERE AI.CodAnalise = ?
+                  WHERE AI.CodAnalise = ? AND (AI.CodInd BETWEEN ? AND ?)
               `,
-            [codAnalise],
+            [codAnalise, minInterval, maxInterval],
             //-----------------------
             (_, { rows }) => resolve(rows._array),
             (_, error) => reject(error) // erro interno em tx.executeSql
@@ -44,11 +44,12 @@ function Indicador({ navigation, route }) {
     const indicadorType = route.params.type
     const aterroData = route.params.aterroData
     const analiseData = route.params.analiseData
-    const maxScore = 638
+    const indicadorData = route.params.indicadorData
+    const indicadorDetails = route.params.indicadorDetails
     const [selectedScore, setSelectedScore] = useState(0)
 
     const loadScore = async () => {
-        const response = await getGlobalScore(analiseData.CodAnalise)
+        const response = await getGlobalScore(analiseData.CodAnalise, indicadorDetails.firstQuestion, indicadorDetails.lastQuestion)
 
         setSelectedScore(response[0].Pontuacao)
     }
@@ -60,38 +61,12 @@ function Indicador({ navigation, route }) {
 		});
 	}, [navigation]);
 
-    const indicadorData = [
-        {
-            category: "Características Locacionais",
-            subCategories: [
-                {name: "Características fisiográficas", maxScore: 71},
-                {name: "Interface socioambiental", maxScore: 51},
-                {name: "Sistema viário público de acesso", maxScore: 40},
-            ]
-        },
-        {
-            category: "Infraestrutura Implantada",
-            subCategories: [
-                {name: "Avaliação da infraestrutura implantada", maxScore: 72},
-                {name: "Avaliação do sistema de controle implantado", maxScore: 98}
-            ]
-        },
-        {
-            category: "Condições Operacionais",
-            subCategories: [
-                {name: "Caracteristicas operacionais", maxScore: 104},
-                {name: "Avaliação da Eficiência dos Sistemas de Controle", maxScore: 125},
-                {name: "Documentos básicos e diretrizes operacionais", maxScore: 77},
-            ]
-        }
-    ]
-
 
     return(
         <Container>
             <ScrollView>
-            <Header title={`${indicadorType} - ${aterroData.Nome}`} />
-            <Score scored={selectedScore} total={maxScore} />
+            <Header title={`${indicadorType} - ${aterroData.Nome} ${analiseData.DataIni}`} />
+            <Score scored={selectedScore} total={indicadorDetails.maxScore} />
 
             <Content>
 

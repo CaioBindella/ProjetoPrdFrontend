@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Container, Content, DashboardButton, Text } from "./Style";
+import { Container, Content } from "./Style";
 
 import { ScrollView } from "react-native";
 
@@ -121,7 +121,7 @@ const deleteAllAnaliseItem = () => {
 };
 
 const getScore = (initialCodInd, maxCodInd, codAnalise) => {
-  console.log(initialCodInd-1, (initialCodInd-1)+maxCodInd)
+  console.log(`Pegando Score Local entre ${initialCodInd-1} e ${(initialCodInd-1)+maxCodInd} e CodAnalise ${codAnalise}`)
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
       data.transaction((tx) => {
@@ -145,7 +145,6 @@ const getScore = (initialCodInd, maxCodInd, codAnalise) => {
 function FormIndicador({ route }) {
   const [data, setData] = useState([]);
   const [score, setScore] = useState(0)
-  const [updateScore, setUpdateScore] = useState(false)
   const subCat = route.params.subCategory;
   const aterroData = route.params.aterroData;
   const analiseData = route.params.analiseData;
@@ -155,23 +154,19 @@ function FormIndicador({ route }) {
         const response = await getQuestions(subCat.name);
         const formatedData = formatData(response);
         const score = await getScore(formatedData[0].CodInd, formatedData.length, analiseData.CodAnalise)
-        // console.log(formatedData);
-        console.log(score[0].Pontuacao)
-        
-        console.log(analiseData.CodAnalise)
+        console.log(`Pontuação atual: ${score[0].Pontuacao}`)
         setScore(score[0].Pontuacao)
+
         const previousAnaliseItems = await checkPreviousAnaliseItem(formatedData[0].CodInd, analiseData.CodAnalise)
 
         if(previousAnaliseItems.length === 0){
             formatedData.map(async (eachValue) =>{
-                await createAnaliseItemRegisters(null, eachValue.CodInd, analiseData.CodAnalise)
+              await createAnaliseItemRegisters(null, eachValue.CodInd, analiseData.CodAnalise)
             })
         }
         else{
             console.log("Registros de AnaliseItem já criados!!")
         }
-
-        // await deleteAllAnaliseItem()
 
         setData(formatedData);
     } catch (e) {
@@ -187,7 +182,7 @@ function FormIndicador({ route }) {
   return (
     <Container>
       <ScrollView>
-        <Header title={`${subCat.name} - ${aterroData.Nome}`} />
+        <Header title={`${subCat.name} - ${aterroData.Nome} ${analiseData.DataIni}`} />
         <Score scored={score} total={subCat.maxScore} />
 
         <Content>
