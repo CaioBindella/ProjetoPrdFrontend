@@ -25,6 +25,7 @@ export const Content = styled.View`
 
 export const Text = styled.Text`
     color: black;
+	text-align: center;
 `;
 
 export const CardContainer = styled.View`

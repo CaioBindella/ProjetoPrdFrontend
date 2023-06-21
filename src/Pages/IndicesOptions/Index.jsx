@@ -94,6 +94,22 @@ function IndicesOptions({ navigation, route }) {
 		]
 	}
 
+	const socialInfo = {
+		details:{
+			maxScore: 133,
+			firstQuestion: 91,
+			lastQuestion: 105,
+		},
+		data: [
+			{
+				category: "Avaliação Social",
+				subCategories: [
+					{name: "Percepção social dos impactos ambientais negativos da atividade", maxScore: 133},
+				]
+			}
+		]
+	}
+
 	const deleteData = async () => {
 		setModalVisible(!modalVisible);
 		await deleteAnaliseItem(analiseData.CodAnalise)
@@ -114,7 +130,7 @@ function IndicesOptions({ navigation, route }) {
 					<Text>Cadastrar Indicador Econômico</Text>
 				</Button>
 
-				<Button>
+				<Button onPress={() => navigation.navigate('Indicador', {type: "Social", aterroData: aterroData, analiseData: analiseData, indicadorData: socialInfo.data, indicadorDetails: socialInfo.details})}>
 					<Text>Cadastrar Indicador Social</Text>
 				</Button>
 
