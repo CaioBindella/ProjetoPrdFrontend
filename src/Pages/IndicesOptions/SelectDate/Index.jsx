@@ -92,6 +92,8 @@ function SelectDate({ navigation, route }) {
 			<Button onPress={() => toogleDatePicker()}>    
 				<Text>Selecionar Data</Text>
 			</Button>
+
+			
 			<Button onPress={() => handleButtonPress()}>    
 				<Text>Continuar</Text>
 			</Button>
