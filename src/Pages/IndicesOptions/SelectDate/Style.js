@@ -6,20 +6,27 @@ export const Button = styled.TouchableOpacity`
 	border: 1px solid black;
 	border-radius: 10px;
 	justify-content: space-evenly;
-	width: 70%;
+	width: 100%;
 	align-items: center;
 	margin-bottom: 20px;
 	flex-direction: row;
 `;
 
+export const ContentPicker = styled.View`
+    width: 100%;
+	margin-bottom: 20px;
+`;
+
 export const Container = styled.View`
 	flex: 1;
+	align-items: center;
 `;
 
 export const Content = styled.View`
 	flex: 1;
 	align-items: center;
 	justify-content: center;
+	width: 70%;
 `;
 
 
@@ -30,6 +37,11 @@ export const Text = styled.Text`
 
 export const Title = styled.Text`
 	color: black;
+	/* text-align: center; */
+	font-size: 16px;
+	margin: 0px;
+	margin-bottom: 10px;
 	font-weight: bold;
+	width: 100%;
 `;
 

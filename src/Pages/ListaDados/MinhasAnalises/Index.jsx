@@ -5,8 +5,10 @@ import {
 	Title,
 	Container,
 	Button,
+	DescText
 } from './Style';
 import { Feather } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Header from '../../Components/Header/Index';
 import {
 	StatusBar,
@@ -17,17 +19,16 @@ import {
 	ScrollView,
 } from 'react-native';
 
-import { consulta } from '../../../Services/Networks/consulta';
 import { indiceDb } from '../../../Services/SqlTables/sqliteDb';
-import { Touchable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 const ItemCard = ({ aterroData, analiseData, navigation, index }) => (
 	<TouchableOpacity onPress={() => navigation.navigate("IndicesOptions", {aterroData: aterroData, analiseData: analiseData})}>
 		<ItemContainer>
-			<Feather name='home' size={44} color='black' />
+		<Ionicons name="md-analytics-outline" size={44} color="black" />
 			<Card>
-				<Title>Data: {analiseData.DataIni}</Title>
+				<Title>Data: <DescText>{analiseData.DataIni}</DescText></Title>
+				<Title>Tipo: <DescText>{analiseData.Tipo}</DescText></Title>
 			</Card>
 		</ItemContainer>
 	</TouchableOpacity>

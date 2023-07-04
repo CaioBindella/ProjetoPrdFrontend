@@ -14,9 +14,9 @@ const create = (obj) => {
             //comando SQL modificável
             tx.executeSql(
                 `
-                INSERT INTO Analise (DataIni, CodAterro) VALUES (?, ?);
+                INSERT INTO Analise (DataIni, CodAterro, Tipo) VALUES (?, ?, ?);
                 `,
-                [obj.initialDate, obj.codAterro],
+                [obj.initialDate, obj.codAterro, obj.typeAnalysis],
                 //-----------------------
                 (_, { rows }) => resolve(rows._array),
                 (_, error) => reject(error) // erro interno em tx.executeSql

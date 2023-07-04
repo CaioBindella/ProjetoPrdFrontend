@@ -29,6 +29,12 @@ export const Card = styled.View`
 
 export const Title = styled.Text`
 	font-weight: 700;
+	font-size: 15px;
+`;
+
+export const DescText = styled.Text`
+	font-weight: 400;
+	font-size: 15px;
 `;
 
 export const Button = styled.TouchableOpacity`

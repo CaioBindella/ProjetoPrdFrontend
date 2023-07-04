@@ -5,6 +5,7 @@ import {
 	Title,
 	Container,
 	Button,
+	DescText,
 } from './Style';
 import { Feather } from '@expo/vector-icons';
 import Header from '../../Components/Header/Index';
@@ -28,9 +29,9 @@ const Item = ({ Endereco, Latitude, Longitude, Nome, aterroData, navigation }) =
 			<Feather name='home' size={44} color='black' />
 			<Card>
 				<Title>{Nome}</Title>
-				<Text>Endereço: {Endereco}</Text>
-				<Text>Latitude: {Latitude}</Text>
-				<Text>Longitude: {Longitude}</Text>
+				<Title>Endereço: <DescText>{Endereco}</DescText></Title>
+				<Title>Latitude: <DescText>{Latitude}</DescText></Title>
+				<Title>Longitude: <DescText>{Longitude}</DescText></Title>
 			</Card>
 		</ItemContainer>
 	</TouchableOpacity>

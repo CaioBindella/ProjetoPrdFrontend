@@ -94,7 +94,7 @@ function IndicesOptions({ navigation, route }) {
 		]
 	}
 
-	const socialInfo = {
+	const socialInfoInterview = {
 		details:{
 			maxScore: 133,
 			firstQuestion: 91,
@@ -102,9 +102,25 @@ function IndicesOptions({ navigation, route }) {
 		},
 		data: [
 			{
-				category: "Avaliação Social",
+				category: "Análise de Risco",
 				subCategories: [
-					{name: "Percepção social dos impactos ambientais negativos da atividade", maxScore: 133},
+					{name: "Percepção social dos impactos ambientais negativos da atividade - Entrevista", maxScore: 133},
+				]
+			}
+		]
+	}
+
+	const socialInfoRisc = {
+		details:{
+			maxScore: 133,
+			firstQuestion: 106,
+			lastQuestion: 116,
+		},
+		data: [
+			{
+				category: "Análise por Entrevista",
+				subCategories: [
+					{name: "Percepção social dos impactos ambientais negativos da atividade - Análise de Risco", maxScore: 133},
 				]
 			}
 		]
@@ -122,15 +138,33 @@ function IndicesOptions({ navigation, route }) {
         <Container>
             <Header title={`Índices de ${aterroData.Nome} ${analiseData.DataIni}`}/>
             <Content>
-				<Button onPress={() => navigation.navigate('Indicador', {type: "Técnico", aterroData: aterroData, analiseData: analiseData, indicadorData: tecnicoInfo.data, indicadorDetails: tecnicoInfo.details})}>
+				<Button onPress={() => navigation.navigate('Indicador', {
+					type: "Técnico", 
+					aterroData: aterroData, 
+					analiseData: analiseData, 
+					indicadorData: tecnicoInfo.data, 
+					indicadorDetails: tecnicoInfo.details
+				})}>
 					<Text>Cadastrar Indicador Técnico</Text>
 				</Button>
 
-				<Button onPress={() => navigation.navigate('Indicador', {type: "Econômico", aterroData: aterroData, analiseData: analiseData, indicadorData: economicoInfo.data, indicadorDetails: economicoInfo.details})}>
+				<Button onPress={() => navigation.navigate('Indicador', {
+					type: "Econômico", 
+					aterroData: aterroData, 
+					analiseData: analiseData, 
+					indicadorData: economicoInfo.data, 
+					indicadorDetails: economicoInfo.details
+				})}>
 					<Text>Cadastrar Indicador Econômico</Text>
 				</Button>
 
-				<Button onPress={() => navigation.navigate('Indicador', {type: "Social", aterroData: aterroData, analiseData: analiseData, indicadorData: socialInfo.data, indicadorDetails: socialInfo.details})}>
+				<Button onPress={() => navigation.navigate('Indicador', {
+					type: "Social", 
+					aterroData: aterroData, 
+					analiseData: analiseData, 
+					indicadorData: analiseData.Tipo === 'Análise por Entrevista' ? socialInfoInterview.data : socialInfoRisc.data, 
+					indicadorDetails: analiseData.Tipo === 'Análise por Entrevista' ? socialInfoInterview.details : socialInfoRisc.details, 
+				})}>
 					<Text>Cadastrar Indicador Social</Text>
 				</Button>
 

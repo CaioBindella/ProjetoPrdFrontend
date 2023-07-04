@@ -6,7 +6,8 @@ export const Container = styled.View`
 
 export const Button = styled.TouchableOpacity`
 	background: #fff;
-	height: 40px;
+	/* height: 40px; */
+	padding: 10px 0px;
 	border: 1px solid black;
 	border-radius: 10px;
 	justify-content: space-evenly;

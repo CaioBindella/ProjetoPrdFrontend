@@ -63,7 +63,7 @@ const Dashboard = ({ navigation, route }) => {
 
         <Content>
           {arrayDeObjetos.map((objeto, index) => (
-            <BarChart name={objeto.nome} number={objeto.numero} taxa={objeto.taxa}/>
+            <BarChart key={index} name={objeto.nome} number={objeto.numero} taxa={objeto.taxa}/>
         ))}
         </Content>
 

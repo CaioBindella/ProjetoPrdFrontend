@@ -14,6 +14,7 @@ import {
 	ModalButtonText,
 } from './Style';
 import { Feather } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import Header from '../Components/Header/Index';
 import {
@@ -48,7 +49,7 @@ const PainelAterro = ({ navigation, route }) => {
 				</Button>
 
 				<Button onPress={() => navigation.navigate('MinhasAnalises', {aterroData: aterroData})}>
-					{/* <AntDesign name="plus" size={24} color="green" /> */}
+					<Ionicons name="md-analytics-outline" size={24} color="green" />
 					<Text>Cadastrar ISOAS</Text>
 				</Button>
 
