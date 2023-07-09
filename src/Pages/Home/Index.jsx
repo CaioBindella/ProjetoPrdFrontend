@@ -51,6 +51,10 @@ const Home = ({ navigation }) => {
 					<Button onPress={() => navigation.navigate('MeusAterros')}>
 						<Text>Meus Aterros</Text>
 					</Button>
+
+					<Button onPress={() => navigation.navigate('Ferramentas')}>
+						<Text>Ferramentas</Text>
+					</Button>
 				</ButtonsHome>
 			</Main>
 		</Container>

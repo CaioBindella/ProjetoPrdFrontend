@@ -9,7 +9,7 @@ export const HeaderView = styled.View`
 	justify-content: space-between;
 	border-bottom-right-radius: 8px;
 	border-bottom-left-radius: 8px;
-	padding: 10px;
+	padding: 40px 0px 10px 0px;
 `;
 
 export const HeaderTitle = styled.Text`

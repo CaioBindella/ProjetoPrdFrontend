@@ -6,7 +6,8 @@ export const Container = styled.View`
 
 export const Header = styled.View`
 	background-color: #381704;
-	height: 50px;
+	/* height: 50px; */
+	padding: 30px 0px 10px 0px;
 	align-items: flex-end;
 	justify-content: center;
 	border-bottom-right-radius: 8px;
