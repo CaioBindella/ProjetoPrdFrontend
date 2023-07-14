@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	Container,
 	Button,
@@ -12,6 +12,7 @@ import * as XLSX from 'xlsx'
 import { indiceDb } from '../../Services/SqlTables/sqliteDb';
 
 import Header from '../Components/Header/Index';
+import ImportModal from './ImportModal/Index';
 
 const getTable = (table) => {
 	return new Promise((resolve, reject) => {
@@ -50,6 +51,8 @@ const makeXLSXFile = async () => {
 }
 
 const Ferramentas = ({ navigation }) => {
+	const [modalVisible, setModalVisible] = useState(false);
+
 	const exportXLSX = async () => {
 		const wbout = await makeXLSXFile()
 		
@@ -84,12 +87,14 @@ const Ferramentas = ({ navigation }) => {
 			console.log(error);
 		 })
 	}
+
+
 	return (
 		<Container>
 			<Header title="Ferramentas" />
 
 			<ButtonGroup>
-				<Button onPress={() => navigation.navigate('CadastrosBasicos')}>
+				<Button onPress={() => setModalVisible(true)}>
 					<Text>Importar Banco de Dados</Text>
 				</Button>
 
@@ -101,6 +106,8 @@ const Ferramentas = ({ navigation }) => {
 					<Text>Exportar como XLSX</Text>
 				</Button>
 			</ButtonGroup>
+
+			<ImportModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
 		</Container>
 	);
 };

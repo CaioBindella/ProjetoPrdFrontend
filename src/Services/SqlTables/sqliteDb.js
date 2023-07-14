@@ -4,7 +4,7 @@ import { Asset } from 'expo-asset'
 
 // import Indices from "../../Assets/DatabaseFile/indicesDatabase"
 
-async function openDatabase() {
+async function openDatabase(dbFile) {
   // Elimina um erro attempt to write a readonly database de alguma forma
   const database = SQLite.openDatabase("indicesDatabase.db")
   database._db.close()
@@ -12,6 +12,18 @@ async function openDatabase() {
   if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
   }
+
+  // if (!dbFile) {
+
+  //   const downloadResumable = FileSystem.createDownloadResumable(
+  //     dbFile.uri,
+  //     FileSystem.documentDirectory + 'SQLite/indicesDatabase.db',
+  //   );
+
+  //   await downloadResumable.downloadAsync()
+
+  //   return SQLite.openDatabase('indicesDatabase.db');
+  // }
 
   await FileSystem.downloadAsync(
     Asset.fromModule(require('../../Assets/DatabaseFile/indicesDatabase.db')).uri,
