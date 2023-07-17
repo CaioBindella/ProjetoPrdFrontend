@@ -58,7 +58,7 @@ export const ButtonContainer = styled.View`
     border-bottom-right-radius: 10px;
 `;
 
-export const Button = styled.TouchableOpacity`
+export const ButtonLink = styled.TouchableOpacity`
     background: #24a0ed;
     width: 40%;
     border-radius: 5px;

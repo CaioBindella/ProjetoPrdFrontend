@@ -7,14 +7,15 @@ import {
     ContentTitle,
     ContentOptions,
     InputContainer,
-    Button,
+    ButtonLink,
     LinkText,
     ButtonContainer,
 } from './Style'
 
-import { Text } from 'react-native';
+import { Text, View, StyleSheet, Button } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import { indiceDb } from '../../../Services/SqlTables/sqliteDb';
+import CameraComponent from '../CameraView/Index';
 
 const updateAnaliseItemPesos = (codAvPeso, codInd, codAnalise) => {
     return new Promise((resolve, reject) => {
@@ -101,6 +102,19 @@ function IndiceCard ({codInd, title, description, codAvPeso, options, optionValu
       loadAnswer()
     },[])
     
+    const [showCamera, setShowCamera] = React.useState(false);
+    const [cameraVisible, setCameraVisible] = useState(false);
+    const openCamera = () => {
+      setShowCamera(true);
+    };
+    const handleCloseCamera = () => {
+      setCameraVisible(false);
+    };
+  
+    const handleOpenCamera = () => {
+      setCameraVisible(true);
+    };
+
     return(
         <Container>
             <ContentTitle>
@@ -125,11 +139,15 @@ function IndiceCard ({codInd, title, description, codAvPeso, options, optionValu
             </ContentOptions>
 
             <ButtonContainer>
-              <Button>
+              <ButtonLink>
                 <LinkText>Link</LinkText>
-              </Button>
+              </ButtonLink>
+              
             </ButtonContainer>
-            
+            <View>
+              <Button title="Abrir Camera" onPress={handleOpenCamera} />
+              <CameraComponent visible={cameraVisible} onClose={handleCloseCamera} />
+            </View>
 
         </Container>
     );
