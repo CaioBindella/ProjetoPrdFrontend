@@ -121,7 +121,7 @@ const deleteAllAnaliseItem = () => {
 };
 
 const getScore = (initialCodInd, maxCodInd, codAnalise) => {
-  console.log(`Pegando Score Local entre ${initialCodInd-1} e ${(initialCodInd-1)+maxCodInd} e CodAnalise ${codAnalise}`)
+  // console.log(`Pegando Score Local entre ${initialCodInd-1} e ${(initialCodInd-1)+maxCodInd} e CodAnalise ${codAnalise}`)
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
       data.transaction((tx) => {
@@ -154,7 +154,7 @@ function FormIndicador({ route }) {
         const response = await getQuestions(subCat.name);
         const formatedData = formatData(response);
         const score = await getScore(formatedData[0].CodInd, formatedData.length, analiseData.CodAnalise)
-        console.log(`Pontuação atual: ${score[0].Pontuacao}`)
+        // console.log(`Pontuação atual: ${score[0].Pontuacao}`)
         setScore(score[0].Pontuacao)
 
         const previousAnaliseItems = await checkPreviousAnaliseItem(formatedData[0].CodInd, analiseData.CodAnalise)
