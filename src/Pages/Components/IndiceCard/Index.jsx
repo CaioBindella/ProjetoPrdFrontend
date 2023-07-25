@@ -18,7 +18,6 @@ import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import { indiceDb } from '../../../Services/SqlTables/sqliteDb';
 import CameraComponent from '../CameraView/Index'
-import PhotoComponent from '../PhotoComponent/Index'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons'; 
 
