@@ -56,6 +56,7 @@ export const ButtonContainer = styled.View`
     border-top: none;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    flex-direction: row;
 `;
 
 export const ButtonLink = styled.TouchableOpacity`
@@ -72,3 +73,25 @@ export const LinkText = styled.Text`
     color: #fff;
     font-weight: bold;
 `;
+
+export const ButtonCamera = styled.TouchableOpacity`
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 150px;
+    height: 150px;
+    margin: 10px;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const Image = styled.Image`
+    border-radius: 10px;
+    width: 150px;
+    height: 150px;
+`;
+
+export const ImageContainer = styled.View`
+    display: flex;
+    align-items: center;
+`;
+
