@@ -1,5 +1,5 @@
 // React
-import React , { useEffect } from 'react';
+import React , { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 
 // Native Components
@@ -10,6 +10,7 @@ import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
 
 
 import { VictoryBar, VictoryChart, VictoryTheme, VictoryPolarAxis } from "victory-native";
+import Score from '../../Components/Score/Index';
 
 
 const getMaxScores = () => {
@@ -24,6 +25,7 @@ const getMaxScores = () => {
                 INNER JOIN AvaliacaoPeso AP ON AP.CodInd = I.CodInd
                 WHERE AP.Maxima = 1
                 GROUP BY SC.DescSubCat
+                ORDER BY SC.CodSubCat ASC
               `,
             [],
             //-----------------------
@@ -33,39 +35,72 @@ const getMaxScores = () => {
         });
       });
     });
-  }
+}
 
+const getActualScores = () => {
+  return new Promise((resolve, reject) => {
+    indiceDb.then((data) => {
+      data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+            `
+            SELECT DescSubCat, SUM(Pontuacao) as ActualScore FROM AnaliseItem AI
+            INNER JOIN AvaliacaoPeso AP ON AI.CodAvPeso = AP.CodAvPeso
+            INNER JOIN Indicador I ON AI.CodInd = I.CodInd
+            INNER JOIN SubCategoria SC ON I.CodSubCat = SC.CodSubCat
+            GROUP BY DescSubCat
+            `,
+          [],
+          //-----------------------
+          (_, { rows }) => resolve(rows._array),
+          (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+      });
+    });
+  });
+}
 
 const Dashboard = ({ navigation, route }) => {
     const aterroData = route.params.aterroData
+    const [score, setScore] = useState(Array(8).fill(0))
+    const [globalScore, setGlobalScore] = useState()
 
     const loadData = async () => {
-        const maxScores = await getMaxScores()
+      const maxScores = await getMaxScores()
+      const actualScores = await getActualScores()
+      const technicArray = Array(8).fill(0)
 
-        console.log(maxScores)
+      actualScores.map((eachActualScore) => {
+        // Pega o score máximo e o índice de acordo com o nome da subcategoria
+        const maxScore = parseInt(maxScores.find(eachScore => eachScore.DescSubCat === eachActualScore.DescSubCat).MaxScore)
+        const index =  parseInt(maxScores.findIndex(eachScore => eachScore.DescSubCat === eachActualScore.DescSubCat))
+        const actualScore = parseInt(eachActualScore.ActualScore)
+
+        technicArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
+      })
+
+      console.log(technicArray)
+
+      // Soma todos os elementos do array de scores técnicos
+      let sumTechnicArray = 0;
+      technicArray.map(eachElement => sumTechnicArray += eachElement)
+      
+      setGlobalScore(sumTechnicArray)
+      setScore(technicArray)
     }
-    
+
     useEffect(() => {
-        loadData()
-
-        
+      loadData()  
     }, [])
-
-    const arrayDeObjetos = [
-      { nome: "Objeto 1", numero: 10, taxa: 98 },
-      { nome: "Objeto 2", numero: 20, taxa: 55 },
-      { nome: "Objeto 3", numero: 30, taxa: 60 },
-    ];
 
 
   return (
     <Container>
         <Header title={`Dashboard Técnico - ${aterroData.Nome}`}/>
-
         <Content>
-          {/* {arrayDeObjetos.map((objeto, index) => (
-            <BarChart key={index} name={objeto.nome} number={objeto.numero} taxa={objeto.taxa}/>
-        ))} */}
+        
+        <Title>Performance Geral</Title>
+        <Score scored={globalScore} total={638} />
 
         <VictoryChart polar
             theme={VictoryTheme.material}
@@ -86,14 +121,14 @@ const Dashboard = ({ navigation, route }) => {
             <VictoryBar
               style={{ data: { fill: "tomato", width: 25 } }}
               data={[
-                { x: "1", y: 10 },
-                { x: "2", y: 25 },
-                { x: "3", y: 40 },
-                { x: "4", y: 50 },
-                { x: "5", y: 50 },
-                { x: "6", y: 30 },
-                { x: "7", y: 50 },
-                { x: "8", y: 30 }
+                { x: "1", y: parseInt(score[0])},
+                { x: "2", y: parseInt(score[1]) },
+                { x: "3", y: parseInt(score[2]) },
+                { x: "4", y: parseInt(score[3]) },
+                { x: "5", y: parseInt(score[4]) },
+                { x: "6", y: parseInt(score[5])  },
+                { x: "7", y: parseInt(score[6])  },
+                { x: "8", y: parseInt(score[7]) }
               ]}
             />
           </VictoryChart>

@@ -77,7 +77,7 @@ const loadPreviousAnswer = (codInd, codAnalise) =>{
     });
 }
 
-function IndiceCard ({codInd, title, description, codAvPeso, options, optionValue, codAnalise, data, getScore, setScore}){
+function IndiceCard ({codInd, title, description, codAvPeso, options, optionValue, codAnalise, data, getScore, setScore, scoreData, setScoreData, index}){
 
     const [checked, setChecked] = useState(null);
 
@@ -88,9 +88,9 @@ function IndiceCard ({codInd, title, description, codAvPeso, options, optionValu
       const score = await getScore(data[0].CodInd, data.length, codAnalise)
       setScore(score[0].Pontuacao)
 
-      const test = await getAllAnaliseItem();
-      console.log(`\nTodos os registros de analiseItem:\n`)
-      test.map((eachTest) => console.log(eachTest))
+      // const test = await getAllAnaliseItem();
+      // console.log(`\nTodos os registros de analiseItem:\n`)
+      // test.map((eachTest) => console.log(eachTest))
     }
 
     const loadAnswer = async () => {
