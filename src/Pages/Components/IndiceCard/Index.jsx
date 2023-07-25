@@ -10,12 +10,16 @@ import {
     ButtonLink,
     LinkText,
     ButtonContainer,
+    ButtonCamera,
+    Image
 } from './Style'
 
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import { indiceDb } from '../../../Services/SqlTables/sqliteDb';
-import CameraComponent from '../CameraView/Index';
+import CameraComponent from '../CameraView/Index'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons'; 
 
 const updateAnaliseItemPesos = (codAvPeso, codInd, codAnalise) => {
     return new Promise((resolve, reject) => {
@@ -102,17 +106,19 @@ function IndiceCard ({codInd, title, description, codAvPeso, options, optionValu
       loadAnswer()
     },[])
     
-    const [showCamera, setShowCamera] = React.useState(false);
     const [cameraVisible, setCameraVisible] = useState(false);
-    const openCamera = () => {
-      setShowCamera(true);
+    const [capturedPhoto, setCapturedPhoto] = useState(null);
+  
+    const handleOpenCamera = () => {
+      setCameraVisible(true);
     };
+  
     const handleCloseCamera = () => {
       setCameraVisible(false);
     };
   
-    const handleOpenCamera = () => {
-      setCameraVisible(true);
+    const handlePhotoTaken = (photoUri) => {
+      setCapturedPhoto(photoUri);
     };
 
     return(
@@ -142,16 +148,44 @@ function IndiceCard ({codInd, title, description, codAvPeso, options, optionValu
               <ButtonLink>
                 <LinkText>Link</LinkText>
               </ButtonLink>
-              
+
+              {capturedPhoto && (
+                <ButtonCamera onPress={() => setCapturedPhoto(null)}>
+                  <Image
+                    source={{ uri: capturedPhoto }}
+                    resizeMode="contain"
+                  />
+                  <Entypo
+                    name="circle-with-minus"
+                    size={20}
+                    color="red"
+                    style={styles.closeIcon}
+                  />
+                </ButtonCamera>
+              )}
+              {!capturedPhoto && (
+                <ButtonCamera onPress={handleOpenCamera}>
+                  <MaterialCommunityIcons name="camera-plus-outline" size={50} color="black" />
+                </ButtonCamera>
+              )}
+
+              <CameraComponent
+                visible={cameraVisible}
+                onClose={handleCloseCamera}
+                onPhotoTaken={handlePhotoTaken}
+              />       
             </ButtonContainer>
-            <View>
-              <Button title="Abrir Camera" onPress={handleOpenCamera} />
-              <CameraComponent visible={cameraVisible} onClose={handleCloseCamera} />
-            </View>
 
         </Container>
     );
 }
 
+const styles = StyleSheet.create({
+  closeIcon: {
+      position: 'absolute',
+      top:5,
+      right: 5,
+  },
+});
 
 export default IndiceCard;

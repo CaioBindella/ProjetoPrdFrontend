@@ -1,11 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, View, StyleSheet, Text, Modal, Image, Platform } from 'react-native';
+import { View, TouchableOpacity, Image, Text, Modal, Button } from 'react-native';
 import { Camera } from 'expo-camera';
-import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
 import * as ImageManipulator from 'expo-image-manipulator';
+import { FontAwesome } from '@expo/vector-icons';
+import { Entypo, Fontisto, Ionicons } from '@expo/vector-icons';
 
-const CameraComponent = ({ visible, onClose }) => {
+import {
+  ButtonContainer,
+  ButtonPhoto,
+  ButtonCamera,
+  CameraContainer,
+  ModalContainer,
+  MContainer,
+  ModalText, 
+  ButtonSave,
+  ButtonModalContainer
+} from "./style"
+
+const CameraComponent = ({ visible, onClose, onPhotoTaken }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState(null);
@@ -37,17 +50,6 @@ const CameraComponent = ({ visible, onClose }) => {
       { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
     );
     return manipResult;
-  };
-
-  const saveToGallery = async () => {
-    if (photo) {
-      if (Platform.OS === 'ios') {
-        await MediaLibrary.requestPermissionsAsync();
-      }
-
-      const asset = await MediaLibrary.createAssetAsync(photo.uri);
-      await MediaLibrary.createAlbumAsync('Expo', asset, false);
-    }
   };
 
   const sharePhoto = async () => {
@@ -97,100 +99,80 @@ const CameraComponent = ({ visible, onClose }) => {
     onClose();
   };
 
+  const handleSavePhoto = () => {
+    if (photo) {
+      onPhotoTaken(photo.uri);
+      handleClose();
+    }
+  };
+
   if (hasPermission === null) {
     return <View />;
-  }
-  if (hasPermission === false) {
+  }  if (hasPermission === false) {
     return <Text>Acesso negado!</Text>;
   }
 
   return (
     <Modal visible={visible} onRequestClose={handleClose} animationType="slide">
-      <View style={styles.container}>
+      <View style={{ flex: 1 }}>
         {showPreview ? (
-          <View style={styles.photoContainer}>
-            <Image source={{ uri: photo.uri }} style={styles.photo} />
-            <View style={styles.buttonContainer}>
-              <Button title="Salvar na galeria" onPress={saveToGallery} />
-              <Button title="Compartilhar" onPress={sharePhoto} />
-              <Button title="Apagar" onPress={deletePhoto} />
-            </View>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Image source={{ uri: photo.uri }} style={{ width: '80%', height: '80%', resizeMode: 'contain', borderRadius: 10 }} />
+            <ButtonContainer>
+              <ButtonPhoto onPress={sharePhoto}>
+                <Text>Compartilhar</Text>
+              </ButtonPhoto>
+              <ButtonPhoto onPress={deletePhoto}>
+                <Text>Excluir</Text>
+              </ButtonPhoto>
+            </ButtonContainer>
           </View>
         ) : (
           <Camera
-            style={styles.camera}
+            style={{ flex: 1 }}
             type={type}
             ref={(ref) => setCamera(ref)}
             onCameraReady={onCameraReady}
           >
-            <View style={styles.buttonContainer}>
-              <Button title="Tirar foto" onPress={takePicture} />
-              <Button title="Fechar" onPress={handleClose} />
-              <Button title="Virar Camera" onPress={flipCamera} />
-            </View>
+            <CameraContainer>
+              <ButtonCamera onPress={handleClose}>
+                <Ionicons name="close" size={40} color="white" />              
+              </ButtonCamera>
+              <ButtonCamera onPress={takePicture}>
+                <FontAwesome name="dot-circle-o" size={80} color="white" />
+              </ButtonCamera>
+              <ButtonCamera style={{marginBottom: 15}} onPress={flipCamera}>
+                <Fontisto name="arrow-return-right" size={30} color="white" />              
+              </ButtonCamera>
+            </CameraContainer>
+            
           </Camera>
         )}
         <Modal visible={showDeleteConfirmation} transparent animationType="fade">
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalText}>Tem certeza que deseja excluir a imagem?</Text>
-              <View style={styles.modalButtonContainer}>
-                <Button title="Excluir" onPress={confirmDeletePhoto} />
-                <Button title="Cancelar" onPress={cancelDeletePhoto} />
-              </View>
-            </View>
-          </View>
+          <MContainer>
+            <ModalContainer>
+              <ModalText>Tem certeza que deseja excluir a imagem?</ModalText>
+              <ButtonModalContainer>
+                <ButtonPhoto onPress={confirmDeletePhoto}>
+                  <Text>Excluir</Text>
+                </ButtonPhoto>
+                <ButtonPhoto onPress={cancelDeletePhoto}>
+                  <Text>Cancelar</Text>
+                </ButtonPhoto>
+              </ButtonModalContainer>
+            </ModalContainer>
+          </MContainer>
         </Modal>
       </View>
+      {showPreview && (
+        <ButtonContainer>
+          <ButtonSave title="Salvar Foto" onPress={handleSavePhoto}>
+            <Text>Salvar</Text>
+          </ButtonSave>
+        </ButtonContainer>
+      )}
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  camera: {
-    flex: 1,
-  },
-  photoContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  photo: {
-    width: '80%',
-    height: '80%',
-    resizeMode: 'contain',
-    borderRadius: 10,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 20,
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  modalText: {
-    fontSize: 18,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  modalButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-  },
-});
 
 export default CameraComponent;
