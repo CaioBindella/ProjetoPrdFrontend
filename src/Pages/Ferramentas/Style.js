@@ -12,9 +12,9 @@ export const ButtonGroup = styled.View`
 export const Button = styled.TouchableOpacity`
 	background-color: #bcb9c0;
 	width: 70%;
-	height: 40px;
+	/* height: 40px; */
+	padding: 5px 0px;
 	border-radius: 10px;
-	border: 3px solid #736262;
 	justify-content: center;
 	align-items: center;
 	border: 2px solid #736262;
@@ -24,6 +24,7 @@ export const Button = styled.TouchableOpacity`
 export const Text = styled.Text`
 	color: #000;
 	font-size: 20px;
+	text-align: center;
 	/* font-family: Inter;
     font-weight: 3300; */
 `;

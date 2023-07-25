@@ -69,23 +69,18 @@ const Dashboard = ({ navigation, route }) => {
       const maxScores = await getMaxScores()
       const actualScores = await getActualScores()
       const technicArray = Array(8).fill(0)
+      let totalScore = 0;
 
       actualScores.map((eachActualScore) => {
         // Pega o score máximo e o índice de acordo com o nome da subcategoria
         const maxScore = parseInt(maxScores.find(eachScore => eachScore.DescSubCat === eachActualScore.DescSubCat).MaxScore)
         const index =  parseInt(maxScores.findIndex(eachScore => eachScore.DescSubCat === eachActualScore.DescSubCat))
         const actualScore = parseInt(eachActualScore.ActualScore)
-
+        totalScore += actualScore
         technicArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
       })
-
-      console.log(technicArray)
-
-      // Soma todos os elementos do array de scores técnicos
-      let sumTechnicArray = 0;
-      technicArray.map(eachElement => sumTechnicArray += eachElement)
       
-      setGlobalScore(sumTechnicArray)
+      setGlobalScore(totalScore)
       setScore(technicArray)
     }
 

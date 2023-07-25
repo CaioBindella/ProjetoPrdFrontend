@@ -20,20 +20,32 @@ import * as Updates from 'expo-updates';
 const ImportModal = ({ modalVisible, setModalVisible }) => {
 	const pickDocument = async () => {
 		let result = await DocumentPicker.getDocumentAsync({});
-		console.log(result)
 
-		if ((await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/indicesDatabase.db')).exists) {
-			await FileSystem.deleteAsync(FileSystem.documentDirectory + "SQLite/indicesDatabase.db")
+		if(result.type === "cancel"){
+			return
 		}
-		
-		await FileSystem.copyAsync({
-			from: result.uri,
-			to: FileSystem.documentDirectory + 'SQLite/indicesDatabase.db'
-		})
 
-		console.log(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/indicesDatabase.db'))
+		// Verifica se o tipo de arquivo é equivalente a .db e se ocorreu tudo certo
+		if (result.mimeType === "application/octet-stream"){
+			// Deleta o arquivo .db atual
+			if ((await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/indicesDatabase.db')).exists) {
+				await FileSystem.deleteAsync(FileSystem.documentDirectory + "SQLite/indicesDatabase.db")
+			}
+			
+			// Copia o escolhido com o nome de indicesDatabase.db
+			await FileSystem.copyAsync({
+				from: result.uri,
+				to: FileSystem.documentDirectory + 'SQLite/indicesDatabase.db'
+			})
 
-		// Updates.reloadAsync()
+			alert("Importação concluída com sucesso!")
+			
+			// Reinicia o aplicativo em produção
+			// Updates.reloadAsync()
+		}
+		else{
+			alert("Escolha um arquivo com a extensão .db")
+		}
 	};
 
     return (
