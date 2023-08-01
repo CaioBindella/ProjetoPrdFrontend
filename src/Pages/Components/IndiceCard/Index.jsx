@@ -155,8 +155,8 @@ function IndiceCard ({codInd, title, description, codAvPeso, options, optionValu
                     source={{ uri: capturedPhoto }}
                     resizeMode="contain"
                   />
-                  <Entypo
-                    name="circle-with-minus"
+                  <MaterialCommunityIcons
+                    name="dots-horizontal-circle"
                     size={20}
                     color="red"
                     style={styles.closeIcon}
