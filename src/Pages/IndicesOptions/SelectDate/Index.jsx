@@ -34,8 +34,9 @@ function SelectDate({ navigation, route }) {
         data.transaction((tx) => {
           //comando SQL modificável
           tx.executeSql(
-            `SELECT * FROM Analise
-                    WHERE DataIni = '${initialDate}' AND CodAterro = ${codAterro}`,
+            `
+              SELECT * FROM Analise
+              WHERE DataIni = '${initialDate}' AND CodAterro = ${codAterro}`,
             [],
             //-----------------------
             (_, { rows }) => resolve(rows._array),
@@ -48,20 +49,20 @@ function SelectDate({ navigation, route }) {
 
   const handleButtonPress = async () => {
     const initialDate = `${date.getMonth() + 1}-${date.getFullYear()}`;
-    const result = await getPreviousAnalysis(initialDate, aterroData.id);
+    const result = await getPreviousAnalysis(initialDate, aterroData.CodAterro);
 
     if (result.length === 0) {
       if (date && valueTypeAnalysis) {
         const data = {
           initialDate: initialDate,
-          codAterro: aterroData.id,
+          codAterro: aterroData.CodAterro,
           typeAnalysis: valueTypeAnalysis,
         };
         try {
           await inclui("analise", data);
           const analiseData = await getPreviousAnalysis(
             initialDate,
-            aterroData.id
+            aterroData.CodAterro
           );
           navigation.navigate("IndicesOptions", {
             aterroData: aterroData,
@@ -69,7 +70,7 @@ function SelectDate({ navigation, route }) {
           });
         } catch (e) {
           console.log(e);
-          alert(" um erro ao criar análise");
+          alert("Erro ao criar análise");
         }
       } else {
         alert("Preencha a abordagem da análise");

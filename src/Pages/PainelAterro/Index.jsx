@@ -55,7 +55,7 @@ const PainelAterro = ({ navigation, route }) => {
 
 				<Button onPress={() => setModalVisible(!modalVisible)}>
 					<AntDesign name="delete" size={24} color="red" />
-					<Text>Excluir Aterro {aterroData.Nome}</Text>
+					<Text>Excluir {aterroData.Nome}</Text>
 				</Button>
 			</Content>
 

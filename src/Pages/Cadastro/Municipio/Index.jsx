@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import {
 	Container,
-	Header,
-	HeaderTitle,
 	ContainerInputGroup,
 	Title,
-	TitleIMG,
 	ViewTitle,
 	InputGroup,
 	Input,
@@ -13,10 +10,11 @@ import {
 	ButtonGroup,
 	TextButton,
 } from './Style';
-import { StatusBar, Image, View, Text,ScrollView } from 'react-native';
+import { Text, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import { inclui } from '../../../Services/Networks/inclui';
+import Header from '../../Components/Header/Index';
 
 const CadastroMunicipio = ({ navigation }) => {
 	const [nome, setNome] = useState('');
@@ -43,10 +41,8 @@ const CadastroMunicipio = ({ navigation }) => {
 	}
 	return (
 		<Container>
-			<StatusBar />
-			<Header>
-				<HeaderTitle>Cadastrar Município</HeaderTitle>
-			</Header>
+			<Header title={"Cadastro Município"}/>
+
 			<ScrollView>
 				<ViewTitle>
 					<Title>Preencha os dados referente ao Município</Title>

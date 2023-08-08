@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
 	Container,
 	ContainerInputGroup,
 	Title,
-	TitleIMG,
 	ViewTitle,
 	InputGroup,
 	Input,
@@ -11,7 +10,7 @@ import {
 	ButtonGroup,
 	TextButton,
 } from './Style';
-import { StatusBar, Image, View, Text,ScrollView } from 'react-native';
+import { Text, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import Header from '../../Components/Header/Index';
@@ -22,10 +21,8 @@ const UpdateUmMunicipio = ({ navigation, route }) => {
 	const Item = route.params.item
 	const [nome, setNome] = useState(Item.Nome);
 	const [tamPop, setTamPop] = useState(String(Item.TamPop));
-	const [taxGerPerCap, setTaxGerPerCap] = useState(String(Item.TaxGerPerCap));
+	const [taxGerPerCap, setTaxGerPerCap] = useState(String(Item.TaxGerPerCapita));
 	const [precipMedAnual, setPrecipMedAnual] = useState(String(Item.PrecipMedAnual));
-
-    
 
 	async function UpUmMunicipio() {
 		const data = {
@@ -36,7 +33,7 @@ const UpdateUmMunicipio = ({ navigation, route }) => {
 		};
 
 		if (nome && tamPop && taxGerPerCap && precipMedAnual) {
-			atualiza(Item.id, 'municipio', data)
+			atualiza(Item.CodMunicipio, 'municipio', data)
 			
 			navigation.navigate('Home')
 		} else {
@@ -45,7 +42,6 @@ const UpdateUmMunicipio = ({ navigation, route }) => {
 	}
 	return (
 		<Container>
-			<StatusBar />
 			<Header title="Atualizar Município" />
 			<ScrollView>
 				<ViewTitle>

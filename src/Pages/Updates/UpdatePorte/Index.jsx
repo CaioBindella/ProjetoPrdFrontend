@@ -4,8 +4,6 @@ import {
     ButtonGroup,
 	Button,
 	TextButton,
-	Title,
-	ViewTitle,
 	ContainerInputGroup,
 	InputGroup,
 	Input,
@@ -26,7 +24,7 @@ function UpdatePorte({navigation, route}) {
 		};
 
 		if (nomePorte) {
-			atualiza(Item.id, 'porte', data)
+			atualiza(Item.CodPorte, 'porte', data)
 
 			navigation.navigate('Home')
 		} else {

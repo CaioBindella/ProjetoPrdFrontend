@@ -19,7 +19,6 @@ import { atualiza } from "../../../../Services/Networks/atualiza";
 
 function UpdateAterroFinal({navigation, route}) {
     const aterroData = route.params.aterroData
-    console.log(aterroData)
     const [openMunicipio, setOpenMunicipio] = useState(false);
 	const [valueMunicipio, setValueMunicipio] = useState(aterroData.Municipio);
 	const [itemsMunicipio, setItemsMunicipio] = useState([]);
@@ -37,7 +36,7 @@ function UpdateAterroFinal({navigation, route}) {
         let itemModel = []
         
         data.map((eachData) => {
-            itemModel = [...itemModel, {label: eachData.Nome, value: eachData.Nome}]
+            itemModel = [...itemModel, {label: eachData.Nome, value: eachData.CodMunicipio || eachData.CodPorte || eachData.CodOrganizacao}]
         })
 
         setFunction(itemModel)
@@ -61,7 +60,7 @@ function UpdateAterroFinal({navigation, route}) {
                 Porte: valuePorte
             }
 
-			atualiza(aterroData.id, 'aterro', data)
+			atualiza(aterroData.CodAterro, 'aterro', data)
 
 			navigation.navigate('Home')
 		} else {
@@ -70,7 +69,7 @@ function UpdateAterroFinal({navigation, route}) {
 	}
     return(
         <Container>
-            <Header title='Cadastrar Aterro'/>
+            <Header title='Atualizar Aterro'/>
 
             <Content>
                 <PickerContainer>

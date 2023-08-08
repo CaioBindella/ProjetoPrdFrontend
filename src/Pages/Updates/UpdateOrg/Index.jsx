@@ -11,7 +11,6 @@ import {
 } from './Style';
 
 import { ScrollView, Text } from 'react-native';
-import axios from 'axios';
 import { atualiza } from '../../../Services/Networks/atualiza'
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -32,7 +31,7 @@ const UpdateOrg = ({ navigation, route }) => {
 		};
 
 		if (nome && CNPJ && contato) {
-			atualiza(Item.id, 'organizacao', data)
+			atualiza(Item.CodOrganizacao, 'organizacao', data)
 			navigation.navigate('Home')
 
 		} else {

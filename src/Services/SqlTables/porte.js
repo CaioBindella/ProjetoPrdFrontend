@@ -1,18 +1,4 @@
-import db from "./sqliteDb";
-
-/**
- * INICIALIZAÇÃO DA TABELA
- * - Executa sempre, mas só cria a tabela caso não exista (primeira execução)
- */
-db.transaction((tx) => {
-  //<<<<<<<<<<<<<<<<<<<<<<<< USE ISSO APENAS DURANTE OS TESTES!!! >>>>>>>>>>>>>>>>>>>>>>>
-  // tx.executeSql("DROP TABLE porte;");
-  //<<<<<<<<<<<<<<<<<<<<<<<< USE ISSO APENAS DURANTE OS TESTES!!! >>>>>>>>>>>>>>>>>>>>>>>
-
-  tx.executeSql(
-    "CREATE TABLE IF NOT EXISTS porte (id INTEGER PRIMARY KEY AUTOINCREMENT, Nome TEXT, UNIQUE(Nome));"
-  );
-});
+import { indiceDb } from "./sqliteDb";
 
 /**
  * CRIAÇÃO DE UM NOVO REGISTRO
@@ -23,20 +9,24 @@ db.transaction((tx) => {
  */
 const create = (obj) => {
   return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      //comando SQL modificável
-      tx.executeSql(
-        "INSERT INTO porte (Nome) values (?);",
-        [obj.Porte],
-        //-----------------------
-        (_, { rowsAffected, insertId }) => {
-          if (rowsAffected > 0) resolve(insertId);
-          else reject("Error inserting obj: " + JSON.stringify(obj)); // insert falhou
-        },
-        (_, error) => reject(error) // erro interno em tx.executeSql
-      );
+    indiceDb.then((data) => {
+        data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+            `
+            INSERT INTO Porte (Nome) values (?);
+            `,
+            [obj.Porte],
+            //-----------------------
+            (_, { rowsAffected, insertId }) => {
+              if (rowsAffected > 0) resolve(insertId);
+              else reject("Error inserting obj: " + JSON.stringify(obj)); // insert falhou
+            },
+            (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+        });
     });
-  });
+  })
 };
 
 /**
@@ -48,20 +38,24 @@ const create = (obj) => {
  */
 const update = (id, obj) => {
   return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      //comando SQL modificável
-      tx.executeSql(
-        "UPDATE porte SET Nome=? WHERE id=?;",
-        [obj.Porte, id],
-        //-----------------------
-        (_, { rowsAffected }) => {
-          if (rowsAffected > 0) resolve(rowsAffected);
-          else reject("Error updating obj: id=" + id); // nenhum registro alterado
-        },
-        (_, error) => reject(error) // erro interno em tx.executeSql
-      );
+    indiceDb.then((data) => {
+        data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+            `
+            UPDATE Porte SET Nome=? WHERE CodPorte=?;
+            `,
+            [obj.Porte, id],
+            //-----------------------
+            (_, { rowsAffected, insertId }) => {
+              if (rowsAffected > 0) resolve(insertId);
+              else reject("Error updating obj: id=" + id); // nenhum registro alterado
+            },
+            (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+        });
     });
-  });
+  })
 };
 
 /**
@@ -73,20 +67,24 @@ const update = (id, obj) => {
  */
 const find = (id) => {
   return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      //comando SQL modificável
-      tx.executeSql(
-        "SELECT * FROM porte WHERE id=?;",
-        [id],
-        //-----------------------
-        (_, { rows }) => {
-          if (rows.length > 0) resolve(rows._array[0]);
-          else reject("Obj not found: id=" + id); // nenhum registro encontrado
-        },
-        (_, error) => reject(error) // erro interno em tx.executeSql
-      );
+    indiceDb.then((data) => {
+        data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+            `
+            SELECT * FROM Porte WHERE CodPorte=?;
+            `,
+            [id],
+            //-----------------------
+            (_, { rows }) => {
+              if (rows.length > 0) resolve(rows._array[0]);
+              else reject("Obj not found: id=" + id); // nenhum registro encontrado
+            },
+            (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+        });
     });
-  });
+  })
 };
 
 /**
@@ -99,17 +97,21 @@ const find = (id) => {
  */
 const all = () => {
   return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      //comando SQL modificável
-      tx.executeSql(
-        "SELECT * FROM porte;",
-        [],
-        //-----------------------
-        (_, { rows }) => resolve(rows._array),
-        (_, error) => reject(error) // erro interno em tx.executeSql
-      );
+    indiceDb.then((data) => {
+        data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+          `
+          SELECT * FROM Porte;
+          `,
+          [],
+          //-----------------------
+          (_, { rows }) => resolve(rows._array),
+          (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+        });
     });
-  });
+  })
 };
 
 /**
@@ -121,19 +123,23 @@ const all = () => {
  */
 const remove = (id) => {
   return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      //comando SQL modificável
-      tx.executeSql(
-        "DELETE FROM porte WHERE id=?;",
-        [id],
-        //-----------------------
-        (_, { rowsAffected }) => {
-          resolve(rowsAffected);
-        },
-        (_, error) => reject(error) // erro interno em tx.executeSql
-      );
+    indiceDb.then((data) => {
+        data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+          `
+          DELETE FROM Porte WHERE CodPorte=?;
+          `,
+          [id],
+          //-----------------------
+          (_, { rowsAffected }) => {
+            resolve(rowsAffected);
+          },
+          (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+      });
     });
-  });
+  })
 };
 
 export default {

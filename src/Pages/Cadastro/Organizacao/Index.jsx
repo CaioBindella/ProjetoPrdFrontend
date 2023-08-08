@@ -13,13 +13,9 @@ import {
 import { ScrollView, Text } from 'react-native';
 import { inclui } from '../../../Services/Networks/inclui';
 
-
-
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Header from '../../Components/Header/Index';
-import Buttons from '../Components/Buttons/index';
-
 
 const Organizacao = ({ navigation }) => {
     const [nome, setNome] = useState('');

@@ -25,24 +25,6 @@ color: #fff;
 text-align: center;
 `;
 
-export const Title = styled.Text`
-    width: 60%;
-	font-weight: 500;
-	font-size: 20px;
-	margin-right: 10px;
-`;
-
-export const ViewTitle = styled.View`
-    width: 100%;
-	height: 70px;
-    /* flex: 1; */
-	justify-content: center;
-	align-items: center;
-	flex-direction: row;
-	margin-top: 25px;
-    border-bottom-width: 2px;
-`;
-
 export const ContainerInputGroup = styled.View`
     background-color: #fff;
 	align-items: center;

@@ -5,20 +5,6 @@ export const Container = styled.View`
 	background-color: #fff;
 `;
 
-export const Header = styled.View`
-	background-color: #381704;
-	height: 50px;
-	align-items: center;
-	justify-content: center;
-	border-bottom-right-radius: 8px;
-	border-bottom-left-radius: 8px;
-`;
-
-export const HeaderTitle = styled.Text`
-    color: white;
-    font-size: 25px;  
-`;
-
 export const ContainerInputGroup = styled.View`
 	background-color: #fff;
 	align-items: center;
@@ -38,8 +24,6 @@ export const Title = styled.Text`
 	font-size: 20px;
 	margin-right: 10px;
 `;
-
-export const TitleIMG = styled.Image``;
 
 export const ViewTitle = styled.View`
 	width: 100%;

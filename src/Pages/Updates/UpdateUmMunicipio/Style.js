@@ -25,8 +25,6 @@ export const Title = styled.Text`
 	margin-right: 10px;
 `;
 
-export const TitleIMG = styled.Image``;
-
 export const ViewTitle = styled.View`
 	width: 100%;
 	height: 70px;

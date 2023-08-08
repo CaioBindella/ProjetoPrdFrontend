@@ -4,8 +4,6 @@ import {
     ButtonGroup,
 	Button,
 	TextButton,
-	Title,
-	ViewTitle,
 	ContainerInputGroup,
 	InputGroup,
 	Input,

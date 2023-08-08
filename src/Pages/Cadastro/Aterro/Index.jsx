@@ -5,8 +5,6 @@ import {
 	InputGroup,
 	Input,
 	Button,
-	Header,
-	HeaderTitle,
 	Title,
 	ViewTitle,
 	ButtonGroup,
@@ -16,6 +14,7 @@ import {
 import { ScrollView } from 'react-native';
 
 import { Entypo } from '@expo/vector-icons';
+import Header from '../../Components/Header/Index';
 
 const Cadastro = ({ navigation }) => {
 	const [nome, setNome] = useState('');
@@ -69,9 +68,7 @@ const Cadastro = ({ navigation }) => {
 				width: '100%',
 			}}>
 			<Container>
-				<Header>
-					<HeaderTitle>Cadastrar Aterro</HeaderTitle>
-				</Header>
+				<Header title={"Cadastro Aterro"} />
 
 				<ViewTitle>
 					<Title>Preencha os dados referente ao Aterro</Title>

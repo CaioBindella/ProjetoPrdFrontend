@@ -12,12 +12,10 @@ import {
 
 import { ScrollView, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 
 import { Ionicons } from '@expo/vector-icons';
 
 import Header from '../Components/Header/index';
-import Buttons from '../Components/Buttons/index';
 
 const Profissional = ({ navigation }) => {
 	const [nomeGerente, setNomeGerente] = useState('');
