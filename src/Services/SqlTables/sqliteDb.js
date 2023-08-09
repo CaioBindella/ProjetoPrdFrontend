@@ -32,4 +32,11 @@ export async function openDatabase() {
   return SQLite.openDatabase('indicesDatabase.db');
 }
 
-export const indiceDb = openDatabase().then((response) => response)
+export const indiceDb = openDatabase().then((response) => {
+  response._db.exec(
+    [{ sql: 'PRAGMA foreign_keys = ON;', args: [] }],
+    false,
+   () => console.log('Foreign keys turned on'),
+  )
+  return response
+})

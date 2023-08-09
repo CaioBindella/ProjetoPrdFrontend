@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { 
     ModalView, 
     ModalContent, 
@@ -18,6 +18,8 @@ import * as FileSystem from 'expo-file-system';
 import * as Updates from 'expo-updates';
 
 const ImportModal = ({ modalVisible, setModalVisible }) => {
+	const [firstAlert, setFirstAlert] = useState(true)
+
 	const pickDocument = async () => {
 		let result = await DocumentPicker.getDocumentAsync({});
 
@@ -48,6 +50,16 @@ const ImportModal = ({ modalVisible, setModalVisible }) => {
 		}
 	};
 
+	const handleImportButton = () => {
+		if (firstAlert){
+			setFirstAlert(false)
+			return
+		}
+
+		pickDocument()
+		setModalVisible(!modalVisible);
+	}
+
     return (
         <Modal
 			animationType='slide'
@@ -60,8 +72,16 @@ const ImportModal = ({ modalVisible, setModalVisible }) => {
 			<ModalView>
 				<ModalContent>
 					<Feather name='alert-circle' size={70} color='orange' />
-					<ModalTitle>Tem certeza que deseja importar o banco de dados?</ModalTitle>
-					<ModalText>Se confirmar, você perderá seus dados atuais</ModalText>
+					{firstAlert ?
+						<>
+							<ModalTitle>Tem certeza que deseja importar o banco de dados?</ModalTitle>
+							<ModalText>Se confirmar, você perderá seus dados atuais</ModalText>
+						</>
+						:
+						<>
+							<ModalTitle>Novamente, você tem absoluta certeza? Você perderá seus dados atuais</ModalTitle>
+						</>
+					}
 					<ModalButtonGroup>
 						<ModalButton
 							style={{ backgroundColor: '#a6a6a6' }}
@@ -71,8 +91,7 @@ const ImportModal = ({ modalVisible, setModalVisible }) => {
 						<ModalButton
 							style={{ backgroundColor: 'red' }}
 							onPress={() => {
-								pickDocument()
-								setModalVisible(!modalVisible);
+								handleImportButton()
 							}}>
 							<ModalButtonText>Importar</ModalButtonText>
 						</ModalButton>

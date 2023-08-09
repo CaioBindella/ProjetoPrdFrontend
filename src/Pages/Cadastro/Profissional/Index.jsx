@@ -14,8 +14,8 @@ import { ScrollView, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Ionicons } from '@expo/vector-icons';
+import Header from '../../Components/Header/Index';
 
-import Header from '../Components/Header/index';
 
 const Profissional = ({ navigation }) => {
 	const [nomeGerente, setNomeGerente] = useState('');
@@ -77,7 +77,7 @@ const Profissional = ({ navigation }) => {
 	}
 	return (
 		<ScrollView style={{ width: '100%', backgroundColor: 'white' }}>
-			<Header />
+			<Header title={"Cadastro Profissional"} />
 
 			<ViewTitle>
 				<Title>Preencha os dados referente aos Profissionais</Title>

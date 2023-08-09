@@ -11,10 +11,11 @@ import {
 } from './Style'
 
 import DropDownPicker from 'react-native-dropdown-picker';
-import Header from "../../../Cadastro/Components/Header";
+
 
 import { consulta } from "../../../../Services/Networks/consulta";
 import { atualiza } from "../../../../Services/Networks/atualiza";
+import Header from "../../../Components/Header/Index";
 
 
 function UpdateAterroFinal({navigation, route}) {
@@ -69,7 +70,7 @@ function UpdateAterroFinal({navigation, route}) {
 	}
     return(
         <Container>
-            <Header title='Atualizar Aterro'/>
+            <Header title={"Atualizar Aterro"} />
 
             <Content>
                 <PickerContainer>

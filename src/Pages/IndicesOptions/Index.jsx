@@ -19,26 +19,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { excluir } from "../../Services/Networks/excluir";
 
-const deleteAnaliseItem = (codAnalise) => {
-	return new Promise((resolve, reject) => {
-	  indiceDb.then((data) => {
-		data.transaction((tx) => {
-		  //comando SQL modificável
-		  tx.executeSql(
-			  `
-			  	DELETE FROM AnaliseItem WHERE CodAnalise=?;"
-			  `,
-			[codAnalise],
-			//-----------------------
-			(_, { rows }) => resolve(rows._array),
-			(_, error) => reject(error) // erro interno em tx.executeSql
-		  );
-		});
-	  });
-	});
-  }
-
-
 function IndicesOptions({ navigation, route }) {
     const aterroData = route.params.aterroData;
 	const analiseData = route.params.analiseData;
@@ -128,7 +108,6 @@ function IndicesOptions({ navigation, route }) {
 
 	const deleteData = async () => {
 		setModalVisible(!modalVisible);
-		await deleteAnaliseItem(analiseData.CodAnalise)
 		await excluir(analiseData.CodAnalise, 'analise')
 		alert('Excluido');
 		navigation.navigate('Home')

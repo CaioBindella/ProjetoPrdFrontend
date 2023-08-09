@@ -14,7 +14,7 @@ const create = (obj) => {
         //comando SQL modificável
         tx.executeSql(
             `
-            INSERT INTO Aterro (Nome, Endereco, BaciaHidrografica, RecebimentoBruto, RecebimentoGerado, CondicaoClimatica, Latitude, Longitude, LicencaPrevia, LicencaOperacional, Municipio, Organizacao, Porte) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            INSERT INTO Aterro (Nome, Endereco, BaciaHidrografica, RecebimentoBruto, RecebimentoGerado, CondicaoClimatica, Latitude, Longitude, LicencaPrevia, LicencaOperacional, CodMunicipio, CodOrganizacao, CodPorte) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             `,
             [obj.Nome, obj.Endereco, obj.BaciaHidrografica, obj.RecebimentoBruto, obj.RecebimentoGerado, obj.CondicaoClimatica, obj.Latitude, obj.Longitude, obj.LicencaPrevia, obj.LicencaOperacional, obj.Municipio, obj.Organizacao, obj.Porte],
             //-----------------------
@@ -43,7 +43,7 @@ const update = (id, obj) => {
         //comando SQL modificável
         tx.executeSql(
             `
-            UPDATE Aterro SET Nome=?, Endereco=?, BaciaHidrografica=?, RecebimentoBruto=?, RecebimentoGerado=?, CondicaoClimatica=?, Latitude=?, Longitude=?, LicencaPrevia=?, LicencaOperacional=?, Municipio=?, Organizacao=?, Porte=? WHERE CodAterro=?;
+            UPDATE Aterro SET Nome=?, Endereco=?, BaciaHidrografica=?, RecebimentoBruto=?, RecebimentoGerado=?, CondicaoClimatica=?, Latitude=?, Longitude=?, LicencaPrevia=?, LicencaOperacional=?, CodMunicipio=?, CodOrganizacao=?, CodPorte=? WHERE CodAterro=?;
             `,
             [obj.Nome, obj.Endereco, obj.BaciaHidrografica, obj.RecebimentoBruto, obj.RecebimentoGerado, obj.CondicaoClimatica, obj.Latitude, obj.Longitude, obj.LicencaPrevia, obj.LicencaOperacional, obj.Municipio, obj.Organizacao, obj.Porte, id],
             //-----------------------
