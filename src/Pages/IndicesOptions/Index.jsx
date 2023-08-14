@@ -18,6 +18,7 @@ import Header from "../Components/Header/Index";
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { excluir } from "../../Services/Networks/excluir";
+import DeleteModal from "../Components/DeleteModal/Index";
 
 function IndicesOptions({ navigation, route }) {
     const aterroData = route.params.aterroData;
@@ -152,34 +153,8 @@ function IndicesOptions({ navigation, route }) {
 					<Text>Excluir Analise {analiseData.DataIni}</Text>
 				</Button>
 			</Content>
-			<Modal
-				animationType='slide'
-				transparent={true}
-				visible={modalVisible}
-				onRequestClose={() => {
-					Alert.alert('Modal has been closed.');
-					setModalVisible(!modalVisible);
-				}}>
-				<ModalView>
-					<ModalContent>
-						<Feather name='alert-circle' size={70} color='orange' />
-						<ModalTitle>Tem certeza que deseja excluir?</ModalTitle>
-						<Text>Se confirmar você não voltará a ver esse dado</Text>
-						<ModalButtonGroup>
-							<ModalButton
-								style={{ backgroundColor: '#a6a6a6' }}
-								onPress={() => setModalVisible(!modalVisible)}>
-								<ModalButtonText>Cancelar</ModalButtonText>
-							</ModalButton>
-							<ModalButton
-								style={{ backgroundColor: 'red' }}
-								onPress={() => deleteData()}>
-								<ModalButtonText>Excluir</ModalButtonText>
-							</ModalButton>
-						</ModalButtonGroup>
-					</ModalContent>
-				</ModalView>
-			</Modal>
+			
+			<DeleteModal modalVisible={modalVisible} setModalVisible={setModalVisible} navigation={navigation} deleteFunction={deleteData}/>
         </Container>
     );
 };

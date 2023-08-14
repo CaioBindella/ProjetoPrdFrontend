@@ -6,13 +6,13 @@ import {
 	ButtonGroup,
 } from './Style';
 
-import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import * as XLSX from 'xlsx'
 import { indiceDb } from '../../Services/SqlTables/sqliteDb';
 
 import Header from '../Components/Header/Index';
 import ImportModal from './ImportModal/Index';
+import ShareModal from './ShareModal/Index';
 
 const getTable = (table) => {
 	return new Promise((resolve, reject) => {
@@ -97,7 +97,6 @@ const makeXLSXFileUnified = async () => {
 	return XLSX.write(wb, {type:'base64', bookType:"xlsx"})
 }
 
-
 const makeXLSXFileSeparate = async () => {
 	var wb = XLSX.utils.book_new();
 	const tables = ['Analise', 'AnaliseItem', 'Aterro', 'Avaliacao', 'AvaliacaoPeso', 'Categoria', 'Indicador', 'Municipio', 'Organizacao', 'Porte', 'SubCategoria', 'TipoIndicador']
@@ -113,74 +112,101 @@ const makeXLSXFileSeparate = async () => {
 	return XLSX.write(wb, {type:'base64', bookType:"xlsx"})
 }
 
+const createXLSX = async (type) => {
+	var wbout
+	if(type === "separate"){
+		wbout = await makeXLSXFileSeparate()
+	}
+	else{
+		wbout = await makeXLSXFileUnified()
+	}
+	
+	const uri = FileSystem.documentDirectory + "XLSX/indicesDatabase.xlsx"
+
+	if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'XLSX')).exists) {
+		await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'XLSX');
+	}
+
+	// Escreve arquivo Excel no armazenamento do celular
+	FileSystem.writeAsStringAsync(uri, wbout, {
+		encoding: FileSystem.EncodingType.Base64
+	})
+	.catch(e => {
+		alert(e)
+	})
+}
+
 const Ferramentas = () => {
-	const [modalVisible, setModalVisible] = useState(false);
+	const [importModalVisible, setImportModalVisible] = useState(false);
+	const [shareModalVisible, setShareModalVisible] = useState(false);
+	const [exportType, setExportType] = useState('')
+	const [uri, setUri] = useState('')
 
-	const exportXLSX = async (type) => {
-		var wbout
-		if(type === "separate"){
-			wbout = await makeXLSXFileSeparate()
+	const handleExport = (type) => {
+		switch (type){
+			case "Banco de dados":
+				setUri("SQLite/indicesDatabase.db")
+				setExportType(type)
+				setShareModalVisible(true)
+				break
+			case "XLSX unificado":
+				try{
+					createXLSX("unified")
+					setUri("XLSX/indicesDatabase.xlsx")
+					setExportType(type)
+					setShareModalVisible(true)
+				}
+				catch (e) {
+					alert(e)
+				}
+				
+				break
+			case "XLSX separado":
+				try{
+					createXLSX("separate")
+					setUri("XLSX/indicesDatabase.xlsx")
+					setExportType(type)
+					setShareModalVisible(true)
+				}
+				catch (e) {
+					alert(e)
+				}
+				break
+			default:
+				alert("Opção inválida")
+				break
 		}
-		else{
-			wbout = await makeXLSXFileUnified()
-		}
-		
-		const uri = FileSystem.documentDirectory + "XLSX/indicesDatabase.xlsx"
-
-		if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'XLSX')).exists) {
-			await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'XLSX');
-		}
-
-		// Write generated excel to Storage and Share
-		FileSystem.writeAsStringAsync(uri, wbout, {
-			encoding: FileSystem.EncodingType.Base64
-		})
-		.then(async () => {
-			await Sharing.shareAsync(
-				uri, 
-				{dialogTitle: 'Compartilhe ou copie seu arquivo via:'}
-			 ).catch(e =>{
-				console.log(e);
-			 })
-		})
-		.catch(e => {
-			console.log(e)
-		})
 	}
-
-	const exportDb = async () => {
-		await Sharing.shareAsync(
-			FileSystem.documentDirectory + 'SQLite/indicesDatabase.db', 
-			{dialogTitle: 'Compartilhe ou copie seu arquivo via:'}
-		 ).catch(e =>{
-			console.log(e);
-		 })
-	}
-
 
 	return (
 		<Container>
 			<Header title="Ferramentas" />
 
 			<ButtonGroup>
-				<Button onPress={() => setModalVisible(true)}>
-					<Text>Importar Banco de Dados</Text>
+				<Button onPress={() => setImportModalVisible(true)}>
+					<Text>Importar Banco de dados</Text>
 				</Button>
 
-				<Button onPress={() => exportDb()}>
-					<Text>Exportar Banco de Dados</Text>
+				<Button onPress={() => handleExport("Banco de dados")}>
+					<Text>Exportar Banco de dados</Text>
 				</Button>
 
-				<Button onPress={() => exportXLSX("separate")}>
+				<Button onPress={() => handleExport("XLSX separado")}>
 					<Text>Exportar como XLSX separado</Text>
 				</Button>
 
-				<Button onPress={() => exportXLSX("unified")}>
+				<Button onPress={() => handleExport("XLSX unificado")}>
 					<Text>Exportar como XLSX unificado</Text>
 				</Button>
 			</ButtonGroup>
 
-			<ImportModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
+			<ImportModal modalVisible={importModalVisible} setModalVisible={setImportModalVisible} />
+			<ShareModal 
+				modalVisible={shareModalVisible} 
+				setModalVisible={setShareModalVisible} 
+				exportType={exportType} 
+				uri={uri}
+			/>
 		</Container>
 	);
 };

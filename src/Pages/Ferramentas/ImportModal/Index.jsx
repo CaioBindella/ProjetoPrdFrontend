@@ -43,7 +43,7 @@ const ImportModal = ({ modalVisible, setModalVisible }) => {
 			alert("Importação concluída com sucesso!")
 			
 			// Reinicia o aplicativo em produção
-			// Updates.reloadAsync()
+			Updates.reloadAsync()
 		}
 		else{
 			alert("Escolha um arquivo com a extensão .db")
@@ -67,8 +67,11 @@ const ImportModal = ({ modalVisible, setModalVisible }) => {
 			visible={modalVisible}
 			onRequestClose={() => {
 				setModalVisible(!modalVisible);
-			}
-		}>
+			}}
+			onDismiss={() => {
+				setModalVisible(!modalVisible)
+			}}
+		>
 			<ModalView>
 				<ModalContent>
 					<Feather name='alert-circle' size={70} color='orange' />
@@ -84,16 +87,16 @@ const ImportModal = ({ modalVisible, setModalVisible }) => {
 					}
 					<ModalButtonGroup>
 						<ModalButton
-							style={{ backgroundColor: '#a6a6a6' }}
-							onPress={() => setModalVisible(!modalVisible)}>
-							<ModalButtonText>Cancelar</ModalButtonText>
-						</ModalButton>
-						<ModalButton
-							style={{ backgroundColor: 'red' }}
+							background="#3f81eb"
 							onPress={() => {
 								handleImportButton()
 							}}>
 							<ModalButtonText>Importar</ModalButtonText>
+						</ModalButton>
+						<ModalButton
+							background="#E13F33"
+							onPress={() => setModalVisible(!modalVisible)}>
+							<ModalButtonText>Cancelar</ModalButtonText>
 						</ModalButton>
 					</ModalButtonGroup>
 				</ModalContent>
