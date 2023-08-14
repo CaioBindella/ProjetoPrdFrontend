@@ -19,7 +19,10 @@ import { RadioButton } from 'react-native-paper';
 import { indiceDb } from '../../../Services/SqlTables/sqliteDb';
 import CameraComponent from '../CameraView/Index'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons'; 
+
+import * as DocumentPicker from "expo-document-picker"
+import * as FileSystem from 'expo-file-system';
+import * as Updates from 'expo-updates';
 
 const updateAnaliseItemPesos = (codAvPeso, codInd, codAnalise) => {
     return new Promise((resolve, reject) => {
@@ -84,6 +87,8 @@ const loadPreviousAnswer = (codInd, codAnalise) =>{
 function IndiceCard ({codInd, title, description, codAvPeso, options, optionValue, codAnalise, data, getScore, setScore, scoreData, setScoreData, index}){
 
     const [checked, setChecked] = useState(null);
+    const [cameraVisible, setCameraVisible] = useState(false);
+    const [capturedPhoto, setCapturedPhoto] = useState(null);
 
     const handleRadioPress = async (value, selectedCod) => {
       setChecked(value)
@@ -102,13 +107,20 @@ function IndiceCard ({codInd, title, description, codAvPeso, options, optionValu
       setChecked(response[0] ? response[0].Pontuacao : null)
     }
 
+    const pickDocument = async () => {
+      let result = await DocumentPicker.getDocumentAsync({});
+  
+      if(result.type === "cancel"){
+        return
+      }
+  
+      console.log(result)
+    };
+
     useEffect(() => {
       loadAnswer()
     },[])
     
-    const [cameraVisible, setCameraVisible] = useState(false);
-    const [capturedPhoto, setCapturedPhoto] = useState(null);
-  
     const handleOpenCamera = () => {
       setCameraVisible(true);
     };
@@ -145,7 +157,7 @@ function IndiceCard ({codInd, title, description, codAvPeso, options, optionValu
             </ContentOptions>
 
             <ButtonContainer>
-              <ButtonLink>
+              <ButtonLink onPress={() => pickDocument()}>
                 <LinkText>Link</LinkText>
               </ButtonLink>
 
