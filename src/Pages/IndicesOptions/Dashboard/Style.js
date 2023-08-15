@@ -12,6 +12,10 @@ export const Content = styled.View`
     align-items: center;
 `;
 
+export const ContentCharts = styled.View`
+    width: 100%;
+`;
+
 export const Description = styled.Text`
     font-size: 16px;
 `;
@@ -26,4 +30,23 @@ export const Title = styled.Text`
     font-weight: bold;
     text-align: center;
     padding: 5px;
+`;
+
+export const Button = styled.TouchableOpacity`
+    margin-top: 10px;
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+`;
+
+export const TextButton = styled.Text`
+    padding: 10px;
+	border-radius: 5px;
+	background-color: #24a0ed;
+	text-align: center;
+    color: #fff;
+    font-weight: bold;
+	border: 1px solid white;
 `;

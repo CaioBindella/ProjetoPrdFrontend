@@ -87,7 +87,7 @@ function Indicador({ navigation, route }) {
             </Content>
 
             <DashboardButton onPress={() => navigation.navigate('Dashboard', {
-                aterroData: aterroData, analiseData: analiseData})}>
+                aterroData: aterroData, analiseData: analiseData ,indicadorType: indicadorType})}>
                 <TextDashboard>Gerar DashBoard</TextDashboard>
             </DashboardButton>
 
