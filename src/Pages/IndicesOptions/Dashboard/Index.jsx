@@ -3,7 +3,7 @@ import React , { useEffect, useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 
 // Native Components
-import { Container, Content, ContentCharts, Description, DescriptionContent, Title, Button, TextButton } from './Style';
+import { Container, Content, ContentCharts, Description, DescriptionContent, Title, Button, TextButton, Line } from './Style';
 
 import Header from '../../Components/Header/Index';
 import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
@@ -68,6 +68,10 @@ const Dashboard = ({ navigation, route }) => {
     const [score, setScore] = useState(Array(8).fill(0))
     const [globalScore, setGlobalScore] = useState()
 
+    const [firsttec , setFirsttec] = useState()
+    const [sectec , setSectec] = useState()
+    const [thirdtec , setThirdtec] = useState()
+
     const loadData = async () => {
       const maxScores = await getMaxScores()
       const actualScores = await getActualScores()
@@ -83,8 +87,20 @@ const Dashboard = ({ navigation, route }) => {
         technicArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
       })
       
+      //pega a pontuação de cada sub-area
+      const firstgrouptec = ((technicArray[0] + technicArray[1] + technicArray[2])/3).toFixed()
+      const secondgrouptec = ((technicArray[3] + technicArray[4])/2).toFixed()
+      const thirdgrouptec = ((technicArray[5] + technicArray[6] + technicArray[7])/3).toFixed()
+
+      console.log(firstgrouptec)
+      console.log(secondgrouptec)
+      console.log(thirdgrouptec)
       setGlobalScore(totalScore)
       setScore(technicArray)
+      
+      setFirsttec(firstgrouptec)
+      setSectec(secondgrouptec)
+      setThirdtec(thirdgrouptec)
     }
 
     let chartComponent;
@@ -97,7 +113,27 @@ const Dashboard = ({ navigation, route }) => {
               <Content>
               <Title>Performance Geral</Title>
               <Score scored={globalScore} total={638} />
-      
+
+              <Line/>
+              <Title>Avaliação Técnica Ambiental</Title>
+
+              <VictoryChart
+                theme={VictoryTheme.material}
+                domainPadding={{ x: 100 }}
+              >
+                <VictoryBar horizontal
+                  style={{
+                    data: { fill: "darkblue" }
+                  }}
+                  data={[   { x: "1", y: parseInt(firsttec)},
+                            { x: "2", y: parseInt(sectec) },
+                            { x: "3", y: parseInt(thirdtec) }
+                          ]}
+                />
+              </VictoryChart>
+
+              <Line/> 
+              <Title>Avaliação da Sub-área</Title>            
               <VictoryChart polar
                   theme={VictoryTheme.material}
                 >

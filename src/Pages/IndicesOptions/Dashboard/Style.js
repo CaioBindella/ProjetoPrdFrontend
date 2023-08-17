@@ -50,3 +50,11 @@ export const TextButton = styled.Text`
     font-weight: bold;
 	border: 1px solid white;
 `;
+
+export const Line = styled.View`
+    width: 80%;
+    height: 2px;
+    border: 1px solid black;
+    margin-top: 30px;
+    background-color: black;
+`;
