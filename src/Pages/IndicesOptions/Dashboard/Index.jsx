@@ -125,10 +125,10 @@ const Dashboard = ({ navigation, route }) => {
                   style={{
                     data: { fill: "darkblue" }
                   }}
-                  data={[   { x: "1", y: parseInt(firsttec)},
-                            { x: "2", y: parseInt(sectec) },
-                            { x: "3", y: parseInt(thirdtec) }
-                          ]}
+                  // data={[   { x: "1", y: parseInt(firsttec)},
+                  //           { x: "2", y: parseInt(sectec) },
+                  //           { x: "3", y: parseInt(thirdtec) }
+                  //         ]}
                 />
               </VictoryChart>
 
@@ -186,20 +186,67 @@ const Dashboard = ({ navigation, route }) => {
               <ScrollView>
               <Header title={`Dashboard Técnico - ${aterroData.Nome}`}/>
               <Content>
-                <VictoryPie
-                  padAngle={({ datum }) => datum.y}
-                  innerRadius={100}
-                  colorScale={["tomato", "orange", "gold", "cyan", "navy" ]}
-                />
-
+              <Line/> 
+              <Title>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>            
+              <VictoryChart polar
+                  theme={VictoryTheme.material}
+                >
+                  {
+                    ["1", "2", "3", "4", "5", "6", "7", "8"].map((d, i) => {
+                      return (
+                        <VictoryPolarAxis dependentAxis
+                          key={i}
+                          label={d}
+                          labelPlacement="perpendicular"
+                          style={{ tickLabels: { fill: "none" } }}
+                          axisValue={d}
+                        />
+                      );
+                    })
+                  }
+                  <VictoryBar
+                    style={{ data: { fill: "purple", width: 25 } }}
+                    data={[
+                      { x: "1", y: parseInt(score[0])},
+                      { x: "2", y: parseInt(score[1]) },
+                      { x: "3", y: parseInt(score[2]) },
+                      { x: "4", y: parseInt(score[3]) },
+                      { x: "5", y: parseInt(score[4]) },
+                      { x: "6", y: parseInt(score[5])  },
+                      { x: "7", y: parseInt(score[6])  },
+                      { x: "8", y: parseInt(score[7]) }
+                    ]}
+                  />
+                </VictoryChart>
+      
                 <DescriptionContent>
-                    <Title>Letra relacionada ao Percentual do CMO Estimado diário</Title>
-                    <Description>A: Escavadeira 90HP</Description>
-                    <Description>B: Caminhão tanque (18.000l)</Description>
-                    <Description>C: Trator Esteira D6K 13,4t 125HP </Description>
-                    <Description>D: Compactador de solo 130HP</Description>
-                    <Description>E: Outros</Description>
+                    <Title>Número relacionado a Sub-ítem</Title>
+                    <Description>1: Trator Esteira D6K 13,4t 125HP</Description>
+                    <Description>2: Escavadeira 90HP</Description>
+                    <Description>3: Caminhão Tanque</Description>
+                    <Description>4: Compactador de solo 130HP</Description>
+                    <Description>5: Moto nivelador 125HP</Description>
+                    <Description>6: Carregadeira de rodas 128HP</Description>
+                    <Description>7: Disponibilidade de Lâmina Raspadora</Description>
+                    <Description>8: CMO Praticado em função do Porte</Description>
                 </DescriptionContent>
+                <Line/>
+                <Title>Avaliação da Inadimplência</Title>
+                <VictoryChart
+                theme={VictoryTheme.material}
+                domainPadding={{ x: 10 }}
+              >
+                <VictoryBar horizontal
+                  style={{
+                    data: { fill: "darkblue" }
+                  }}
+                  barWidth={40}
+                  domain={{x: [0, 3], y: [0, 100]}}
+                  data={[   { x: "%", y: 75},   
+                          ]}
+                />
+              </VictoryChart>
+
               </Content>
               </ScrollView>
             </ContentCharts>;
@@ -211,43 +258,58 @@ const Dashboard = ({ navigation, route }) => {
               <Header title={`Dashboard Técnico - ${aterroData.Nome}`}/>
               <Content>
                 
-              <Title>Impactos Positivos</Title>  
-              <VictoryPie
-                data={[
-                  { x: 1, y: 2, label: "A" },
-                  { x: 2, y: 3, label: "B" },
-                  { x: 3, y: 4, label: "C" },
-                  { x: 4, y: 5, label: "D" }
-                ]}
-                colorScale={["purple", "darkblue", "darkred", "green" ]}
-              />
-
-              <DescriptionContent>
-                  <Title>Letra relacionada aos Impactos Positivos Identificados:</Title>
-                  <Description>A: Sinalização</Description>
-                  <Description>B: Melhorias(Vias)</Description>
-                  <Description>C: Contratação</Description>
-                  <Description>D: Educação</Description>
-              </DescriptionContent>
+              <Title>Avaliação da percepção social dos impactos ambientais negativos da atividade</Title>  
               
-              <Title>Impactos Negativos</Title>
-              <VictoryPie
-                data={[
-                  { x: 1, y: 2, label: "A" },
-                  { x: 2, y: 3, label: "B" },
-                  { x: 3, y: 4, label: "C" },
-                  { x: 4, y: 5, label: "D" }
-                ]}
-                colorScale={["lightblue", "cyan", "darkred", "grey" ]}
-              />
+              <VictoryChart polar
+                  theme={VictoryTheme.material}
+                >
+                  {
+                    ["1", "2", "3", "4", "5", "6", "7", "8"].map((d, i) => {
+                      return (
+                        <VictoryPolarAxis dependentAxis
+                          key={i}
+                          label={d}
+                          labelPlacement="perpendicular"
+                          style={{ tickLabels: { fill: "none" } }}
+                          axisValue={d}
+                        />
+                      );
+                    })
+                  }
+                  <VictoryBar
+                    style={{ data: { fill: "purple", width: 25 } }}
+                    data={[
+                      { x: "1", y: parseInt(score[0])},
+                      { x: "2", y: parseInt(score[1]) },
+                      { x: "3", y: parseInt(score[2]) },
+                      { x: "4", y: parseInt(score[3]) },
+                      { x: "5", y: parseInt(score[4]) },
+                      { x: "6", y: parseInt(score[5])  },
+                      { x: "7", y: parseInt(score[6])  },
+                      { x: "8", y: parseInt(score[7]) }
+                    ]}
+                  />
+                </VictoryChart>
+      
+                <DescriptionContent>
+                    <Title>Número relacionado a Sub-ítem</Title>
+                    <Description>1: Foi percebido cheiro de lixo nas redondezas do aterro ?</Description>
+                    <Description>2: Foi percebido barulho de caminhões transitando no entorno do aterro?</Description>
+                    <Description>3: Foi percebida fumaça oriunda de caminhões transitando no entorno do aterro?</Description>
+                    <Description>4: Foi constatada a presença de resíduos volantes oriundos dos caminhões?</Description>
+                    <Description>5: Foi constatada fila de caminhões no acesso à balança do aterro?</Description>
+                    <Description>6: Foi constatado chorume oriundo dos caminhões no entorno do aterro?</Description>
+                    <Description>7: Foi percebido barulho do maquinário pesado da operação do aterro na entorno do aterro? </Description>
+                    <Description>8: Foi percebido o aumento de poeira e material particulado no interior das resídências devido ao trânsito de caminhões no  entorno do aterro?</Description>
+                    <Description>9: Foi constatada aproliferação de ratos e outros vetores terrestres após a instalação do aterro?</Description>
+                    <Description>10: Foi constatada alteração de odor/sabor caracteristico na água de poço após a instalação do aterro?</Description>
+                    <Description>11: Foi constatada aproliferação de moscas e outros vetores aéreos após a instalação do aterro?</Description>
+                    <Description>12: Quantos entrevistados afirmaram haver, ao menos, 3 benefícios em função das operações normais do aterro?</Description>
+                    <Description>13: Quanto à duração dos impacos constatdos, quantos foram considerados constantes?</Description>
+                    <Description>14: Quanto à frequência dos impacos constatdos, quantos foram considerados diários?</Description>
+                    <Description>15: Quantos entrevistados afirmaram haver, ao menos, 3 prejuizos ao bem-estar em função das operações normais do aterro?</Description>
+                </DescriptionContent>
 
-              <DescriptionContent>
-                  <Title>Letra relacionada aos Impactos Positivos Identificados:</Title>
-                  <Description>A: Sinalização</Description>
-                  <Description>B: Melhorias(Vias)</Description>
-                  <Description>C: Contratação</Description>
-                  <Description>D: Educação</Description>
-              </DescriptionContent>
               </Content>
               </ScrollView>
             </ContentCharts>; 
@@ -256,30 +318,6 @@ const Dashboard = ({ navigation, route }) => {
           chartComponent = null;
           break;
       }
-
-    const html = `
-    <html>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-      </head>
-      <body style="text-align: center;">
-        <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
-          Hello Expo!
-        </h1>
-        <img
-          src="https://d30j33t1r58ioz.cloudfront.net/static/guides/sdk.png"
-          style="width: 90vw;" />
-      </body>
-    </html>
-    `;
-
-
-    const printToFile = async () => {
-      // On iOS/android prints the given html. On web prints the HTML from the current page.
-      const { uri } = await Print.printToFileAsync({ html });
-      console.log('File has been saved to:', uri);
-      await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
-    };
 
     useEffect(() => {
       loadData()  
@@ -290,8 +328,7 @@ const Dashboard = ({ navigation, route }) => {
     <Container>
       <ScrollView>
         {chartComponent}
-
-        <Button onPress={printToFile}>
+        <Button>
           <TextButton>Gerar PDF</TextButton>
         </Button>
       </ScrollView>
