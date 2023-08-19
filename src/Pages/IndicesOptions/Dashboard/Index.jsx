@@ -15,7 +15,7 @@ import Score from '../../Components/Score/Index';
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 
-const getMaxScores = () => {
+const getMaxTecScores = () => {
     return new Promise((resolve, reject) => {
       indiceDb.then((data) => {
         data.transaction((tx) => {
@@ -39,7 +39,7 @@ const getMaxScores = () => {
     });
 }
 
-const getActualScores = () => {
+const getActualTecScores = (tipo) => {
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
       data.transaction((tx) => {
@@ -50,9 +50,61 @@ const getActualScores = () => {
             INNER JOIN AvaliacaoPeso AP ON AI.CodAvPeso = AP.CodAvPeso
             INNER JOIN Indicador I ON AI.CodInd = I.CodInd
             INNER JOIN SubCategoria SC ON I.CodSubCat = SC.CodSubCat
+            INNER JOIN Categoria C ON SC.CodCat = C.CodCat
+            INNER JOIN TipoIndicador TP ON C.CodTipoInd = TP.CodTipo
+            WHERE TP.DescTipo = ?
             GROUP BY DescSubCat
             `,
-          [],
+          [tipo],
+          //-----------------------
+          (_, { rows }) => resolve(rows._array),
+          (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+      });
+    });
+  });
+}
+
+const getMaxScores = (tipo, subcat) => {
+  return new Promise((resolve, reject) => {
+    indiceDb.then((data) => {
+      data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+            `
+            SELECT Titulo, Pontuacao AS MaxScore FROM Indicador I
+            INNER JOIN SubCategoria SC ON SC.CodSubCat = I.CodSubCat
+            INNER JOIN Categoria C ON C.CodCat = SC.CodCat
+            INNER JOIN TipoIndicador TP ON TP.CodTipo = C.CodTipoInd
+            INNER JOIN AvaliacaoPeso AP ON AP.CodInd = I.CodInd
+            WHERE AP.Maxima = 1 AND TP.DescTipo = ? AND SC.DescSubCat = ?
+            `,
+          [tipo, subcat],
+          //-----------------------
+          (_, { rows }) => resolve(rows._array),
+          (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+      });
+    });
+  });
+}
+
+const getActualScores = (tipo, subcat) => {
+  return new Promise((resolve, reject) => {
+    indiceDb.then((data) => {
+      data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+            `
+            SELECT Titulo, Pontuacao as ActualScore FROM AnaliseItem AI
+            INNER JOIN AvaliacaoPeso AP ON AI.CodAvPeso = AP.CodAvPeso
+            INNER JOIN Indicador I ON AI.CodInd = I.CodInd
+            INNER JOIN SubCategoria SC ON I.CodSubCat = SC.CodSubCat
+            INNER JOIN Categoria C ON SC.CodCat = C.CodCat
+            INNER JOIN TipoIndicador TP ON C.CodTipoInd = TP.CodTipo
+            WHERE TP.DescTipo = ? AND SC.DescSubCat = ?
+            `,
+          [tipo, subcat],
           //-----------------------
           (_, { rows }) => resolve(rows._array),
           (_, error) => reject(error) // erro interno em tx.executeSql
@@ -65,42 +117,98 @@ const getActualScores = () => {
 const Dashboard = ({ navigation, route }) => {
     const aterroData = route.params.aterroData
     const tipoind = route.params.indicadorType
+    const analiseData = route.params.analiseData
     const [score, setScore] = useState(Array(8).fill(0))
     const [globalScore, setGlobalScore] = useState()
-
-    const [firsttec , setFirsttec] = useState()
-    const [sectec , setSectec] = useState()
-    const [thirdtec , setThirdtec] = useState()
+    
+    //Tecnico
+    const [firsttec , setFirsttec] = useState(0)
+    const [sectec , setSectec] = useState(0)
+    const [thirdtec , setThirdtec] = useState(0)
+    
+    //Economico
+    const [firstEco, setFirstEco] = useState(0)
+    
+    //Social
+    const [firstSocial, setFirstSocial] = useState(0)
 
     const loadData = async () => {
-      const maxScores = await getMaxScores()
-      const actualScores = await getActualScores()
       const technicArray = Array(8).fill(0)
+      const economicArray = Array(8).fill(0)
+      const socialArray = Array(15).fill(0)
       let totalScore = 0;
 
-      actualScores.map((eachActualScore) => {
-        // Pega o score máximo e o índice de acordo com o nome da subcategoria
-        const maxScore = parseInt(maxScores.find(eachScore => eachScore.DescSubCat === eachActualScore.DescSubCat).MaxScore)
-        const index =  parseInt(maxScores.findIndex(eachScore => eachScore.DescSubCat === eachActualScore.DescSubCat))
-        const actualScore = parseInt(eachActualScore.ActualScore)
-        totalScore += actualScore
-        technicArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
-      })
-      
-      //pega a pontuação de cada sub-area
-      const firstgrouptec = ((technicArray[0] + technicArray[1] + technicArray[2])/3).toFixed()
-      const secondgrouptec = ((technicArray[3] + technicArray[4])/2).toFixed()
-      const thirdgrouptec = ((technicArray[5] + technicArray[6] + technicArray[7])/3).toFixed()
+      switch (tipoind){
+        case 'Técnico':
+          const maxTecScores = await getMaxTecScores()
+          const actualTecScores = await getActualTecScores(tipoind)
 
-      console.log(firstgrouptec)
-      console.log(secondgrouptec)
-      console.log(thirdgrouptec)
-      setGlobalScore(totalScore)
-      setScore(technicArray)
-      
-      setFirsttec(firstgrouptec)
-      setSectec(secondgrouptec)
-      setThirdtec(thirdgrouptec)
+          actualTecScores.map((eachActualScore) => {
+            // Pega o score máximo e o índice de acordo com o nome da subcategoria
+            const maxScore = parseInt(maxTecScores.find(eachScore => eachScore.DescSubCat === eachActualScore.DescSubCat).MaxScore)
+            const index =  parseInt(maxTecScores.findIndex(eachScore => eachScore.DescSubCat === eachActualScore.DescSubCat))
+            const actualScore = parseInt(eachActualScore.ActualScore)
+            totalScore += actualScore
+            technicArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
+          })
+          
+          //pega a pontuação de cada sub-area
+          const firstgrouptec = ((technicArray[0] + technicArray[1] + technicArray[2])/3).toFixed()
+          const secondgrouptec = ((technicArray[3] + technicArray[4])/2).toFixed()
+          const thirdgrouptec = ((technicArray[5] + technicArray[6] + technicArray[7])/3).toFixed()
+    
+          setGlobalScore(totalScore)
+          setScore(technicArray)
+          
+          setFirsttec(firstgrouptec)
+          setSectec(secondgrouptec)
+          setThirdtec(thirdgrouptec)
+          break;
+          
+        case 'Econômico':
+          const maxEcoScores = await getMaxScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios")
+          const actualEcoScores = await getActualScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios")
+
+          actualEcoScores.map((eachActualScore) => {
+            // Pega o score máximo e o índice de acordo com o nome da subcategoria
+            const maxScore = parseInt(maxEcoScores.find(eachScore => eachScore.Titulo === eachActualScore.Titulo).MaxScore)
+            const index =  parseInt(maxEcoScores.findIndex(eachScore => eachScore.Titulo === eachActualScore.Titulo))
+            const actualScore = parseInt(eachActualScore.ActualScore)
+            totalScore += actualScore
+            economicArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
+          })
+          
+          setGlobalScore(totalScore)
+          setScore(economicArray)
+
+          break;
+
+        case 'Social':
+          var maxSocialScores, actualSocialScores
+
+          if (analiseData.Tipo === "Análise por Entrevista"){
+            maxSocialScores = await getMaxScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Entrevista")
+            actualSocialScores = await getActualScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Entrevista")
+          }
+          else{
+            maxSocialScores = await getMaxScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Social")
+            actualSocialScores = await getActualScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Social")
+          }
+
+          actualSocialScores.map((eachActualScore) => {
+            // Pega o score máximo e o índice de acordo com o nome da subcategoria
+            const maxScore = parseInt(maxSocialScores.find(eachScore => eachScore.Titulo === eachActualScore.Titulo).MaxScore)
+            const index =  parseInt(maxSocialScores.findIndex(eachScore => eachScore.Titulo === eachActualScore.Titulo))
+            const actualScore = parseInt(eachActualScore.ActualScore)
+            totalScore += actualScore
+            socialArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
+          })
+          
+          setGlobalScore(totalScore)
+          setScore(socialArray)
+
+          break;
+      }
     }
 
     let chartComponent;
@@ -125,12 +233,16 @@ const Dashboard = ({ navigation, route }) => {
                   style={{
                     data: { fill: "darkblue" }
                   }}
-                  // data={[   { x: "1", y: parseInt(firsttec)},
-                  //           { x: "2", y: parseInt(sectec) },
-                  //           { x: "3", y: parseInt(thirdtec) }
-                  //         ]}
+                  data={[   { x: "1", y: parseInt(firsttec)},
+                            { x: "2", y: parseInt(sectec) },
+                            { x: "3", y: parseInt(thirdtec) }
+                          ]}
                 />
               </VictoryChart>
+
+              <Description>1: Características locacionais</Description>
+              <Description>2: Infra estrutura implantada</Description>
+              <Description>3: Condições operacionais</Description>
 
               <Line/> 
               <Title>Avaliação da Sub-área</Title>            
@@ -184,8 +296,9 @@ const Dashboard = ({ navigation, route }) => {
           chartComponent = 
             <ContentCharts>
               <ScrollView>
-              <Header title={`Dashboard Técnico - ${aterroData.Nome}`}/>
+              <Header title={`Dashboard Econômico - ${aterroData.Nome}`}/>
               <Content>
+              <Score scored={globalScore} total={53} />
               <Line/> 
               <Title>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>            
               <VictoryChart polar
@@ -255,16 +368,17 @@ const Dashboard = ({ navigation, route }) => {
           chartComponent = 
           <ContentCharts>
             <ScrollView>
-              <Header title={`Dashboard Técnico - ${aterroData.Nome}`}/>
+              <Header title={`Dashboard Social - ${aterroData.Nome}`}/>
               <Content>
-                
+              <Score scored={globalScore} total={133} /> 
+              <Line></Line>
               <Title>Avaliação da percepção social dos impactos ambientais negativos da atividade</Title>  
               
               <VictoryChart polar
                   theme={VictoryTheme.material}
                 >
                   {
-                    ["1", "2", "3", "4", "5", "6", "7", "8"].map((d, i) => {
+                    ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"].map((d, i) => {
                       return (
                         <VictoryPolarAxis dependentAxis
                           key={i}
@@ -277,16 +391,23 @@ const Dashboard = ({ navigation, route }) => {
                     })
                   }
                   <VictoryBar
-                    style={{ data: { fill: "purple", width: 25 } }}
+                    style={{ data: { fill: "darkgreen", width: 25 } }}
                     data={[
                       { x: "1", y: parseInt(score[0])},
                       { x: "2", y: parseInt(score[1]) },
                       { x: "3", y: parseInt(score[2]) },
                       { x: "4", y: parseInt(score[3]) },
                       { x: "5", y: parseInt(score[4]) },
-                      { x: "6", y: parseInt(score[5])  },
-                      { x: "7", y: parseInt(score[6])  },
-                      { x: "8", y: parseInt(score[7]) }
+                      { x: "6", y: parseInt(score[5]) },
+                      { x: "7", y: parseInt(score[6]) },
+                      { x: "8", y: parseInt(score[7]) },
+                      { x: "9", y: parseInt(score[0]) },
+                      { x: "10", y: parseInt(score[1]) },
+                      { x: "11", y: parseInt(score[2]) },
+                      { x: "12", y: parseInt(score[3]) },
+                      { x: "13", y: parseInt(score[4]) },
+                      { x: "14", y: parseInt(score[5]) },
+                      { x: "15", y: parseInt(score[6]) },
                     ]}
                   />
                 </VictoryChart>
