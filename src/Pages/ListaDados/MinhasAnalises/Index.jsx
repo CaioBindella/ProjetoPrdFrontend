@@ -5,9 +5,11 @@ import {
 	Title,
 	Container,
 	Button,
-	DescText
+	DescText,
+	DashboardButton,
+	TextDashboard
 } from './Style';
-import { Feather } from '@expo/vector-icons';
+
 import { Ionicons } from '@expo/vector-icons';
 import Header from '../../Components/Header/Index';
 import {
@@ -45,7 +47,8 @@ const MinhasAnalises = ({ navigation, route }) => {
 				//comando SQL modificável
 				tx.executeSql(
 					`
-					SELECT * FROM Analise;
+					SELECT * FROM Analise 
+					ORDER BY DataIni ASC;
 					`,
 					[],
 					//-----------------------
@@ -97,6 +100,11 @@ const MinhasAnalises = ({ navigation, route }) => {
 				<AntDesign name="plus" size={24} color="black" />
 				<Text>Incluir nova analise </Text>
 			</Button>
+
+			<DashboardButton onPress={() => navigation.navigate('TemporalDashboard', {
+                aterroData: aterroData})}>
+                <TextDashboard>Gerar DashBoard</TextDashboard>
+            </DashboardButton>
 
 		</Container>
 	);

@@ -48,3 +48,19 @@ export const Button = styled.TouchableOpacity`
 	margin-bottom: 20px;
 	flex-direction: row;
 `;
+
+export const DashboardButton = styled.TouchableOpacity`
+	margin: 5px 0px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 70%;
+	padding: 10px 0px;
+	background-color: #24a0ed;
+	border-radius: 10px;
+`;
+
+export const TextDashboard = styled.Text`
+    color: #fff;
+    font-weight: bold;
+`;

@@ -7,11 +7,11 @@ export const Container = styled.View`
 export const Button = styled.TouchableOpacity`
 	background: #fff;
 	/* height: 40px; */
-	padding: 10px 0px;
+	padding: 10px 5px;
 	border: 1px solid black;
 	border-radius: 10px;
 	justify-content: space-evenly;
-	width: 70%;
+	width: 80%;
 	align-items: center;
 	margin-bottom: 20px;
 	flex-direction: row;
@@ -19,6 +19,7 @@ export const Button = styled.TouchableOpacity`
 `;
 export const Content = styled.View`
 	flex: 1;
+	width: 100%;
 	align-items: center;
 	justify-content: center;
 `;
@@ -34,9 +35,13 @@ export const CardContainer = styled.View`
 	background-color: #d9d9d9;
 	border-radius: 10px;
 	border: 1px solid #381704;
+	width: 80%;
+	align-items: center;
+	justify-content: center;
 `;
 
 export const Title = styled.Text`
+	width: 100%;
 	text-align: center;
 	margin-bottom: 3%;
 	background-color: #381704;
@@ -48,21 +53,17 @@ export const Title = styled.Text`
 `;
 
 export const DashboardButton = styled.TouchableOpacity`
-    margin-top: 10px;
-	margin-bottom: 10px;
+	margin: 10px 0px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 100%;
-	
+	width: 60%;
+	padding: 10px 0px;
+	background-color: #24a0ed;
+	border-radius: 10px;
 `;
 
 export const TextDashboard = styled.Text`
-	padding: 10px;
-	border-radius: 5px;
-	background-color: #24a0ed;
-	text-align: center;
     color: #fff;
     font-weight: bold;
-	border: 1px solid white;
 `;

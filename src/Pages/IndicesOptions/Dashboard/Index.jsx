@@ -117,6 +117,7 @@ const getActualScores = (tipo, subcat) => {
 const Dashboard = ({ navigation, route }) => {
     const aterroData = route.params.aterroData
     const tipoind = route.params.indicadorType
+    const indicadorDetails = route.params.indicadorDetails
     const analiseData = route.params.analiseData
     const [score, setScore] = useState(Array(8).fill(0))
     const [globalScore, setGlobalScore] = useState()
@@ -220,7 +221,7 @@ const Dashboard = ({ navigation, route }) => {
               <Header title={`Dashboard Técnico - ${aterroData.Nome}`}/>
               <Content>
               <Title>Performance Geral</Title>
-              <Score scored={globalScore} total={638} />
+              <Score scored={globalScore} total={indicadorDetails.maxScore} />
 
               <Line/>
               <Title>Avaliação Técnica Ambiental</Title>
@@ -298,7 +299,7 @@ const Dashboard = ({ navigation, route }) => {
               <ScrollView>
               <Header title={`Dashboard Econômico - ${aterroData.Nome}`}/>
               <Content>
-              <Score scored={globalScore} total={53} />
+              <Score scored={globalScore} total={indicadorDetails.maxScore} />
               <Line/> 
               <Title>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>            
               <VictoryChart polar
@@ -370,7 +371,7 @@ const Dashboard = ({ navigation, route }) => {
             <ScrollView>
               <Header title={`Dashboard Social - ${aterroData.Nome}`}/>
               <Content>
-              <Score scored={globalScore} total={133} /> 
+              <Score scored={globalScore} total={indicadorDetails.maxScore} /> 
               <Line></Line>
               <Title>Avaliação da percepção social dos impactos ambientais negativos da atividade</Title>  
               

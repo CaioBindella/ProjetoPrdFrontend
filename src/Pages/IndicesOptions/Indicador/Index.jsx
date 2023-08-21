@@ -65,32 +65,30 @@ function Indicador({ navigation, route }) {
     return(
         <Container>
             <ScrollView>
-            <Header title={`${indicadorType} - ${aterroData.Nome} ${analiseData.DataIni}`} />
-            <Score scored={selectedScore} total={indicadorDetails.maxScore} />
+                <Header title={`${indicadorType} - ${aterroData.Nome} ${analiseData.DataIni}`} />
+                <Score scored={selectedScore} total={indicadorDetails.maxScore} />
 
-            <Content>
+                <Content>
+                    {indicadorData.map((eachCategory, index) => {
+                        return (
+                            <CardContainer key={index}>
+                                <Title>{eachCategory.category}</Title>
+                                {eachCategory.subCategories.map((eachSubCategory, index) => {
+                                    return (
+                                        <Button key={index} onPress={() => navigation.navigate('FormIndicador', {subCategory: eachSubCategory, aterroData: aterroData, analiseData: analiseData})}>
+                                            <Text>{eachSubCategory.name}</Text>
+                                        </Button>
+                                    )
+                                })}
+                            </CardContainer>
+                        )
+                    })}
 
-                {indicadorData.map((eachCategory, index) => {
-                    return (
-                        <CardContainer key={index}>
-                            <Title>{eachCategory.category}</Title>
-                            {eachCategory.subCategories.map((eachSubCategory, index) => {
-                                return (
-                                    <Button key={index} onPress={() => navigation.navigate('FormIndicador', {subCategory: eachSubCategory, aterroData: aterroData, analiseData: analiseData})}>
-                                        <Text>{eachSubCategory.name}</Text>
-                                    </Button>
-                                )
-                            })}
-                        </CardContainer>
-                    )
-                })}
-            </Content>
-
-            <DashboardButton onPress={() => navigation.navigate('Dashboard', {
-                aterroData: aterroData, analiseData: analiseData ,indicadorType: indicadorType})}>
-                <TextDashboard>Gerar DashBoard</TextDashboard>
-            </DashboardButton>
-
+                    <DashboardButton onPress={() => navigation.navigate('Dashboard', {
+                        aterroData: aterroData, analiseData: analiseData ,indicadorType: indicadorType, indicadorDetails: indicadorDetails})}>
+                        <TextDashboard>Gerar DashBoard</TextDashboard>
+                    </DashboardButton>
+                </Content>
             </ScrollView>
 
         </Container>

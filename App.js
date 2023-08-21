@@ -25,6 +25,7 @@ import MinhasAnalises from './src/Pages/ListaDados/MinhasAnalises/Index';
 import Indicador from './src/Pages/IndicesOptions/Indicador/Index';
 import SelectDate from './src/Pages/IndicesOptions/SelectDate/Index';
 import Dashboard from './src/Pages/IndicesOptions/Dashboard/Index';
+import TemporalDashboard from './src/Pages/IndicesOptions/TemporalDashboard/Index';
 import Ferramentas from './src/Pages/Ferramentas/Index';
 
 
@@ -174,6 +175,11 @@ export default function App() {
 					<Stack.Screen
 						name='Ferramentas'
 						component={Ferramentas}
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name='TemporalDashboard'
+						component={TemporalDashboard}
 						options={{ headerShown: false }}
 					/>
 				</Stack.Navigator>
