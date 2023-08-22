@@ -39,7 +39,7 @@ const getMaxTecScores = () => {
     });
 }
 
-const getActualTecScores = (tipo) => {
+const getActualTecScores = (codAnalise) => {
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
       data.transaction((tx) => {
@@ -52,10 +52,10 @@ const getActualTecScores = (tipo) => {
             INNER JOIN SubCategoria SC ON I.CodSubCat = SC.CodSubCat
             INNER JOIN Categoria C ON SC.CodCat = C.CodCat
             INNER JOIN TipoIndicador TP ON C.CodTipoInd = TP.CodTipo
-            WHERE TP.DescTipo = ?
+            WHERE TP.DescTipo = "Técnico"  AND AI.CodAnalise = ?
             GROUP BY DescSubCat
             `,
-          [tipo],
+          [codAnalise],
           //-----------------------
           (_, { rows }) => resolve(rows._array),
           (_, error) => reject(error) // erro interno em tx.executeSql
@@ -89,7 +89,7 @@ const getMaxScores = (tipo, subcat) => {
   });
 }
 
-const getActualScores = (tipo, subcat) => {
+const getActualScores = (tipo, subcat, codAnalise) => {
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
       data.transaction((tx) => {
@@ -102,9 +102,9 @@ const getActualScores = (tipo, subcat) => {
             INNER JOIN SubCategoria SC ON I.CodSubCat = SC.CodSubCat
             INNER JOIN Categoria C ON SC.CodCat = C.CodCat
             INNER JOIN TipoIndicador TP ON C.CodTipoInd = TP.CodTipo
-            WHERE TP.DescTipo = ? AND SC.DescSubCat = ?
+            WHERE TP.DescTipo = ? AND SC.DescSubCat = ? AND AI.CodAnalise = ?
             `,
-          [tipo, subcat],
+          [tipo, subcat, codAnalise],
           //-----------------------
           (_, { rows }) => resolve(rows._array),
           (_, error) => reject(error) // erro interno em tx.executeSql
@@ -142,7 +142,7 @@ const Dashboard = ({ navigation, route }) => {
       switch (tipoind){
         case 'Técnico':
           const maxTecScores = await getMaxTecScores()
-          const actualTecScores = await getActualTecScores(tipoind)
+          const actualTecScores = await getActualTecScores(analiseData.CodAnalise)
 
           actualTecScores.map((eachActualScore) => {
             // Pega o score máximo e o índice de acordo com o nome da subcategoria
@@ -168,7 +168,7 @@ const Dashboard = ({ navigation, route }) => {
           
         case 'Econômico':
           const maxEcoScores = await getMaxScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios")
-          const actualEcoScores = await getActualScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios")
+          const actualEcoScores = await getActualScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios", analiseData.CodAnalise)
 
           actualEcoScores.map((eachActualScore) => {
             // Pega o score máximo e o índice de acordo com o nome da subcategoria
@@ -189,11 +189,11 @@ const Dashboard = ({ navigation, route }) => {
 
           if (analiseData.Tipo === "Análise por Entrevista"){
             maxSocialScores = await getMaxScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Entrevista")
-            actualSocialScores = await getActualScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Entrevista")
+            actualSocialScores = await getActualScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Entrevista", analiseData.CodAnalise)
           }
           else{
             maxSocialScores = await getMaxScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Social")
-            actualSocialScores = await getActualScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Social")
+            actualSocialScores = await getActualScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Social", analiseData.CodAnalise)
           }
 
           actualSocialScores.map((eachActualScore) => {
@@ -218,7 +218,7 @@ const Dashboard = ({ navigation, route }) => {
           chartComponent = 
             <ContentCharts> 
               <ScrollView>
-              <Header title={`Dashboard Técnico - ${aterroData.Nome}`}/>
+              <Header title={`Dashboard Técnico - ${aterroData.Nome} - ${analiseData.DataIni}`}/>
               <Content>
               <Title>Performance Geral</Title>
               <Score scored={globalScore} total={indicadorDetails.maxScore} />
@@ -230,14 +230,14 @@ const Dashboard = ({ navigation, route }) => {
                 theme={VictoryTheme.material}
                 domainPadding={{ x: 100 }}
               >
-                <VictoryBar horizontal
-                  style={{
-                    data: { fill: "darkblue" }
-                  }}
-                  data={[   { x: "1", y: parseInt(firsttec)},
-                            { x: "2", y: parseInt(sectec) },
-                            { x: "3", y: parseInt(thirdtec) }
-                          ]}
+              <VictoryBar horizontal
+                style={{
+                  data: { fill: "darkblue" }
+                }}
+                data={[   { x: "1", y: parseInt(firsttec)},
+                          { x: "2", y: parseInt(sectec) },
+                          { x: "3", y: parseInt(thirdtec) }
+                        ]}
                 />
               </VictoryChart>
 
@@ -297,7 +297,7 @@ const Dashboard = ({ navigation, route }) => {
           chartComponent = 
             <ContentCharts>
               <ScrollView>
-              <Header title={`Dashboard Econômico - ${aterroData.Nome}`}/>
+              <Header title={`Dashboard Econômico - ${aterroData.Nome} - ${analiseData.DataIni}`}/>
               <Content>
               <Score scored={globalScore} total={indicadorDetails.maxScore} />
               <Line/> 
@@ -369,7 +369,7 @@ const Dashboard = ({ navigation, route }) => {
           chartComponent = 
           <ContentCharts>
             <ScrollView>
-              <Header title={`Dashboard Social - ${aterroData.Nome}`}/>
+              <Header title={`Dashboard Social - ${aterroData.Nome} - ${analiseData.DataIni}`}/>
               <Content>
               <Score scored={globalScore} total={indicadorDetails.maxScore} /> 
               <Line></Line>
