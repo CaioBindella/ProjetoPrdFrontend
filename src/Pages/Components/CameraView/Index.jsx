@@ -106,6 +106,7 @@ const CameraComponent = ({ visible, onClose, onPhotoTaken }) => {
     }
   };
 
+
   if (hasPermission === null) {
     return <View />;
   }  if (hasPermission === false) {
