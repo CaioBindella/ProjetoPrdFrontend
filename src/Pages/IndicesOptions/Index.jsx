@@ -11,11 +11,25 @@ import { AntDesign } from '@expo/vector-icons';
 import { excluir } from "../../Services/Networks/excluir";
 import DeleteModal from "../Components/DeleteModal/Index";
 import { economicoInfo, socialInfoInterview, socialInfoRisc, tecnicoInfo } from "../../Configs/Fonts/IndicadorInfo";
+import Score from "../Components/Score/Index";
+import { getGlobalScore } from "./Indicador/Index";
 
 function IndicesOptions({ navigation, route }) {
     const aterroData = route.params.aterroData;
 	const analiseData = route.params.analiseData;
+	const [selectedScore, setSelectedScore] = useState(0)
 	const [modalVisible, setModalVisible] = useState(false);
+
+	const loadScore = async () => {
+		var response
+		if (analiseData.Tipo === 'Análise por Entrevista')
+			response = await getGlobalScore(analiseData.CodAnalise, tecnicoInfo.details.firstQuestion, socialInfoInterview.details.lastQuestion)
+		else{
+			response = await getGlobalScore(analiseData.CodAnalise, tecnicoInfo.details.firstQuestion, socialInfoRisc.details.lastQuestion)
+		}
+
+        setSelectedScore(response[0].Pontuacao)
+	}
 
 	const deleteData = async () => {
 		setModalVisible(!modalVisible);
@@ -24,9 +38,18 @@ function IndicesOptions({ navigation, route }) {
 		navigation.navigate('Home')
 	}
 
+	useEffect(() => {
+		loadScore()
+	}, [])
+
     return(
         <Container>
             <Header title={`Índices de ${aterroData.Nome} ${analiseData.DataIni}`}/>
+			<Score 
+				scored={selectedScore} 
+				total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoInterview.details.maxScore}
+			/>
+
             <Content>
 				<Button onPress={() => navigation.navigate('Indicador', {
 					type: "Técnico", 

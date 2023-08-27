@@ -50,7 +50,12 @@ const getTemporalScores = () => {
             INNER JOIN Categoria C ON C.CodCat = SC.CodCat
             INNER JOIN TipoIndicador TP ON TP.CodTipo = C.CodTipoInd
             WHERE AI.CodAnalise = A1.CodAnalise AND TP.DescTipo = "Social"
-            ) AS SocScore
+            ) AS SocScore,
+            (
+            SELECT SUM(Pontuacao) AS Pontuacao from AnaliseItem AI
+            INNER JOIN AvaliacaoPeso AP ON AP.CodAvPeso = AI.CodAvPeso
+            WHERE AI.CodAnalise = A1.CodAnalise AND (AI.CodInd BETWEEN 1 AND 116)
+            ) AS TotalScore
             FROM Analise A1
             ORDER BY DataIni ASC
             `,
@@ -78,6 +83,7 @@ const TemporalDashboard = ({ navigation, route }) => {
   const [tecScoreList, setTecScoreList] = useState([{x:"", y:0}])
   const [ecoScoreList, setEcoScoreList] = useState([{x:"", y:0}])
   const [socScoreList, setSocScoreList] = useState([{x:"", y:0}])
+  const [totalScoreList, setTotalScoreList] = useState([{x:"", y:0}])
 
   const loadData = async () => {
     const response = await getTemporalScores()
@@ -85,6 +91,7 @@ const TemporalDashboard = ({ navigation, route }) => {
     const auxTecScore = []
     const auxEcoScore = []
     const auxSocScore = []
+    const auxTotalScore = []
 
     response.map((eachValue) => {
       auxDataIni.push(eachValue.DataIni)
@@ -92,12 +99,14 @@ const TemporalDashboard = ({ navigation, route }) => {
       auxTecScore.push({x: eachValue.DataIni, y: getPercentage(eachValue.TecScore, tecnicoInfo.details.maxScore)})
       auxEcoScore.push({x: eachValue.DataIni, y: getPercentage(eachValue.EcoScore, economicoInfo.details.maxScore)})
       auxSocScore.push({x: eachValue.DataIni, y: getPercentage(eachValue.SocScore, socialInfoRisc.details.maxScore)})
+      auxTotalScore.push({x: eachValue.DataIni, y: getPercentage(eachValue.TotalScore, (tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore))})
     })
 
     setDataIniList(auxDataIni)
     setTecScoreList(auxTecScore)
     setEcoScoreList(auxEcoScore)
     setSocScoreList(auxSocScore)
+    setTotalScoreList(auxTotalScore)
   }
 
   useEffect(() => {
@@ -171,11 +180,26 @@ const TemporalDashboard = ({ navigation, route }) => {
               }}
               data={socScoreList}
             />
+            <VictoryLine
+              style={{
+                data: { stroke: "#381704" },
+                parent: { border: "1px solid #ccc"}
+              }}
+              categories={{
+                x: dataIniList
+              }}
+              animate={{
+                duration: 2000,
+                onLoad: { duration: 3000 }
+              }}
+              data={totalScoreList}
+            />
             
           </VictoryChart>
 
           <DescriptionContent>
             <Description>Legenda: </Description>
+            <Description><ColorBox color={"#381704"}>&#x2587;</ColorBox> Total</Description>
             <Description><ColorBox color={"#fe8a71"}>&#x2587;</ColorBox> Técnico</Description>
             <Description><ColorBox color={"#f6cd61"}>&#x2587;</ColorBox> Econômico</Description>
             <Description><ColorBox color={"#3da4ab"}>&#x2587;</ColorBox> Social</Description>

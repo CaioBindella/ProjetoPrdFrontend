@@ -17,7 +17,7 @@ import Header from "../../Components/Header/Index";
 import Score from "../../Components/Score/Index";
 import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
 
-const getGlobalScore = (codAnalise, minInterval, maxInterval) => {
+export const getGlobalScore = (codAnalise, minInterval, maxInterval) => {
     // console.log(`Pegando Score Global entre: ${minInterval} e ${maxInterval} CodAnalise ${codAnalise}`)
 
     return new Promise((resolve, reject) => {
