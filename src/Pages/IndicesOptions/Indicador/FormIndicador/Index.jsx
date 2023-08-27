@@ -8,6 +8,7 @@ import Header from "../../../Components/Header/Index";
 import IndiceCard from "../../../Components/IndiceCard/Index";
 import Score from "../../../Components/Score/Index";
 import { indiceDb } from "../../../../Services/SqlTables/sqliteDb";
+import { Provider } from "react-native-paper";
 
 const getQuestions = (subcat) => {
   return new Promise((resolve, reject) => {
@@ -35,24 +36,24 @@ const getQuestions = (subcat) => {
 };
 
 const checkPreviousAnaliseItem = (codInd, codAnalise) => {
-    return new Promise((resolve, reject) => {
-      indiceDb.then((data) => {
-        data.transaction((tx) => {
-          //comando SQL modificável
-          tx.executeSql(
-            `
+  return new Promise((resolve, reject) => {
+    indiceDb.then((data) => {
+      data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+          `
                 SELECT CodAvPeso, CodInd, CodAnalise
                 FROM AnaliseItem
                 WHERE CodInd=? AND CodAnalise=?;
             `,
-            [codInd, codAnalise],
-            //-----------------------
-            (_, { rows }) => resolve(rows._array),
-            (_, error) => reject(error) // erro interno em tx.executeSql
-          );
-        });
+          [codInd, codAnalise],
+          //-----------------------
+          (_, { rows }) => resolve(rows._array),
+          (_, error) => reject(error) // erro interno em tx.executeSql
+        );
       });
     });
+  });
 };
 
 const createAnaliseItemRegisters = (codAvPeso, codInd, codAnalise) => {
@@ -61,7 +62,7 @@ const createAnaliseItemRegisters = (codAvPeso, codInd, codAnalise) => {
       data.transaction((tx) => {
         //comando SQL modificável
         tx.executeSql(
-            `
+          `
             INSERT INTO AnaliseItem (CodAvPeso, CodInd, CodAnalise) VALUES (?, ?, ?);
             `,
           [codAvPeso, codInd, codAnalise],
@@ -107,7 +108,7 @@ const deleteAllAnaliseItem = () => {
       data.transaction((tx) => {
         //comando SQL modificável
         tx.executeSql(
-            `
+          `
             DELETE FROM AnaliseItem;"
             `,
           [],
@@ -127,12 +128,12 @@ const getScore = (initialCodInd, maxCodInd, codAnalise) => {
       data.transaction((tx) => {
         //comando SQL modificável
         tx.executeSql(
-            `
+          `
                 SELECT SUM(Pontuacao) AS Pontuacao from AnaliseItem AI
                 INNER JOIN AvaliacaoPeso AP ON AP.CodAvPeso = AI.CodAvPeso
                 WHERE (AI.CodInd > ? AND AI.CodInd <= ? ) AND AI.CodAnalise = ?
             `,
-          [initialCodInd-1, (initialCodInd-1)+maxCodInd, codAnalise],
+          [initialCodInd - 1, initialCodInd - 1 + maxCodInd, codAnalise],
           //-----------------------
           (_, { rows }) => resolve(rows._array),
           (_, error) => reject(error) // erro interno em tx.executeSql
@@ -140,38 +141,48 @@ const getScore = (initialCodInd, maxCodInd, codAnalise) => {
       });
     });
   });
-}
+};
 
 function FormIndicador({ route }) {
   const [data, setData] = useState([]);
-  const [score, setScore] = useState(0)
+  const [score, setScore] = useState(0);
   const subCat = route.params.subCategory;
   const aterroData = route.params.aterroData;
   const analiseData = route.params.analiseData;
 
   const loadData = async () => {
     try {
-        const response = await getQuestions(subCat.name);
-        const formatedData = formatData(response);
-        const score = await getScore(formatedData[0].CodInd, formatedData.length, analiseData.CodAnalise)
-        // console.log(`Pontuação atual: ${score[0].Pontuacao}`)
-        setScore(score[0].Pontuacao)
+      const response = await getQuestions(subCat.name);
+      const formatedData = formatData(response);
+      const score = await getScore(
+        formatedData[0].CodInd,
+        formatedData.length,
+        analiseData.CodAnalise
+      );
+      // console.log(`Pontuação atual: ${score[0].Pontuacao}`)
+      setScore(score[0].Pontuacao);
 
-        const previousAnaliseItems = await checkPreviousAnaliseItem(formatedData[0].CodInd, analiseData.CodAnalise)
+      const previousAnaliseItems = await checkPreviousAnaliseItem(
+        formatedData[0].CodInd,
+        analiseData.CodAnalise
+      );
 
-        if(previousAnaliseItems.length === 0){
-            formatedData.map(async (eachValue) =>{
-              await createAnaliseItemRegisters(null, eachValue.CodInd, analiseData.CodAnalise)
-            })
-        }
-        else{
-            console.log("Registros de AnaliseItem já criados!!")
-        }
+      if (previousAnaliseItems.length === 0) {
+        formatedData.map(async (eachValue) => {
+          await createAnaliseItemRegisters(
+            null,
+            eachValue.CodInd,
+            analiseData.CodAnalise
+          );
+        });
+      } else {
+        console.log("Registros de AnaliseItem já criados!!");
+      }
 
-        setData(formatedData);
+      setData(formatedData);
     } catch (e) {
-        console.log(e)
-        alert("Ocorreu um erro ao carregar as perguntas.");
+      console.log(e);
+      alert("Ocorreu um erro ao carregar as perguntas.");
     }
   };
 
@@ -180,35 +191,36 @@ function FormIndicador({ route }) {
   }, []);
 
   return (
-    <Container>
-      <ScrollView>
-        <Header title={`${subCat.name} - ${aterroData.Nome} ${analiseData.DataIni}`} />
-        <Score scored={score} total={subCat.maxScore} />
+    <Provider>
+      <Container>
+        <ScrollView>
+          <Header
+            title={`${subCat.name} - ${aterroData.Nome} ${analiseData.DataIni}`}
+          />
+          <Score scored={score} total={subCat.maxScore} />
 
-        <Content>
-          {data.map((eachData, index) => {
-            return (
-              <IndiceCard
-                key={index}
-                codInd={eachData.CodInd}
-                title={eachData.Titulo}
-                description={eachData.DescInd}
-                codAvPeso={eachData.CodAvPeso}
-                options={eachData.Desc}
-                optionValue={eachData.Pontuacao}
-                codAnalise={analiseData.CodAnalise}
-                data={data}
-                getScore={getScore}
-                setScore={setScore}
-              />
-            );
-          })}
-        </Content>
-    
-      </ScrollView>
-
-          
-    </Container>
+          <Content>
+            {data.map((eachData, index) => {
+              return (
+                <IndiceCard
+                  key={index}
+                  codInd={eachData.CodInd}
+                  title={eachData.Titulo}
+                  description={eachData.DescInd}
+                  codAvPeso={eachData.CodAvPeso}
+                  options={eachData.Desc}
+                  optionValue={eachData.Pontuacao}
+                  codAnalise={analiseData.CodAnalise}
+                  data={data}
+                  getScore={getScore}
+                  setScore={setScore}
+                />
+              );
+            })}
+          </Content>
+        </ScrollView>
+      </Container>
+    </Provider>
   );
 }
 

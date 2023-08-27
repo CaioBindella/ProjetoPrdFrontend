@@ -56,12 +56,15 @@ export const ButtonContainer = styled.View`
     border-top: none;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    flex-direction: row;
+    flex-direction: column;
 `;
 
 export const ButtonLink = styled.TouchableOpacity`
-    background: #24a0ed;
-    width: 40%;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    background: ${({uploaded}) => uploaded ? "#fff" : "#24a0ed"};
+    width: 90%;
     border-radius: 5px;
     padding: 10px 30px;
     margin-top: 10px;
@@ -70,8 +73,8 @@ export const ButtonLink = styled.TouchableOpacity`
 
 export const LinkText = styled.Text`
     text-align: center;
-    color: #fff;
-    font-weight: bold;
+    color: ${({uploaded}) => uploaded ? "#000" : "#fff"};
+    font-weight: ${({uploaded}) => uploaded ? "regular" : "bold"};
 `;
 
 export const ButtonCamera = styled.TouchableOpacity`
