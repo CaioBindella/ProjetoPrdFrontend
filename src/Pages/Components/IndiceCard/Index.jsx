@@ -18,11 +18,8 @@ import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import { indiceDb } from '../../../Services/SqlTables/sqliteDb';
 import CameraComponent from '../CameraView/Index'
+import ImageSettings from '../ImageSettings/Index'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-import * as DocumentPicker from "expo-document-picker"
-import * as FileSystem from 'expo-file-system';
-import * as Updates from 'expo-updates';
 
 const updateAnaliseItemPesos = (codAvPeso, codInd, codAnalise) => {
     return new Promise((resolve, reject) => {
@@ -87,8 +84,8 @@ const loadPreviousAnswer = (codInd, codAnalise) =>{
 function IndiceCard ({codInd, title, description, codAvPeso, options, optionValue, codAnalise, data, getScore, setScore, scoreData, setScoreData, index}){
 
     const [checked, setChecked] = useState(null);
-    const [cameraVisible, setCameraVisible] = useState(false);
-    const [capturedPhoto, setCapturedPhoto] = useState(null);
+    // const [cameraVisible, setCameraVisible] = useState(false);
+    // const [capturedPhoto, setCapturedPhoto] = useState(null);
 
     const handleRadioPress = async (value, selectedCod) => {
       setChecked(value)
@@ -121,6 +118,10 @@ function IndiceCard ({codInd, title, description, codAvPeso, options, optionValu
       loadAnswer()
     },[])
     
+    const [cameraVisible, setCameraVisible] = useState(false);
+    const [capturedPhoto, setCapturedPhoto] = useState(null);
+    const [showImageSettings, setShowImageSettings] = useState(false);
+  
     const handleOpenCamera = () => {
       setCameraVisible(true);
     };
@@ -130,7 +131,26 @@ function IndiceCard ({codInd, title, description, codAvPeso, options, optionValu
     };
   
     const handlePhotoTaken = (photoUri) => {
-      setCapturedPhoto(photoUri);
+      setCapturedPhoto(photoUri); 
+    };
+
+    const handleOpenImageSettings = () => {
+      setShowImageSettings(true);
+    };
+  
+    const handleCloseImageSettings = () => {
+      setShowImageSettings(false);
+    };
+    
+    const handleDeletePhoto = () => {
+      setCapturedPhoto(null);
+      setShowImageSettings(false);
+    };
+    
+  
+    const handleSavePhotoFromSettings = (photoUri) => {
+      handlePhotoTaken(photoUri);
+      handleCloseImageSettings();
     };
 
     return(
@@ -162,7 +182,7 @@ function IndiceCard ({codInd, title, description, codAvPeso, options, optionValu
               </ButtonLink>
 
               {capturedPhoto && (
-                <ButtonCamera onPress={() => setCapturedPhoto(null)}>
+                <ButtonCamera onPress={handleOpenImageSettings}>
                   <Image
                     source={{ uri: capturedPhoto }}
                     resizeMode="contain"
@@ -185,7 +205,15 @@ function IndiceCard ({codInd, title, description, codAvPeso, options, optionValu
                 visible={cameraVisible}
                 onClose={handleCloseCamera}
                 onPhotoTaken={handlePhotoTaken}
-              />       
+              />
+
+              <ImageSettings
+                visible={showImageSettings}
+                onDelete={handleDeletePhoto}
+                onClose={handleCloseImageSettings}
+                onSave={() => handleSavePhotoFromSettings(capturedPhoto)}
+                photo={capturedPhoto}
+              />
             </ButtonContainer>
 
         </Container>
