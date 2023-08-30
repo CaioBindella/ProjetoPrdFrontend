@@ -129,6 +129,7 @@ const Dashboard = ({ navigation, route }) => {
     
     //Economico
     const [firstEco, setFirstEco] = useState(0)
+    const [inadimplencia, setInadimplencia] = useState([])
     
     //Social
     const [firstSocial, setFirstSocial] = useState(0)
@@ -167,8 +168,17 @@ const Dashboard = ({ navigation, route }) => {
           break;
           
         case 'Econômico':
+          
           const maxEcoScores = await getMaxScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios")
           const actualEcoScores = await getActualScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios", analiseData.CodAnalise)
+          const PercentInadimplencia = await getActualScores("Econômico", "Inadimplência", analiseData.CodAnalise)
+
+          const nonZeroScores = PercentInadimplencia
+          .map((item, index) => item.ActualScore < 0 ? index : null)
+          .filter(index => index !== null);
+
+          setInadimplencia(nonZeroScores[0])
+          console.log(setInadimplencia)
 
           actualEcoScores.map((eachActualScore) => {
             // Pega o score máximo e o índice de acordo com o nome da subcategoria
@@ -178,6 +188,21 @@ const Dashboard = ({ navigation, route }) => {
             totalScore += actualScore
             economicArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
           })
+
+          switch (setInadimplencia(nonZeroScores[0])) {
+            case 0:
+              setInadimplencia(25);
+              break;
+            case 1:
+              setInadimplencia(50);
+              break;
+            case 2:
+              setInadimplencia(75);
+              break;
+            case 3:
+              setInadimplencia(100);
+              break;
+          }
           
           setGlobalScore(totalScore)
           setScore(economicArray)
@@ -356,10 +381,18 @@ const Dashboard = ({ navigation, route }) => {
                   }}
                   barWidth={40}
                   domain={{x: [0, 3], y: [0, 100]}}
-                  data={[   { x: "%", y: 75},   
+                  data={[   { x: "%", y: inadimplencia},   
                           ]}
                 />
               </VictoryChart>
+
+              <DescriptionContent>
+                    <Title>Representação do nível de Inadimplência</Title>
+                    <Description>25%: Inadimplência entre 5% e 25%</Description>
+                    <Description>50%: Inadimplência entre 25% e 50%</Description>
+                    <Description>75%: Inadimplência entre 50% e 75%</Description>
+                    <Description>100%: Inadimplência acima de 75%</Description>
+                </DescriptionContent>
 
               </Content>
               </ScrollView>
@@ -450,9 +483,9 @@ const Dashboard = ({ navigation, route }) => {
     <Container>
       <ScrollView>
         {chartComponent}
-        <Button>
+        {/* <Button>
           <TextButton>Gerar PDF</TextButton>
-        </Button>
+        </Button> */}
       </ScrollView>
     </Container>
 )
