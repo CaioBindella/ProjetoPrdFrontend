@@ -177,9 +177,6 @@ const Dashboard = ({ navigation, route }) => {
           .map((item, index) => item.ActualScore < 0 ? index : null)
           .filter(index => index !== null);
 
-          setInadimplencia(nonZeroScores[0])
-          console.log(setInadimplencia)
-
           actualEcoScores.map((eachActualScore) => {
             // Pega o score máximo e o índice de acordo com o nome da subcategoria
             const maxScore = parseInt(maxEcoScores.find(eachScore => eachScore.Titulo === eachActualScore.Titulo).MaxScore)
@@ -189,7 +186,7 @@ const Dashboard = ({ navigation, route }) => {
             economicArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
           })
 
-          switch (setInadimplencia(nonZeroScores[0])) {
+          switch (nonZeroScores[0]) {
             case 0:
               setInadimplencia(25);
               break;

@@ -15,7 +15,7 @@ const Header = ({title}) => {
 
 			<HeaderTitle>{title}</HeaderTitle>
 
-            <EvilIcons name='gear' size={30} color='white' />
+            <EvilIcons name='gear' size={30} color='transparent' />
 			
 		</HeaderView>
 	);

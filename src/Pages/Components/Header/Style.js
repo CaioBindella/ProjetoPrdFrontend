@@ -6,7 +6,7 @@ export const HeaderView = styled.View`
 	flex-direction: row;
 	background-color: #381704;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: space-around;
 	border-bottom-right-radius: 8px;
 	border-bottom-left-radius: 8px;
 	padding: 40px 0px 10px 0px;
