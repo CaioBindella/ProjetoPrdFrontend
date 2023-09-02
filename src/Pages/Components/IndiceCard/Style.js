@@ -59,12 +59,19 @@ export const ButtonContainer = styled.View`
     flex-direction: column;
 `;
 
+export const UpdateContainer = styled.View`
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    width: 90%;
+`;
+
 export const ButtonLink = styled.TouchableOpacity`
     justify-content: space-around;
     align-items: center;
     flex-direction: row;
     background: ${({uploaded}) => uploaded ? "#fff" : "#24a0ed"};
-    width: 90%;
+    width: 85%;
     border-radius: 5px;
     padding: 10px 30px;
     margin-top: 10px;

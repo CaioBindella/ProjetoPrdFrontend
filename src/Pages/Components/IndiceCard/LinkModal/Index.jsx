@@ -12,12 +12,40 @@ import {
 
 import { Entypo } from "@expo/vector-icons";
 import { Modal, Portal } from "react-native-paper";
+import { indiceDb } from "../../../../Services/SqlTables/sqliteDb";
 
-const LinkModal = ({ setLink, modalVisible, setModalVisible }) => {
+const updateLink = (link, codInd, codAnalise) => {
+  return new Promise((resolve, reject) => {
+    indiceDb.then((data) => {
+      data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+          `
+            UPDATE AnaliseItem SET Link=?
+            WHERE CodInd = ? and CodAnalise = ?
+          `,
+          [link, codInd, codAnalise],
+          //-----------------------
+          (_, { rows }) => resolve(rows._array),
+          (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+      });
+    });
+  });
+}
+
+const LinkModal = ({ codInd, codAnalise, setLink, modalVisible, setModalVisible }) => {
   const [url, setUrl] = useState("");
 
-  const handleConfirm = () => {
-    setLink(url);
+  const handleConfirm = async () => {
+    try{
+      await updateLink(url, codInd, codAnalise)
+      setLink(url);
+    }
+    catch (e){
+      alert(e)
+    }
+    
     setModalVisible(!modalVisible);
   };
 

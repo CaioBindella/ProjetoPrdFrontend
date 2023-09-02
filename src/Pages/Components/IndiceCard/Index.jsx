@@ -12,13 +12,13 @@ import {
   ButtonContainer,
   ButtonCamera,
   Image,
+  UpdateContainer,
 } from "./Style";
 
 import { Text, StyleSheet } from "react-native";
 import { RadioButton } from "react-native-paper";
 import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
-import CameraComponent from "../CameraView/Index";
-import ImageSettings from "../ImageSettings/Index";
+
 import {
   MaterialCommunityIcons,
   Feather,
@@ -26,9 +26,11 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 
-import * as DocumentPicker from "expo-document-picker";
 import * as Linking from "expo-linking";
-import LinkModal from "../LinkModal/Index";
+import LinkModal from "./LinkModal/Index";
+import HelpModal from "./HelpModal/Index";
+import CameraComponent from "./CameraView/Index";
+import ImageSettings from "./ImageSettings/Index";
 
 const updateAnaliseItemPesos = (codAvPeso, codInd, codAnalise) => {
   return new Promise((resolve, reject) => {
@@ -51,25 +53,6 @@ const updateAnaliseItemPesos = (codAvPeso, codInd, codAnalise) => {
   });
 };
 
-const getAllAnaliseItem = () => {
-  return new Promise((resolve, reject) => {
-    indiceDb.then((data) => {
-      data.transaction((tx) => {
-        //comando SQL modificável
-        tx.executeSql(
-          `
-                SELECT * from AnaliseItem;"
-                `,
-          [],
-          //-----------------------
-          (_, { rows }) => resolve(rows._array),
-          (_, error) => reject(error) // erro interno em tx.executeSql
-        );
-      });
-    });
-  });
-};
-
 const loadPreviousAnswer = (codInd, codAnalise) => {
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
@@ -77,9 +60,9 @@ const loadPreviousAnswer = (codInd, codAnalise) => {
         //comando SQL modificável
         tx.executeSql(
           `
-                  SELECT Pontuacao from AvaliacaoPeso AP
-                  WHERE AP.CodAvPeso = (SELECT CodAvPeso FROM AnaliseItem WHERE CodInd=? AND CodAnalise=?);"
-              `,
+              SELECT Pontuacao from AvaliacaoPeso AP
+              WHERE AP.CodAvPeso = (SELECT CodAvPeso FROM AnaliseItem WHERE CodInd=? AND CodAnalise=?);"
+          `,
           [codInd, codAnalise],
           //-----------------------
           (_, { rows }) => resolve(rows._array),
@@ -89,6 +72,26 @@ const loadPreviousAnswer = (codInd, codAnalise) => {
     });
   });
 };
+
+const loadPreviousLink = (codInd, codAnalise) => {
+  return new Promise((resolve, reject) => {
+    indiceDb.then((data) => {
+      data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+          `
+            SELECT Link FROM AnaliseItem AI
+            WHERE AI.CodInd = ? and AI.CodAnalise = ?
+          `,
+          [codInd, codAnalise],
+          //-----------------------
+          (_, { rows }) => resolve(rows._array),
+          (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+      });
+    });
+  });
+}
 
 function IndiceCard({
   codInd,
@@ -108,6 +111,7 @@ function IndiceCard({
   const [checked, setChecked] = useState(null);
   const [link, setLink] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [helpModalVisible, setHelpModalVisible] = useState(false)
   const [cameraVisible, setCameraVisible] = useState(false);
   const [capturedPhoto, setCapturedPhoto] = useState(null);
   const [showImageSettings, setShowImageSettings] = useState(false);
@@ -126,6 +130,8 @@ function IndiceCard({
 
   const loadAnswer = async () => {
     const response = await loadPreviousAnswer(codInd, codAnalise);
+    const linkResponse = await loadPreviousLink(codInd, codAnalise)
+    setLink(linkResponse[0] ? linkResponse[0].Link : "")
     setChecked(response[0] ? response[0].Pontuacao : null);
   };
 
@@ -141,6 +147,10 @@ function IndiceCard({
   useEffect(() => {
     loadAnswer();
   }, []);
+
+  const handleHelp = () => {
+    setHelpModalVisible(!helpModalVisible)
+  }
 
   const handleOpenCamera = () => {
     setCameraVisible(true);
@@ -200,23 +210,27 @@ function IndiceCard({
       </ContentOptions>
 
       <ButtonContainer>
-        {!link ? (
-          <ButtonLink onPress={() => pickDocument()}>
-            <Feather name="upload" size={24} color="white" />
-            <LinkText>Link do Comprovante</LinkText>
-          </ButtonLink>
-        ) : (
-          <ButtonLink uploaded={true} onPress={() => Linking.openURL(link)}>
-            <Ionicons name="document-outline" size={24} color="tomato" />
-            <LinkText uploaded={true}>{link.slice(0, 20) + "..."}</LinkText>
-            <AntDesign
-              onPress={() => setLink("")}
-              name="close"
-              size={24}
-              color="black"
-            />
-          </ButtonLink>
-        )}
+        <UpdateContainer>
+          {!link ? (
+            <ButtonLink onPress={() => pickDocument()}>
+              <Feather name="upload" size={24} color="white" />
+              <LinkText>Link do Comprovante</LinkText>
+            </ButtonLink>
+          ) : (
+            <ButtonLink uploaded={true} onPress={() => Linking.openURL(link)}>
+              <Ionicons name="document-outline" size={24} color="tomato" />
+              <LinkText uploaded={true}>{link.slice(0, 20) + "..."}</LinkText>
+              <AntDesign
+                onPress={() => setLink("")}
+                name="close"
+                size={24}
+                color="black"
+              />
+            </ButtonLink>
+          )}
+
+          <Feather name="help-circle" size={24} color="black" onPress={() => handleHelp()}/>
+        </UpdateContainer>
 
         {capturedPhoto && (
           <ButtonCamera onPress={handleOpenImageSettings}>
@@ -255,9 +269,16 @@ function IndiceCard({
       </ButtonContainer>
 
       <LinkModal
+        codInd={codInd}
+        codAnalise={codAnalise}
         setLink={setLink}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+      />
+
+      <HelpModal 
+        modalVisible={helpModalVisible}
+        setModalVisible={setHelpModalVisible}
       />
     </Container>
   );

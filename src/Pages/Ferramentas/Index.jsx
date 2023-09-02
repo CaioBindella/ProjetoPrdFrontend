@@ -59,7 +59,9 @@ const getAllTable = () => {
 
 				C.DescCat AS [Categoria Avaliação],
 
-				TI.DescTipo AS [Tipo Indicador]
+				TI.DescTipo AS [Tipo Indicador],
+
+        AI.Link AS [Link Comprovante]
 
 				FROM Indicador I
 				INNER JOIN AnaliseItem AI ON AI.CodInd = I.CodInd

@@ -56,16 +56,16 @@ const checkPreviousAnaliseItem = (codInd, codAnalise) => {
   });
 };
 
-const createAnaliseItemRegisters = (codAvPeso, codInd, codAnalise) => {
+const createAnaliseItemRegisters = (codAvPeso, codInd, codAnalise, link) => {
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
       data.transaction((tx) => {
         //comando SQL modificável
         tx.executeSql(
           `
-            INSERT INTO AnaliseItem (CodAvPeso, CodInd, CodAnalise) VALUES (?, ?, ?);
+            INSERT INTO AnaliseItem (CodAvPeso, CodInd, CodAnalise, Link) VALUES (?, ?, ?, ?);
             `,
-          [codAvPeso, codInd, codAnalise],
+          [codAvPeso, codInd, codAnalise, link],
           //-----------------------
           (_, { rows }) => resolve(rows._array),
           (_, error) => reject(error) // erro interno em tx.executeSql
@@ -172,7 +172,8 @@ function FormIndicador({ route }) {
           await createAnaliseItemRegisters(
             null,
             eachValue.CodInd,
-            analiseData.CodAnalise
+            analiseData.CodAnalise,
+            null
           );
         });
       } else {

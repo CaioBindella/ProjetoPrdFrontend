@@ -9,7 +9,7 @@ import Header from '../../Components/Header/Index';
 import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
 
 
-import { VictoryLine, VictoryChart, VictoryTheme, VictoryAxis, VictoryLabel} from "victory-native";
+import { VictoryLine, VictoryChart, VictoryTheme, VictoryAxis, VictoryLabel, VictoryScatter} from "victory-native";
 import { economicoInfo, socialInfoRisc, tecnicoInfo } from '../../../Configs/Fonts/IndicadorInfo';
 
 
@@ -137,6 +137,14 @@ const TemporalDashboard = ({ navigation, route }) => {
               label="Pontuação (%)"
               axisLabelComponent={<VictoryLabel dy={-24} />}
             />
+            <VictoryScatter  
+              style={{
+                data: { fill: "#fe8a71"}
+              }}
+              size={5}
+              data={tecScoreList}
+              labels={({ datum }) => datum.y}
+            />
             <VictoryLine
               style={{
                 data: { stroke: "#fe8a71" },
@@ -152,6 +160,14 @@ const TemporalDashboard = ({ navigation, route }) => {
               }}
               data={tecScoreList}
             />
+            <VictoryScatter  
+              style={{
+                data: { fill: "#f6cd61"}
+              }}
+              size={5}
+              data={ecoScoreList}
+              labels={({ datum }) => datum.y}
+            />
             <VictoryLine
               style={{
                 data: { stroke: "#f6cd61" },
@@ -166,6 +182,14 @@ const TemporalDashboard = ({ navigation, route }) => {
               }}
               data={ecoScoreList}
             />
+            <VictoryScatter  
+              style={{
+                data: { fill: "#3da4ab"}
+              }}
+              size={5}
+              data={socScoreList}
+              labels={({ datum }) => datum.y}
+            />
             <VictoryLine
               style={{
                 data: { stroke: "#3da4ab" },
@@ -179,6 +203,14 @@ const TemporalDashboard = ({ navigation, route }) => {
                 onLoad: { duration: 3000 }
               }}
               data={socScoreList}
+            />
+            <VictoryScatter  
+              style={{
+                data: { fill: "#381704"}
+              }}
+              size={5}
+              data={totalScoreList}
+              labels={({ datum }) => datum.y}
             />
             <VictoryLine
               style={{
@@ -207,9 +239,9 @@ const TemporalDashboard = ({ navigation, route }) => {
         </ScrollView>
       </Content>
 
-      <Button>
+      {/* <Button>
         <TextButton>Gerar PDF</TextButton>
-      </Button>
+      </Button> */}
     </Container>
 )
 }

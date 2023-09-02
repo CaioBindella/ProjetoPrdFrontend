@@ -20,7 +20,7 @@ const Home = ({ navigation }) => {
 			<StatusBar />
 
 			<Header>
-				<EvilIcons name='gear' size={35} color='white' />
+				{/* <EvilIcons name='gear' size={35} color='white' /> */}
 			</Header>
 
 			<Main>
