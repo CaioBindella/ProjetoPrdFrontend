@@ -13,6 +13,7 @@ import {
 import { Entypo } from "@expo/vector-icons";
 import { Modal, Portal } from "react-native-paper";
 import { indiceDb } from "../../../../Services/SqlTables/sqliteDb";
+import { Alert } from "react-native";
 
 const updateLink = (link, codInd, codAnalise) => {
   return new Promise((resolve, reject) => {
@@ -43,7 +44,7 @@ const LinkModal = ({ codInd, codAnalise, setLink, modalVisible, setModalVisible 
       setLink(url);
     }
     catch (e){
-      alert(e)
+      Alert.alert("Erro", "Erro ao salvar link.")
     }
     
     setModalVisible(!modalVisible);

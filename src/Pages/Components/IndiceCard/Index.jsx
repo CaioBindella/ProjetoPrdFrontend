@@ -15,7 +15,7 @@ import {
   UpdateContainer,
 } from "./Style";
 
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, Alert } from "react-native";
 import { RadioButton } from "react-native-paper";
 import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
 
@@ -93,6 +93,26 @@ const loadPreviousLink = (codInd, codAnalise) => {
   });
 }
 
+const updateLink = (link, codInd, codAnalise) => {
+  return new Promise((resolve, reject) => {
+    indiceDb.then((data) => {
+      data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+          `
+            UPDATE AnaliseItem SET Link=?
+            WHERE CodInd = ? and CodAnalise = ?
+          `,
+          [link, codInd, codAnalise],
+          //-----------------------
+          (_, { rows }) => resolve(rows._array),
+          (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+      });
+    });
+  });
+}
+
 function IndiceCard({
   codInd,
   title,
@@ -140,7 +160,7 @@ function IndiceCard({
       Linking.openURL("http://drive.google.com");
       setModalVisible(true);
     } catch (e) {
-      alert("Erro ao abrir o Drive");
+      Alert.alert("Erro", "Erro ao abrir o Drive")
     }
   };
 
@@ -150,6 +170,16 @@ function IndiceCard({
 
   const handleHelp = () => {
     setHelpModalVisible(!helpModalVisible)
+  }
+
+  const handleLinkDelete = async () => {
+    try{
+      await updateLink(null, codInd, codAnalise)
+      setLink("")
+    }
+    catch (e){
+      Alert.alert("Erro", "Erro ao excluir link!")
+    }
   }
 
   const handleOpenCamera = () => {
@@ -221,7 +251,7 @@ function IndiceCard({
               <Ionicons name="document-outline" size={24} color="tomato" />
               <LinkText uploaded={true}>{link.slice(0, 20) + "..."}</LinkText>
               <AntDesign
-                onPress={() => setLink("")}
+                onPress={() => handleLinkDelete()}
                 name="close"
                 size={24}
                 color="black"

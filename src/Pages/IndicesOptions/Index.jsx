@@ -32,10 +32,7 @@ function IndicesOptions({ navigation, route }) {
 	}
 
 	const deleteData = async () => {
-		setModalVisible(!modalVisible);
 		await excluir(analiseData.CodAnalise, 'analise')
-		alert('Excluido');
-		navigation.navigate('Home')
 	}
 
 	useEffect(() => {

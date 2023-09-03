@@ -12,6 +12,7 @@ import {
 import { Feather } from '@expo/vector-icons';
 
 import { Modal } from "react-native-paper";
+import { Alert } from "react-native";
 
 const DeleteModal = ({ modalVisible, setModalVisible, deleteFunction, navigation }) => {
     return (
@@ -37,8 +38,9 @@ const DeleteModal = ({ modalVisible, setModalVisible, deleteFunction, navigation
                 onPress={() => {
                   setModalVisible(!modalVisible);
 									deleteFunction();
-									alert('Excluido');
-									navigation.navigate('Home')
+                  navigation.navigate('Home')
+									Alert.alert("Sucesso", "Dado exluído com sucesso.")
+									
                 }}
               >
                 <ModalButtonText>Excluir</ModalButtonText>
