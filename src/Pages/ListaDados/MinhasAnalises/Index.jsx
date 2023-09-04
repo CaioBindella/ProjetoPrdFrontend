@@ -48,7 +48,7 @@ const MinhasAnalises = ({ navigation, route }) => {
 				tx.executeSql(
 					`
 					SELECT * FROM Analise 
-					ORDER BY DataIni ASC;
+					ORDER BY CAST(SUBSTR(DataIni, 0, 3) AS UNSIGNED);
 					`,
 					[],
 					//-----------------------

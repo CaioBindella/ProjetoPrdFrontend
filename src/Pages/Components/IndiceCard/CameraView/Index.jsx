@@ -5,6 +5,7 @@ import * as Sharing from 'expo-sharing';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { FontAwesome } from '@expo/vector-icons';
 import { Entypo, Fontisto, Ionicons } from '@expo/vector-icons';
+import { indiceDb } from '../../../../Services/SqlTables/sqliteDb';
 
 import {
   ButtonContainer,
@@ -17,15 +18,37 @@ import {
   ButtonSave,
   ButtonModalContainer
 } from "./style"
+import { Alert } from 'react-native';
 
-const CameraComponent = ({ visible, onClose, onPhotoTaken }) => {
+const updatePhoto = (photoUri, codInd, codAnalise) => {
+  return new Promise((resolve, reject) => {
+    indiceDb.then((data) => {
+      data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+          `
+            UPDATE AnaliseItem SET PhotoUri=?
+            WHERE CodInd = ? and CodAnalise = ?
+          `,
+          [photoUri, codInd, codAnalise],
+          //-----------------------
+          (_, { rows }) => resolve(rows._array),
+          (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+      });
+    });
+  });
+}
+
+const CameraComponent = ({ visible, onClose, onPhotoTaken, capturedPhoto, codInd, codAnalise }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [camera, setCamera] = useState(null);
-  const [photo, setPhoto] = useState(null);
+  const [photo, setPhoto] = useState({});
   const [showPreview, setShowPreview] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const previousType = useRef(type);
+
 
   useEffect(() => {
     (async () => {
@@ -62,10 +85,17 @@ const CameraComponent = ({ visible, onClose, onPhotoTaken }) => {
     setShowDeleteConfirmation(true);
   };
 
-  const confirmDeletePhoto = () => {
-    setPhoto(null);
-    setShowPreview(false);
-    setShowDeleteConfirmation(false);
+  const confirmDeletePhoto = async () => {
+    try {
+      await updatePhoto("", codInd, codAnalise)
+      setPhoto({});
+      setShowPreview(false);
+      setShowDeleteConfirmation(false);
+      onPhotoTaken("")
+    } 
+    catch (e) {
+      Alert.alert("Erro", "Erro ao deletar imagem")
+    }
   };
 
   const cancelDeletePhoto = () => {
@@ -99,10 +129,16 @@ const CameraComponent = ({ visible, onClose, onPhotoTaken }) => {
     onClose();
   };
 
-  const handleSavePhoto = () => {
-    if (photo) {
-      onPhotoTaken(photo.uri);
-      handleClose();
+  const handleSavePhoto = async () => {
+    if (photo || capturedPhoto) {
+      try{
+        await updatePhoto((capturedPhoto ? capturedPhoto : photo.uri), codInd, codAnalise)
+        onPhotoTaken(capturedPhoto ? capturedPhoto : photo.uri);
+        handleClose();
+      }
+      catch (e){
+        Alert.alert("Erro", "Erro ao salvar imagem")
+      }
     }
   };
 
@@ -116,9 +152,9 @@ const CameraComponent = ({ visible, onClose, onPhotoTaken }) => {
   return (
     <Modal visible={visible} onRequestClose={handleClose} animationType="slide">
       <View style={{ flex: 1 }}>
-        {showPreview ? (
+        {(capturedPhoto || showPreview) ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Image source={{ uri: photo.uri }} style={{ width: '80%', height: '80%', resizeMode: 'contain', borderRadius: 10 }} />
+            <Image source={{ uri: (capturedPhoto ? capturedPhoto : photo.uri) }} style={{ width: '80%', height: '80%', resizeMode: 'contain', borderRadius: 10 }} />
             <ButtonContainer>
               <ButtonPhoto onPress={sharePhoto}>
                 <Text>Compartilhar</Text>
@@ -165,7 +201,7 @@ const CameraComponent = ({ visible, onClose, onPhotoTaken }) => {
           </MContainer>
         </Modal>
       </View>
-      {showPreview && (
+      {(capturedPhoto || showPreview) && (
         <ButtonContainer>
           <ButtonSave title="Salvar Foto" onPress={handleSavePhoto}>
             <Text>Salvar</Text>

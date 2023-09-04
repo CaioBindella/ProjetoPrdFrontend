@@ -92,6 +92,26 @@ const loadPreviousLink = (codInd, codAnalise) => {
   });
 }
 
+const loadPreviousPhoto = (codInd, codAnalise) => {
+  return new Promise((resolve, reject) => {
+    indiceDb.then((data) => {
+      data.transaction((tx) => {
+        //comando SQL modificável
+        tx.executeSql(
+          `
+            SELECT PhotoUri FROM AnaliseItem AI
+            WHERE AI.CodInd = ? and AI.CodAnalise = ?
+          `,
+          [codInd, codAnalise],
+          //-----------------------
+          (_, { rows }) => resolve(rows._array),
+          (_, error) => reject(error) // erro interno em tx.executeSql
+        );
+      });
+    });
+  });
+}
+
 const updateLink = (link, codInd, codAnalise) => {
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
@@ -113,6 +133,7 @@ const updateLink = (link, codInd, codAnalise) => {
 }
 
 function IndiceCard({
+  navigation,
   codInd,
   title,
   description,
@@ -150,7 +171,9 @@ function IndiceCard({
   const loadAnswer = async () => {
     const response = await loadPreviousAnswer(codInd, codAnalise);
     const linkResponse = await loadPreviousLink(codInd, codAnalise)
+    const photoResponse = await loadPreviousPhoto(codInd, codAnalise)
     setLink(linkResponse[0] ? linkResponse[0].Link : "")
+    setCapturedPhoto(photoResponse[0] ? photoResponse[0].PhotoUri : null)
     setChecked(response[0] ? response[0].Pontuacao : null);
   };
 
@@ -164,8 +187,8 @@ function IndiceCard({
   };
 
   useEffect(() => {
-    loadAnswer();
-  }, []);
+		loadAnswer();
+	}, []);
 
   const handleHelp = () => {
     setHelpModalVisible(!helpModalVisible)
@@ -193,23 +216,6 @@ function IndiceCard({
     setCapturedPhoto(photoUri);
   };
 
-  const handleOpenImageSettings = () => {
-    setShowImageSettings(true);
-  };
-
-  const handleCloseImageSettings = () => {
-    setShowImageSettings(false);
-  };
-
-  const handleDeletePhoto = () => {
-    setCapturedPhoto(null);
-    setShowImageSettings(false);
-  };
-
-  const handleSavePhotoFromSettings = (photoUri) => {
-    handlePhotoTaken(photoUri);
-    handleCloseImageSettings();
-  };
 
   return (
     <Container>
@@ -287,6 +293,8 @@ function IndiceCard({
           onClose={handleCloseCamera}
           onPhotoTaken={handlePhotoTaken}
           capturedPhoto={capturedPhoto}
+          codInd={codInd}
+          codAnalise={codAnalise}
         />
       </ButtonContainer>
 

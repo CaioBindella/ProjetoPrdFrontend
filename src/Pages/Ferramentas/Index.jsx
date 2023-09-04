@@ -61,7 +61,8 @@ const getAllTable = () => {
 
 				TI.DescTipo AS [Tipo Indicador],
 
-        AI.Link AS [Link Comprovante]
+        AI.Link AS [Link Comprovante],
+        AI.PhotoUri AS [Link Foto]
 
 				FROM Indicador I
 				INNER JOIN AnaliseItem AI ON AI.CodInd = I.CodInd

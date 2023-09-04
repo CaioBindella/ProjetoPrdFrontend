@@ -56,16 +56,16 @@ const checkPreviousAnaliseItem = (codInd, codAnalise) => {
   });
 };
 
-const createAnaliseItemRegisters = (codAvPeso, codInd, codAnalise, link) => {
+const createAnaliseItemRegisters = (codAvPeso, codInd, codAnalise, link, photoUri) => {
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
       data.transaction((tx) => {
         //comando SQL modificável
         tx.executeSql(
           `
-            INSERT INTO AnaliseItem (CodAvPeso, CodInd, CodAnalise, Link) VALUES (?, ?, ?, ?);
+            INSERT INTO AnaliseItem (CodAvPeso, CodInd, CodAnalise, Link, PhotoUri) VALUES (?, ?, ?, ?, ?);
             `,
-          [codAvPeso, codInd, codAnalise, link],
+          [codAvPeso, codInd, codAnalise, link, photoUri],
           //-----------------------
           (_, { rows }) => resolve(rows._array),
           (_, error) => reject(error) // erro interno em tx.executeSql
@@ -143,7 +143,7 @@ const getScore = (initialCodInd, maxCodInd, codAnalise) => {
   });
 };
 
-function FormIndicador({ route }) {
+function FormIndicador({ navigation, route }) {
   const [data, setData] = useState([]);
   const [score, setScore] = useState(0);
   const subCat = route.params.subCategory;
@@ -173,6 +173,7 @@ function FormIndicador({ route }) {
             null,
             eachValue.CodInd,
             analiseData.CodAnalise,
+            null,
             null
           );
         });
@@ -204,6 +205,7 @@ function FormIndicador({ route }) {
             {data.map((eachData, index) => {
               return (
                 <IndiceCard
+                  navigation={navigation}
                   key={index}
                   codInd={eachData.CodInd}
                   title={eachData.Titulo}

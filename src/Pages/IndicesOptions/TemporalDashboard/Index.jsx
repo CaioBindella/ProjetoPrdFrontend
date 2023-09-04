@@ -57,7 +57,7 @@ const getTemporalScores = () => {
             WHERE AI.CodAnalise = A1.CodAnalise AND (AI.CodInd BETWEEN 1 AND 116)
             ) AS TotalScore
             FROM Analise A1
-            ORDER BY DataIni ASC
+            ORDER BY CAST(SUBSTR(DataIni, 0, 3) AS UNSIGNED)
             `,
           [],
           //-----------------------
