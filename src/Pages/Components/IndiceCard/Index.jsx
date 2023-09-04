@@ -30,7 +30,6 @@ import * as Linking from "expo-linking";
 import LinkModal from "./LinkModal/Index";
 import HelpModal from "./HelpModal/Index";
 import CameraComponent from "./CameraView/Index";
-import ImageSettings from "./ImageSettings/Index";
 
 const updateAnaliseItemPesos = (codAvPeso, codInd, codAnalise) => {
   return new Promise((resolve, reject) => {
@@ -263,8 +262,12 @@ function IndiceCard({
         </UpdateContainer>
 
         {capturedPhoto && (
-          <ButtonCamera onPress={handleOpenImageSettings}>
-            <Image source={{ uri: capturedPhoto }} resizeMode="contain" />
+          <ButtonCamera onPress={handleOpenCamera}>
+            <Image
+              source={{ uri: capturedPhoto }}
+              resizeMode="contain"
+              style={{ width: '100%', height: '100%' }} // Ajuste conforme necessário
+            />
             <MaterialCommunityIcons
               name="dots-horizontal-circle"
               size={20}
@@ -275,11 +278,7 @@ function IndiceCard({
         )}
         {!capturedPhoto && (
           <ButtonCamera onPress={handleOpenCamera}>
-            <MaterialCommunityIcons
-              name="camera-plus-outline"
-              size={50}
-              color="black"
-            />
+            <MaterialCommunityIcons name="camera-plus-outline" size={50} color="black" />
           </ButtonCamera>
         )}
 
@@ -287,14 +286,7 @@ function IndiceCard({
           visible={cameraVisible}
           onClose={handleCloseCamera}
           onPhotoTaken={handlePhotoTaken}
-        />
-
-        <ImageSettings
-          visible={showImageSettings}
-          onDelete={handleDeletePhoto}
-          onClose={handleCloseImageSettings}
-          onSave={() => handleSavePhotoFromSettings(capturedPhoto)}
-          photo={capturedPhoto}
+          capturedPhoto={capturedPhoto}
         />
       </ButtonContainer>
 
