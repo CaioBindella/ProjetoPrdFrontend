@@ -10,21 +10,21 @@ import { indiceDb } from "./sqliteDb";
 const create = (obj) => {
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
-        data.transaction((tx) => {
+      data.transaction((tx) => {
         //comando SQL modificável
         tx.executeSql(
-            `
+          `
             INSERT INTO Municipio (Nome, TamPop, TaxGerPerCapita, PrecipMedAnual) values (?, ?, ?, ?);
             `,
-            [obj.Nome, obj.Tam_Pop, obj.Taxa_Ger_Per_Cap, obj.Precip_Med_Anual],
-            //-----------------------
-            (_, { rowsAffected, insertId }) => {
-              if (rowsAffected > 0) resolve(insertId);
-              else reject("Error inserting obj: " + JSON.stringify(obj)); // insert falhou
-            },
-            (_, error) => reject(error) // erro interno em tx.executeSql
+          [obj.Nome, obj.Tam_Pop, obj.Taxa_Ger_Per_Cap, obj.Precip_Med_Anual],
+          //-----------------------
+          (_, { rowsAffected, insertId }) => {
+            if (rowsAffected > 0) resolve(insertId);
+            else reject("Error inserting obj: " + JSON.stringify(obj)); // insert falhou
+          },
+          (_, error) => reject(error) // erro interno em tx.executeSql
         );
-        });
+      });
     });
   })
 };
@@ -39,21 +39,21 @@ const create = (obj) => {
 const update = (id, obj) => {
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
-        data.transaction((tx) => {
+      data.transaction((tx) => {
         //comando SQL modificável
         tx.executeSql(
-            `
+          `
             UPDATE Municipio SET Nome=?, TamPop=?, TaxGerPerCapita=?, PrecipMedAnual=? WHERE CodMunicipio=?;
             `,
-            [obj.Nome, obj.Tam_Pop, obj.Taxa_Ger_Per_Cap, obj.Precip_Med_Anual, id],
-            //-----------------------
-            (_, { rowsAffected, insertId }) => {
-              if (rowsAffected > 0) resolve(insertId);
-              else reject("Error updating obj: id=" + id); // nenhum registro alterado
-            },
-            (_, error) => reject(error) // erro interno em tx.executeSql
+          [obj.Nome, obj.Tam_Pop, obj.Taxa_Ger_Per_Cap, obj.Precip_Med_Anual, id],
+          //-----------------------
+          (_, { rowsAffected, insertId }) => {
+            if (rowsAffected > 0) resolve(insertId);
+            else reject("Error updating obj: id=" + id); // nenhum registro alterado
+          },
+          (_, error) => reject(error) // erro interno em tx.executeSql
         );
-        });
+      });
     });
   })
 };
@@ -68,21 +68,21 @@ const update = (id, obj) => {
 const find = (id) => {
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
-        data.transaction((tx) => {
+      data.transaction((tx) => {
         //comando SQL modificável
         tx.executeSql(
-            `
+          `
             SELECT * FROM Municipio WHERE CodMunicipio=?;
             `,
-            [id],
-            //-----------------------
-            (_, { rows }) => {
-              if (rows.length > 0) resolve(rows._array[0]);
-              else reject("Obj not found: id=" + id); // nenhum registro encontrado
-            },
-            (_, error) => reject(error) // erro interno em tx.executeSql
+          [id],
+          //-----------------------
+          (_, { rows }) => {
+            if (rows.length > 0) resolve(rows._array[0]);
+            else reject("Obj not found: id=" + id); // nenhum registro encontrado
+          },
+          (_, error) => reject(error) // erro interno em tx.executeSql
         );
-        });
+      });
     });
   })
 };
@@ -98,7 +98,7 @@ const find = (id) => {
 const all = () => {
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
-        data.transaction((tx) => {
+      data.transaction((tx) => {
         //comando SQL modificável
         tx.executeSql(
           `
@@ -109,7 +109,7 @@ const all = () => {
           (_, { rows }) => resolve(rows._array),
           (_, error) => reject(error) // erro interno em tx.executeSql
         );
-        });
+      });
     });
   })
 };
@@ -124,7 +124,7 @@ const all = () => {
 const remove = (id) => {
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
-        data.transaction((tx) => {
+      data.transaction((tx) => {
         //comando SQL modificável
         tx.executeSql(
           `

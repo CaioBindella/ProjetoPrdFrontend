@@ -22,7 +22,7 @@ export async function openDatabase() {
     if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
       await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
     }
-  
+
     await FileSystem.downloadAsync(
       Asset.fromModule(require('../../Assets/DatabaseFile/indicesDatabase.db')).uri,
       FileSystem.documentDirectory + 'SQLite/indicesDatabase.db'
@@ -36,7 +36,7 @@ export const indiceDb = openDatabase().then((response) => {
   response._db.exec(
     [{ sql: 'PRAGMA foreign_keys = ON;', args: [] }],
     false,
-   () => console.log('Foreign keys turned on'),
+    () => console.log('Foreign keys turned on'),
   )
   return response
 })
