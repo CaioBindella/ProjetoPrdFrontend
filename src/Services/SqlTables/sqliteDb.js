@@ -1,12 +1,8 @@
 import * as FileSystem from 'expo-file-system';
-import * as SQLite from 'expo-sqlite'
+import * as SQLite from 'expo-sqlite/legacy'
 import { Asset } from 'expo-asset'
 
 export async function openDatabase() {
-  // Elimina um erro attempt to write a readonly database de alguma forma
-  const database = SQLite.openDatabase("indicesDatabase.db")
-  database._db.close()
-
   // Código que reseta o banco de dados a cada restart da aplicação
   // if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
   //   await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
@@ -23,10 +19,12 @@ export async function openDatabase() {
       await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
     }
 
-    await FileSystem.downloadAsync(
-      Asset.fromModule(require('../../Assets/DatabaseFile/indicesDatabase.db')).uri,
-      FileSystem.documentDirectory + 'SQLite/indicesDatabase.db'
-    );
+    const asset = await Asset.fromModule(require("../../Assets/DatabaseFile/indicesDatabase.db")).downloadAsync();
+    await FileSystem.copyAsync({
+      from: asset.localUri,
+      to: FileSystem.documentDirectory + 'SQLite/indicesDatabase.db',
+    });
+  
   }
 
   return SQLite.openDatabase('indicesDatabase.db');
@@ -40,3 +38,4 @@ export const indiceDb = openDatabase().then((response) => {
   )
   return response
 })
+
