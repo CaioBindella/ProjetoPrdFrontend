@@ -48,22 +48,6 @@ export const economicoInfo = {
     ]
 }
 
-export const socialInfoInterview = {
-    details:{
-        maxScore: 133,
-        firstQuestion: 91,
-        lastQuestion: 105,
-    },
-    data: [
-        {
-            category: "Análise de Risco",
-            subCategories: [
-                {name: "Percepção social dos impactos ambientais negativos da atividade - Entrevista", maxScore: 133},
-            ]
-        }
-    ]
-}
-
 export const socialInfoRisc = {
     details:{
         maxScore: 133,
@@ -72,7 +56,7 @@ export const socialInfoRisc = {
     },
     data: [
         {
-            category: "Análise por Entrevista",
+            category: "Análise de Risco",
             subCategories: [
                 {name: "Percepção social dos impactos ambientais negativos da atividade - Análise de Risco", maxScore: 133},
             ]

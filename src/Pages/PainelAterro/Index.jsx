@@ -50,7 +50,7 @@ const PainelAterro = ({ navigation, route }) => {
 				</Button>
 
 				<Button onPress={() => navigation.navigate('MinhasAnalises', {aterroData: aterroData})}>
-					<Ionicons name="md-analytics-outline" size={24} color="green" />
+					<Ionicons name="analytics" size={24} color="green" />
 					<Text>Cadastrar ISOAS</Text>
 				</Button>
 

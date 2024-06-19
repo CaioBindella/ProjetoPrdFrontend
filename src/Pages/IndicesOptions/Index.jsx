@@ -10,7 +10,7 @@ import Header from "../Components/Header/Index";
 import { AntDesign } from '@expo/vector-icons';
 import { excluir } from "../../Services/Networks/excluir";
 import DeleteModal from "../Components/DeleteModal/Index";
-import { economicoInfo, socialInfoInterview, socialInfoRisc, tecnicoInfo } from "../../Configs/Fonts/IndicadorInfo";
+import { economicoInfo, socialInfoRisc, tecnicoInfo } from "../../Configs/Fonts/IndicadorInfo";
 import Score from "../Components/Score/Index";
 import { getGlobalScore } from "./Indicador/Index";
 
@@ -22,11 +22,7 @@ function IndicesOptions({ navigation, route }) {
 
 	const loadScore = async () => {
 		var response
-		if (analiseData.Tipo === 'Análise por Entrevista')
-			response = await getGlobalScore(analiseData.CodAnalise, tecnicoInfo.details.firstQuestion, socialInfoInterview.details.lastQuestion)
-		else{
-			response = await getGlobalScore(analiseData.CodAnalise, tecnicoInfo.details.firstQuestion, socialInfoRisc.details.lastQuestion)
-		}
+		response = await getGlobalScore(analiseData.CodAnalise, tecnicoInfo.details.firstQuestion, socialInfoRisc.details.lastQuestion)
 
         setSelectedScore(response[0].Pontuacao)
 	}
@@ -44,7 +40,7 @@ function IndicesOptions({ navigation, route }) {
             <Header title={`Índices de ${aterroData.Nome} ${analiseData.DataIni}`}/>
 			<Score 
 				scored={selectedScore} 
-				total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoInterview.details.maxScore}
+				total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore}
 			/>
 
             <Content>
@@ -72,8 +68,8 @@ function IndicesOptions({ navigation, route }) {
 					type: "Social", 
 					aterroData: aterroData, 
 					analiseData: analiseData, 
-					indicadorData: analiseData.Tipo === 'Análise por Entrevista' ? socialInfoInterview.data : socialInfoRisc.data, 
-					indicadorDetails: analiseData.Tipo === 'Análise por Entrevista' ? socialInfoInterview.details : socialInfoRisc.details, 
+					indicadorData: socialInfoRisc.data, 
+					indicadorDetails: socialInfoRisc.details, 
 				})}>
 					<Text>Cadastrar Indicador Social</Text>
 				</Button>

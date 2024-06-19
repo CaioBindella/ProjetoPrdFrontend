@@ -27,7 +27,7 @@ import { AntDesign } from '@expo/vector-icons';
 const ItemCard = ({ aterroData, analiseData, navigation, index }) => (
 	<TouchableOpacity onPress={() => navigation.navigate("IndicesOptions", {aterroData: aterroData, analiseData: analiseData})}>
 		<ItemContainer>
-		<Ionicons name="md-analytics-outline" size={44} color="black" />
+		<Ionicons name="analytics-outline" size={44} color="black" />
 			<Card>
 				<Title>Data: <DescText>{analiseData.DataIni}</DescText></Title>
 				<Title>Tipo: <DescText>{analiseData.Tipo}</DescText></Title>

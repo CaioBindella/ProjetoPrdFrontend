@@ -28,15 +28,15 @@ const ImportModal = ({ modalVisible, setModalVisible }) => {
 		}
 
 		// Verifica se o tipo de arquivo é equivalente a .db e se ocorreu tudo certo
-		if (result.mimeType === "application/octet-stream"){
+		if (result.assets[0].mimeType === "application/octet-stream"){
 			// Deleta o arquivo .db atual
-			if ((await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/indicesDatabase.db')).exists) {
+			if ((await FileSystem.getInfoAsync(FileSystem.documentDirectory + "SQLite/indicesDatabase.db")).exists) {
 				await FileSystem.deleteAsync(FileSystem.documentDirectory + "SQLite/indicesDatabase.db")
 			}
 			
 			// Copia o escolhido com o nome de indicesDatabase.db
 			await FileSystem.copyAsync({
-				from: result.uri,
+				from: result.assets[0].uri,
 				to: FileSystem.documentDirectory + 'SQLite/indicesDatabase.db'
 			})
 

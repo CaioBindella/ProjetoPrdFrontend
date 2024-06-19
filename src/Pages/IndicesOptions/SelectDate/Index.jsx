@@ -21,12 +21,12 @@ function SelectDate({ navigation, route }) {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const [openTypeAnalysis, setOpenTypeAnalysis] = useState(false);
-  const [valueTypeAnalysis, setValueTypeAnalysis] = useState(null);
-  const [itemsTypeAnalysis, setItemsTypeAnalysis] = useState([
-    { label: "Análise por Entrevista", value: "Análise por Entrevista" },
-    { label: "Análise de Risco", value: "Análise de Risco" },
-  ]);
+  // const [openTypeAnalysis, setOpenTypeAnalysis] = useState(false);
+  const [valueTypeAnalysis, setValueTypeAnalysis] = useState("Análise de Risco");
+  // const [itemsTypeAnalysis, setItemsTypeAnalysis] = useState([
+  //   { label: "Análise por Entrevista", value: "Análise por Entrevista" },
+  //   { label: "Análise de Risco", value: "Análise de Risco" },
+  // ]);
 
   const getPreviousAnalysis = (initialDate, codAterro) => {
     return new Promise((resolve, reject) => {
@@ -111,7 +111,7 @@ function SelectDate({ navigation, route }) {
           </Text>
         </Button>
 
-        <Title>Selecione abordagem da análise:</Title>
+        {/* <Title>Selecione abordagem da análise:</Title>
         <ContentPicker>
           <DropDownPicker
             open={openTypeAnalysis}
@@ -124,7 +124,8 @@ function SelectDate({ navigation, route }) {
             zIndex={3000}
             zIndexInverse={1000}
           />
-        </ContentPicker>
+        </ContentPicker> */}
+        
 
         <Button onPress={() => handleButtonPress()}>
           <Text>Continuar</Text>
