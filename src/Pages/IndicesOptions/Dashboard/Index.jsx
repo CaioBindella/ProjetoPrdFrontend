@@ -484,46 +484,48 @@ const Dashboard = ({ navigation, route }) => {
     loadData()
   }, [])
 
+  // Exportar PDF
+
   const viewRef = useRef();
 
   const exportComponentAsPDF = async (viewRef) => {
     try {
-      // Capture the view as an image
+      // Transformar View em imagem
       const uri = await captureRef(viewRef, {
         format: 'png',
         quality: 0.8,
       });
 
-      // Generate PDF from the captured image
+      // Gerar PDF da imagem
       const pdf = await Print.printToFileAsync({
         html: `<img src="${uri}" style="width: 100%; height: auto;" />`
       });
 
-      // Share the PDF
+      // Compartilhar o PDF
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(pdf.uri);
       } else {
-        console.log('Sharing not available');
+        console.log('Compartilhamento não possível.');
       }
     } catch (error) {
-      console.error("Error exporting to PDF:", error);
+      console.error("Erro ao exportar PDF:", error);
     }
   };
 
   const handleExport = async () => {
-    await exportComponentAsPDF(viewRef.current); // Pass the current ref, not the event
+    await exportComponentAsPDF(viewRef.current);
   };
 
   return (
     <Container>
-      <ScrollView>
-        <ViewShot ref={viewRef} options={{ format: 'png', quality: 0.8 }}>
+      <ViewShot ref={viewRef} options={{ format: 'png', quality: 0.8 }}>
+        <ScrollView>
           {chartComponent}
-        </ViewShot>
-        <Button onPress={handleExport}>
-          <TextButton>Exportar Dashboard</TextButton>
-        </Button>
-      </ScrollView>
+          <Button onPress={handleExport}>
+            <TextButton>Exportar Dashboard</TextButton>
+          </Button>
+        </ScrollView>
+      </ViewShot>
     </Container>
   )
 }
