@@ -24,7 +24,7 @@ export async function openDatabase() {
       from: asset.localUri,
       to: FileSystem.documentDirectory + 'SQLite/indicesDatabase.db',
     });
-  
+
   }
 
   return SQLite.openDatabase('indicesDatabase.db');
