@@ -24,7 +24,7 @@ import { Touchable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 const Item = ({ Endereco, Latitude, Longitude, Nome, aterroData, navigation }) => (
-	<TouchableOpacity onPress={()=> navigation.navigate('PainelAterro',{aterroData: aterroData})}>
+	<TouchableOpacity onPress={()=> navigation.navigate('PainelAterro', {aterroData: aterroData})}>
 		<ItemContainer>
 			<Feather name='home' size={44} color='black' />
 			<Card>
@@ -81,8 +81,6 @@ const MeusAterros = ({ navigation }) => {
 				<AntDesign name="plus" size={24} color="black" />
 				<Text>Incluir novo Aterro</Text>
 			</Button>
-
-			
 		</Container>
 	);
 };

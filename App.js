@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import Home from './src/Pages/Home/Index';
+import CadastroIsoas from './src/Pages/CadastroIsoas/Index';
 import Aterro from './src/Pages/Cadastro/Aterro/Index';
 import CadastrosBasicos from './src/Pages/CadastrosBasicos/Index';
 import CadastroMunicipio from './src/Pages/Cadastro/Municipio/Index';
@@ -28,10 +29,9 @@ import Dashboard from './src/Pages/IndicesOptions/Dashboard/Index';
 import TemporalDashboard from './src/Pages/IndicesOptions/TemporalDashboard/Index';
 import Ferramentas from './src/Pages/Ferramentas/Index';
 
-
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 
 export default function App() {
 
@@ -45,6 +45,11 @@ export default function App() {
 					<Stack.Screen
 						name='Home'
 						component={Home}
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name='CadastroIsoas'
+						component={CadastroIsoas}
 						options={{ headerShown: false }}
 					/>
 					<Stack.Screen

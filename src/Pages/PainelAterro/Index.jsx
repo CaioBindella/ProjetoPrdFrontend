@@ -49,11 +49,6 @@ const PainelAterro = ({ navigation, route }) => {
 					<Text>Atualizar dados</Text>
 				</Button>
 
-				<Button onPress={() => navigation.navigate('MinhasAnalises', {aterroData: aterroData})}>
-					<Ionicons name="analytics" size={24} color="green" />
-					<Text>Cadastrar ISOAS</Text>
-				</Button>
-
 				<Button onPress={() => setModalVisible(!modalVisible)}>
 					<AntDesign name="delete" size={24} color="red" />
 					<Text>Excluir {aterroData.Nome}</Text>
