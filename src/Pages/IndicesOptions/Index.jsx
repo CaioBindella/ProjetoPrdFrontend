@@ -6,6 +6,7 @@ import {
 	Text,
 } from './Style'
 
+import StarRating from "../Components/star";
 import Header from "../Components/Header/Index";
 import { AntDesign } from '@expo/vector-icons';
 import { excluir } from "../../Services/Networks/excluir";
@@ -19,6 +20,7 @@ function IndicesOptions({ navigation, route }) {
 	const analiseData = route.params.analiseData;
 	const [selectedScore, setSelectedScore] = useState(0)
 	const [modalVisible, setModalVisible] = useState(false);
+	const [scoreStar, setScoreStar] = useState(0)
 
 	const loadScore = async () => {
 		var response
@@ -31,9 +33,35 @@ function IndicesOptions({ navigation, route }) {
 		await excluir(analiseData.CodAnalise, 'analise')
 	}
 
+	
 	useEffect(() => {
 		loadScore()
 	}, [])
+
+	useEffect(() => {
+		const loadStar = () => {
+			let ScoreAtual = ((selectedScore / (tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore)) * 100).toFixed()
+			
+			if (ScoreAtual < 20) {
+				setScoreStar(1);
+			} else if (ScoreAtual >= 20 && ScoreAtual < 40) {
+				setScoreStar(2);
+			} else if (ScoreAtual >= 40 && ScoreAtual < 60) {
+				setScoreStar(3);
+			} else if (ScoreAtual >= 60 && ScoreAtual < 80) {
+				setScoreStar(4);
+			} else if (ScoreAtual >= 80 && ScoreAtual <= 100) {
+				setScoreStar(5);
+			} else {
+				setScoreStar(0);
+			}
+		}
+		
+		if (selectedScore > 0) {
+			loadStar()
+		}
+		console.log(scoreStar)
+	}, [selectedScore])
 
     return(
         <Container>
@@ -42,6 +70,7 @@ function IndicesOptions({ navigation, route }) {
 				scored={selectedScore} 
 				total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore}
 			/>
+			<StarRating initialRating={scoreStar} />
 
             <Content>
 				<Button onPress={() => navigation.navigate('Indicador', {
