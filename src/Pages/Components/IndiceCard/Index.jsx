@@ -288,14 +288,14 @@ function IndiceCard({
           </ButtonCamera>
         )}
 
-        {/* <CameraComponent
+        <CameraComponent
           visible={cameraVisible}
           onClose={handleCloseCamera}
           onPhotoTaken={handlePhotoTaken}
           capturedPhoto={capturedPhoto}
           codInd={codInd}
           codAnalise={codAnalise}
-        /> */}
+        /> 
       </ButtonContainer>
 
       <LinkModal
