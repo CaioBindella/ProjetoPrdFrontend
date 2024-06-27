@@ -25,23 +25,8 @@ function IndicesOptions({ navigation, route }) {
 	const loadScore = async () => {
 		var response
 		response = await getGlobalScore(analiseData.CodAnalise, tecnicoInfo.details.firstQuestion, socialInfoRisc.details.lastQuestion)
-
-        setSelectedScore(response[0].Pontuacao)
-	}
-
-	const deleteData = async () => {
-		await excluir(analiseData.CodAnalise, 'analise')
-	}
-
-	
-	useEffect(() => {
-		loadScore()
-	}, [])
-
-	useEffect(() => {
-		const loadStar = () => {
-			let ScoreAtual = ((selectedScore / (tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore)) * 100).toFixed()
-			
+		
+		let ScoreAtual = ((response[0].Pontuacao / (tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore)) * 100).toFixed()
 			if (ScoreAtual < 20) {
 				setScoreStar(1);
 			} else if (ScoreAtual >= 20 && ScoreAtual < 40) {
@@ -55,13 +40,19 @@ function IndicesOptions({ navigation, route }) {
 			} else {
 				setScoreStar(0);
 			}
-		}
-		
-		if (selectedScore > 0) {
-			loadStar()
-		}
-		console.log(scoreStar)
-	}, [selectedScore])
+
+        setSelectedScore(response[0].Pontuacao)
+	}
+
+	const deleteData = async () => {
+		await excluir(analiseData.CodAnalise, 'analise')
+	}
+
+	
+	useEffect(() => {
+		loadScore()
+	}, [])
+
 
     return(
         <Container>

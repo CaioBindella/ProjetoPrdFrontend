@@ -6,15 +6,13 @@ import { Container, Title, Text, Content } from './Style';
 
 
 const Score = ({scored, total}) => {
-  return (
-    <Container>
-        <Content>
-            <Title>Performance</Title>
-            <Text>{((scored / total) * 100).toFixed()} %</Text>
-        </Content>
-    </Container>
-    
-    
+    return (
+        <Container>
+            <Content>
+                <Title>Performance</Title>
+                <Text>{((scored / total) * 100).toFixed()} %</Text>
+            </Content>
+        </Container>
 );
 } 
 

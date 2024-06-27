@@ -3,7 +3,8 @@ import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 const StarRating = ({ initialRating }) => {
-  const [rating, setRating] = useState(initialRating);
+
+  // const [rating, setRating] = useState(initialRating);
 
   // const handleRating = (star) => {
   //   setRating(star);
@@ -16,7 +17,7 @@ const StarRating = ({ initialRating }) => {
           <FontAwesome
             name="star"
             size={30}
-            color={star <= rating ? 'gold' : 'black'}
+            color={star <= initialRating ? 'gold' : 'black'}
           />
         </TouchableOpacity>
       ))}
