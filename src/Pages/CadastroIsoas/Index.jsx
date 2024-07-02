@@ -30,9 +30,9 @@ function CadastroIsoas() {
         let pickerItems = []
 
         response.forEach((eachData) => {
-            pickerItems.push({label: eachData.Nome, value: eachData})
+          pickerItems.push({label: eachData.Nome, value: eachData})
         })
-    
+        
         setPickerItems(pickerItems)
     } catch (error) {
         Alert.alert("Erro", "Erro ao pegar informações dos aterros")
@@ -69,6 +69,7 @@ function CadastroIsoas() {
             placeholder="Selecione o aterro"
             zIndex={3000}
             zIndexInverse={1000}
+            itemKey="label"
           />
         </ContentPicker>
         

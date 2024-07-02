@@ -1,11 +1,27 @@
+import DropDownPicker from 'react-native-dropdown-picker';
 import styled from 'styled-components/native'
 
 export const Container = styled.View`
     background-color: #fff;
     width: 100%;
-    height: 100%;
+    flex: 1;
     align-items: center;
     justify-content: center;
+`;
+
+export const Title = styled.Text`
+    width: 70%;
+	font-weight: bold;
+	font-size: 20px;
+`;
+
+export const ViewTitle = styled.View`
+    width: 100%;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+    padding: 20px;
+    border-bottom-width: 1px;
 `;
 
 export const Text = styled.Text`
@@ -14,37 +30,19 @@ export const Text = styled.Text`
 `;
 
 export const InputGroup = styled.View`
-    width: 100%;
-    /* flex:2; */
+    display: flex;
+    flex-direction: column;
+    width: 90%;
 	padding: 10px;
-	margin-bottom: 10px;
-	margin-left: 30px;
+    gap: 5px;
 `;
 
 export const Input = styled.TextInput`
-    width: 90%;
-	height: 40px;
-	border: 2px solid;
+    width: 100%;
+	padding: 10px 20px;
+	border: 1px solid;
 	border-radius: 10px;
 	background-color: #e8e8e8;
-`;
-
-export const Title = styled.Text`
-    width: 60%;
-	font-weight: 500;
-	font-size: 20px;
-	margin-right: 10px;
-`;
-
-export const ViewTitle = styled.View`
-    width: 100%;
-	height: 70px;
-    /* flex: 1; */
-	justify-content: center;
-	align-items: center;
-	flex-direction: row;
-	margin-top: 25px;
-    border-bottom-width: 2px;
 `;
 
 export const ButtonGroup = styled.View`
@@ -52,21 +50,31 @@ export const ButtonGroup = styled.View`
 	align-items: center;
     flex-direction: row;
 	width: 100%;
-    height: 100px;
-    /* flex: 1; */
-    margin-top: 40px;
+    padding: 10px 0px;
 `;
 
 export const TextButton = styled.Text`
     color: #fff;
 	text-align: center;
+    font-weight: bold;
 `;
 
 export const Button = styled.TouchableOpacity`
     background: #381704;
-	height: 40px;
-	border: 2px solid #fff;
+	padding: 10px;
 	width: 35%;
 	border-radius: 10px;
-    justify-content: center;
+`;
+
+export const PickerContainer = styled.View`
+    width: 90%;
+    background-color: red;
+`;
+
+export const Picker = styled(DropDownPicker)`
+    width: 100%;
+	padding: 10px 20px;
+	border: 1px solid;
+	border-radius: 10px;
+	background-color: #e8e8e8;
 `;

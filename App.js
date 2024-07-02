@@ -1,21 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import Home from './src/Pages/Home/Index';
 import CadastroIsoas from './src/Pages/CadastroIsoas/Index';
-import Aterro from './src/Pages/Cadastro/Aterro/Index';
+import CadastroAterro from './src/Pages/Cadastro/Aterro/Index';
 import CadastrosBasicos from './src/Pages/CadastrosBasicos/Index';
 import CadastroMunicipio from './src/Pages/Cadastro/Municipio/Index';
 import Profissional from './src/Pages/Cadastro/Profissional/Index';
 import Organizacao from './src/Pages/Cadastro/Organizacao/Index';
 import MeusAterros from './src/Pages/ListaDados/MeusAterros/Index';
-import UpdateUmAterro from './src/Pages/Updates/UpdateUmAterro/Index';
 import UpdateUmMunicipio from './src/Pages/Updates/UpdateUmMunicipio/Index';
 import UpdateOrg from './src/Pages/Updates/UpdateOrg/Index';
 import UpdateProf from './src/Pages/Updates/UpdateProf/Index';
 import UpdatePorte from './src/Pages/Updates/UpdatePorte/Index'
 import IndicesOptions from './src/Pages/IndicesOptions/Index';
 import Porte from './src/Pages/Cadastro/Porte/Index';
-import AterroFinal from './src/Pages/Cadastro/Aterro/AterroFinal/Index';
-import UpdateAterroFinal from './src/Pages/Updates/UpdateUmAterro/UpdateAterroFinal/Index';
 import MeusMunicipios from './src/Pages/ListaDados/MeusMunicipios/Index';
 import MinhasOrganizacoes from './src/Pages/ListaDados/MinhasOrganizacoes/Index'
 import MeusPortes from './src/Pages/ListaDados/MeusPortes/Index'
@@ -58,13 +55,8 @@ export default function App() {
 						options={{ headerShown: false }}
 					/>
 					<Stack.Screen
-						name='Aterro'
-						component={Aterro}
-						options={{ headerShown: false }}
-					/>
-					<Stack.Screen
-						name='AterroFinal'
-						component={AterroFinal}
+						name='CadastroAterro'
+						component={CadastroAterro}
 						options={{ headerShown: false }}
 					/>
 					<Stack.Screen
@@ -90,11 +82,6 @@ export default function App() {
 					<Stack.Screen
 						name='MeusAterros'
 						component={MeusAterros}
-						options={{ headerShown: false }}
-					/>
-					<Stack.Screen
-						name='UpdateUmAterro'
-						component={UpdateUmAterro}
 						options={{ headerShown: false }}
 					/>
 					<Stack.Screen
@@ -125,11 +112,6 @@ export default function App() {
 					<Stack.Screen
 						name='Indicador'
 						component={Indicador}
-						options={{ headerShown: false }}
-					/>
-					<Stack.Screen
-						name='UpdateAterroFinal'
-						component={UpdateAterroFinal}
 						options={{ headerShown: false }}
 					/>
 					<Stack.Screen

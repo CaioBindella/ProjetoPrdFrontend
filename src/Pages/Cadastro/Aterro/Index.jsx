@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	Container,
 	Text,
@@ -9,54 +9,94 @@ import {
 	ViewTitle,
 	ButtonGroup,
 	TextButton,
+	Picker
 } from './Style';
 
-import { ScrollView } from 'react-native';
-
+import { Alert, ScrollView } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
+import { consulta } from '../../../Services/Networks/consulta';
+import { inclui } from '../../../Services/Networks/inclui';
+
 import Header from '../../Components/Header/Index';
+import { atualiza } from '../../../Services/Networks/atualiza';
 
-const Cadastro = ({ navigation }) => {
-	const [nome, setNome] = useState('');
-	const [endereco, setEndereco] = useState('');
-	const [baciaHidrografica, setBaciaHidrografica] = useState('');
-	const [recebimentoBruto, setRecebimentoBruto] = useState(0);
-	const [recebimentoGerado, setRecebimentoGerado] = useState(0);
-	const [condicaoClimatica, setCondicaoClimatica] = useState('');
-	const [latitude, setLatitude] = useState(0);
-	const [longitude, setLongitude] = useState(0);
-	const [licenPrev, setLicenPrev] = useState(0);
-	const [licenOp, setLicenOp] = useState(0);
+const CadastroAterro = ({ navigation, route }) => {
+	const aterroData = route.params.aterroData;
+	const isUpdate = route.params.isUpdate;
 
-	function nextPage() {
-		const data = {
-			Nome: nome,
-			Endereco: endereco,
-			BaciaHidrografica: baciaHidrografica,
-			RecebimentoBruto: parseFloat(recebimentoBruto),
-			RecebimentoGerado: parseFloat(recebimentoGerado),
-			CondicaoClimatica: condicaoClimatica,
-			Longitude: parseFloat(longitude),
-			Latitude: parseFloat(latitude),
-			LicencaPrevia: licenPrev,
-			LicencaOperacional: licenOp
-		};
-		
+	const [nome, setNome] = useState(isUpdate ? aterroData.Nome : "");
+	const [endereco, setEndereco] = useState(isUpdate ? aterroData.Endereco : "");
+	const [recebimentoBruto, setRecebimentoBruto] = useState(isUpdate ? String(aterroData.RecebimentoBruto) : "");
+	
+	const [openMunicipio, setOpenMunicipio] = useState(false);
+	const [valueMunicipio, setValueMunicipio] = useState(isUpdate ? aterroData.CodMunicipio : null);
+	const [itemsMunicipio, setItemsMunicipio] = useState([]);
+
+    const [openOrganizacao, setOpenOrganizacao] = useState(false);
+	const [valueOrganizacao, setValueOrganizacao] = useState(isUpdate ? aterroData.CodOrganizacao : null);
+	const [itemsOrganizacao, setItemsOrganizacao] = useState([]);
+
+    const [openPorte, setOpenPorte] = useState(false);
+	const [valuePorte, setValuePorte] = useState(isUpdate ? aterroData.CodPorte : null);
+	const [itemsPorte, setItemsPorte] = useState([]);
+
+    async function loadDataPicker (table, setFunction) {
+
+        const data = await consulta(table)
+        let itemModel = []
+        
+        data.map((eachData) => {
+            itemModel = [...itemModel, {label: eachData.Nome, value: eachData.CodMunicipio || eachData.CodPorte || eachData.CodOrganizacao}]
+        })
+
+        setFunction(itemModel)
+    }
+
+    useEffect(() => {
+        loadDataPicker('municipio', setItemsMunicipio)
+        loadDataPicker('organizacao', setItemsOrganizacao)
+        loadDataPicker('porte', setItemsPorte)
+    }, [])
+
+	async function createAterro() {		
 		if (
 			nome &&
 			endereco &&
-			baciaHidrografica &&
 			recebimentoBruto &&
-			recebimentoGerado &&
-			condicaoClimatica &&
-			longitude &&
-			latitude &&
-			licenPrev &&
-			licenOp
+			valueMunicipio &&
+			valueOrganizacao &&
+			valuePorte
 		) {
-			navigation.navigate('AterroFinal', {Data: data})
+			const data = {
+				Nome: nome,
+				Endereco: endereco,
+				RecebimentoBruto: parseFloat(recebimentoBruto),
+				CodMunicipio: valueMunicipio,
+				CodOrganizacao: valueOrganizacao,
+				CodPorte: valuePorte,
+				// As informações abaixo não são mais usadas, 
+				// para não mudar o banco de dados por enquanto estou deixando com valores padrão.
+				RecebimentoGerado: 0.0,
+				BaciaHidrografica: "",
+				CondicaoClimatica: "",
+				Longitude: 0.0,
+				Latitude: 0.0,
+				LicencaPrevia: "",
+				LicencaOperacional: "",
+			};
+			
+			if (isUpdate){
+				atualiza(aterroData.CodAterro, 'aterro', data);
+				Alert.alert("Sucesso", "Aterro atualizado com sucesso.");
+			}
+			else{
+				inclui('aterro', data);
+				Alert.alert("Sucesso", "Aterro criado com sucesso.")
+			}
+
+			navigation.navigate('Home');
 		} else {
-			alert('Há campos vazios');
+			Alert.alert("Erro", "Preencha todos os campos.");
 		}
 	}
 
@@ -66,9 +106,10 @@ const Cadastro = ({ navigation }) => {
 		<ScrollView
 			style={{
 				width: '100%',
-			}}>
+			}}
+		>
 			<Container>
-				<Header title={"Cadastro Aterro"} />
+				<Header title={isUpdate ? `Atualizar ${aterroData.Nome}` : `Cadastro Aterro`} />
 
 				<ViewTitle>
 					<Title>Preencha os dados referente ao Aterro</Title>
@@ -94,86 +135,69 @@ const Cadastro = ({ navigation }) => {
 				</InputGroup>
 
 				<InputGroup>
-					<Text>Bacia Hidrografica: </Text>
-					<Input
-						placeholder='Digite aqui a bacia hidrográfica'
-						onChangeText={setBaciaHidrografica}
-						value={baciaHidrografica}
-					/>
-				</InputGroup>
-
-				<InputGroup>
 					<Text>Recebimento Bruto: </Text>
 					<Input
 						placeholder='Digite aqui o recebimento bruto'
 						onChangeText={setRecebimentoBruto}
 						value={recebimentoBruto}
+						keyboardType='numeric'
 					/>
 				</InputGroup>
 
 				<InputGroup>
-					<Text>Recebimento Gerado: </Text>
-					<Input
-						placeholder='Digite aqui o recebimento gerado'
-						onChangeText={setRecebimentoGerado}
-						value={recebimentoGerado}
+					<Text>Município do Aterro:</Text>
+					<Picker
+						open={openMunicipio}
+						value={valueMunicipio}
+						items={itemsMunicipio}
+						setOpen={setOpenMunicipio}
+						setValue={setValueMunicipio}
+						setItems={setItemsMunicipio}
+						placeholder="Selecione o município"
+						zIndex={3000}
+						zIndexInverse={1000}
+						listMode='SCROLLVIEW'
 					/>
 				</InputGroup>
-
 				<InputGroup>
-					<Text>Condição Climática: </Text>
-					<Input
-						placeholder='Digite aqui a condição climática'
-						onChangeText={setCondicaoClimatica}
-						value={condicaoClimatica}
+					<Text>Organização do Aterro:</Text>
+					<Picker
+						open={openOrganizacao}
+						value={valueOrganizacao}
+						items={itemsOrganizacao}
+						setOpen={setOpenOrganizacao}
+						setValue={setValueOrganizacao}
+						setItems={setItemsOrganizacao}
+						placeholder="Selecione a Organização"
+						zIndex={2000}
+						zIndexInverse={2000}
+						listMode='SCROLLVIEW'
 					/>
 				</InputGroup>
-
 				<InputGroup>
-					<Text>Longitude: </Text>
-					<Input
-						placeholder='Digite aqui a longitude'
-						onChangeText={setLongitude}
-						value={longitude}
+					<Text>Porte do Aterro:</Text>
+					<Picker
+						open={openPorte}
+						value={valuePorte}
+						items={itemsPorte}
+						setOpen={setOpenPorte}
+						setValue={setValuePorte}
+						setItems={setItemsPorte}
+						placeholder="Selecione o Porte"
+						zIndex={1000}
+						zIndexInverse={3000}
+						listMode='SCROLLVIEW'
 					/>
 				</InputGroup>
-
-				<InputGroup>
-					<Text>Latitude: </Text>
-					<Input
-						placeholder='Digite aqui a latitude'
-						onChangeText={setLatitude}
-						value={latitude}
-					/>
-				</InputGroup>
-
-				<InputGroup>
-					<Text>Licença Prévia: </Text>
-					<Input
-						placeholder='Digite aqui a Licença Prev'
-						onChangeText={setLicenPrev}
-						value={licenPrev}
-					/>
-				</InputGroup>
-
-				<InputGroup>
-					<Text>Licença de Operação: </Text>
-					<Input
-						placeholder='Digite aqui a Lecença de Operação'
-						onChangeText={setLicenOp}
-						value={licenOp}
-					/>
-				</InputGroup>
-
 
 				<ButtonGroup>
-					<Button onPress={() => navigation.navigate('Home')}>
+					<Button onPress={() => navigation.goBack()}>
 						<TextButton>Cancelar</TextButton>
 					</Button>
 					<Button
-						onPress={() => nextPage()}
+						onPress={() => createAterro()}
 					>
-						<TextButton>Próximo</TextButton>
+						<TextButton>{isUpdate ? "Atualizar" : "Cadastrar"}</TextButton>
 					</Button>
 				</ButtonGroup>
 			</Container>
@@ -181,4 +205,4 @@ const Cadastro = ({ navigation }) => {
 	);
 };
 
-export default Cadastro;
+export default CadastroAterro;

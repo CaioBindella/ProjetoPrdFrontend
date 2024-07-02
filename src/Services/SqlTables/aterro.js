@@ -16,7 +16,7 @@ const create = (obj) => {
             `
             INSERT INTO Aterro (Nome, Endereco, BaciaHidrografica, RecebimentoBruto, RecebimentoGerado, CondicaoClimatica, Latitude, Longitude, LicencaPrevia, LicencaOperacional, CodMunicipio, CodOrganizacao, CodPorte) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             `,
-            [obj.Nome, obj.Endereco, obj.BaciaHidrografica, obj.RecebimentoBruto, obj.RecebimentoGerado, obj.CondicaoClimatica, obj.Latitude, obj.Longitude, obj.LicencaPrevia, obj.LicencaOperacional, obj.Municipio, obj.Organizacao, obj.Porte],
+            [obj.Nome, obj.Endereco, obj.BaciaHidrografica, obj.RecebimentoBruto, obj.RecebimentoGerado, obj.CondicaoClimatica, obj.Latitude, obj.Longitude, obj.LicencaPrevia, obj.LicencaOperacional, obj.CodMunicipio, obj.CodOrganizacao, obj.CodPorte],
             //-----------------------
             (_, { rowsAffected, insertId }) => {
               if (rowsAffected > 0) resolve(insertId);
@@ -45,7 +45,7 @@ const update = (id, obj) => {
             `
             UPDATE Aterro SET Nome=?, Endereco=?, BaciaHidrografica=?, RecebimentoBruto=?, RecebimentoGerado=?, CondicaoClimatica=?, Latitude=?, Longitude=?, LicencaPrevia=?, LicencaOperacional=?, CodMunicipio=?, CodOrganizacao=?, CodPorte=? WHERE CodAterro=?;
             `,
-            [obj.Nome, obj.Endereco, obj.BaciaHidrografica, obj.RecebimentoBruto, obj.RecebimentoGerado, obj.CondicaoClimatica, obj.Latitude, obj.Longitude, obj.LicencaPrevia, obj.LicencaOperacional, obj.Municipio, obj.Organizacao, obj.Porte, id],
+            [obj.Nome, obj.Endereco, obj.BaciaHidrografica, obj.RecebimentoBruto, obj.RecebimentoGerado, obj.CondicaoClimatica, obj.Latitude, obj.Longitude, obj.LicencaPrevia, obj.LicencaOperacional, obj.CodMunicipio, obj.CodOrganizacao, obj.CodPorte, id],
             //-----------------------
             (_, { rowsAffected, insertId }) => {
               if (rowsAffected > 0) resolve(insertId);

@@ -38,13 +38,12 @@ const PainelAterro = ({ navigation, route }) => {
 		await excluir(aterroData.CodAterro, 'aterro')
 	}
 
-
 	return (
 		<Container>
 			<StatusBar />
 			<Header title={`${aterroData.Nome}`}/>
 			<Content>
-				<Button onPress={() => navigation.navigate('UpdateUmAterro', {aterroData: aterroData})}>
+				<Button onPress={() => navigation.navigate('CadastroAterro', {aterroData: aterroData, isUpdate: true})}>
 					<AntDesign name="reload1" size={24} color="blue" />
 					<Text>Atualizar dados</Text>
 				</Button>

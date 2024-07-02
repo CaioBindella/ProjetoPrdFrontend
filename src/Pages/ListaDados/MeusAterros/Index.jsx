@@ -8,30 +8,27 @@ import {
 	DescText,
 } from './Style';
 import { Feather } from '@expo/vector-icons';
-import Header from '../../Components/Header/Index';
+
 import {
 	StatusBar,
-	View,
 	Text,
-	FlatList,
 	TouchableOpacity,
 	ScrollView,
 } from 'react-native';
 
 import { consulta } from '../../../Services/Networks/consulta';
-
-import { Touchable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-const Item = ({ Endereco, Latitude, Longitude, Nome, aterroData, navigation }) => (
+import Header from '../../Components/Header/Index';
+
+const Item = ({ aterroData, navigation }) => (
 	<TouchableOpacity onPress={()=> navigation.navigate('PainelAterro', {aterroData: aterroData})}>
 		<ItemContainer>
 			<Feather name='home' size={44} color='black' />
 			<Card>
-				<Title>{Nome}</Title>
-				<Title>Endereço: <DescText>{Endereco}</DescText></Title>
-				<Title>Latitude: <DescText>{Latitude}</DescText></Title>
-				<Title>Longitude: <DescText>{Longitude}</DescText></Title>
+				<Title>{aterroData.Nome}</Title>
+				<Title>Endereço: <DescText>{aterroData.Endereco}</DescText></Title>
+				<Title>Recebimento Bruto: <DescText>{aterroData.RecebimentoBruto}</DescText></Title>
 			</Card>
 		</ItemContainer>
 	</TouchableOpacity>
@@ -62,10 +59,6 @@ const MeusAterros = ({ navigation }) => {
 					data.map((eachData, index) => {
 						return(
 							<Item
-								Endereco={eachData.Endereco}
-								Nome={eachData.Nome}
-								Latitude={eachData.Latitude}
-								Longitude={eachData.Longitude}
 								aterroData={eachData}
 								key={index}
 								navigation={navigation}
@@ -77,7 +70,7 @@ const MeusAterros = ({ navigation }) => {
 				}
 			</ScrollView>
 
-			<Button onPress={() => navigation.navigate('Aterro')}>
+			<Button onPress={() => navigation.navigate('CadastroAterro', {aterroData: {}, isUpdate: false})}>
 				<AntDesign name="plus" size={24} color="black" />
 				<Text>Incluir novo Aterro</Text>
 			</Button>

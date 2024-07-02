@@ -47,10 +47,11 @@ const MinhasAnalises = ({ navigation, route }) => {
 				//comando SQL modificável
 				tx.executeSql(
 					`
-					SELECT * FROM Analise 
+					SELECT * FROM Analise
+					WHERE CodAterro = ?
 					ORDER BY CAST(SUBSTR(DataIni, 0, 3) AS UNSIGNED);
 					`,
-					[],
+					[aterroData.CodAterro],
 					//-----------------------
 					(_, { rows }) => resolve(rows._array),
 					(_, error) => reject(error) // erro interno em tx.executeSql
