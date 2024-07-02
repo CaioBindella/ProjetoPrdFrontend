@@ -27,19 +27,22 @@ function IndicesOptions({ navigation, route }) {
 		response = await getGlobalScore(analiseData.CodAnalise, tecnicoInfo.details.firstQuestion, socialInfoRisc.details.lastQuestion)
 		
 		let ScoreAtual = ((response[0].Pontuacao / (tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore)) * 100).toFixed()
-			if (ScoreAtual < 20) {
-				setScoreStar(1);
-			} else if (ScoreAtual >= 20 && ScoreAtual < 40) {
-				setScoreStar(2);
-			} else if (ScoreAtual >= 40 && ScoreAtual < 60) {
-				setScoreStar(3);
-			} else if (ScoreAtual >= 60 && ScoreAtual < 80) {
-				setScoreStar(4);
-			} else if (ScoreAtual >= 80 && ScoreAtual <= 100) {
-				setScoreStar(5);
-			} else {
-				setScoreStar(0);
-			}
+		console.log(ScoreAtual)
+		if (ScoreAtual == 0) {
+			setScoreStar(0);
+		} else if (ScoreAtual >= 1 && ScoreAtual < 20) {
+			setScoreStar(1);
+		}else if (ScoreAtual >= 20 && ScoreAtual < 40) {
+			setScoreStar(2);
+		} else if (ScoreAtual >= 40 && ScoreAtual < 60) {
+			setScoreStar(3);
+		} else if (ScoreAtual >= 60 && ScoreAtual < 80) {
+			setScoreStar(4);
+		} else if (ScoreAtual >= 80 && ScoreAtual <= 100) {
+			setScoreStar(5);
+		} else {
+			setScoreStar(0);
+		}
 
         setSelectedScore(response[0].Pontuacao)
 	}

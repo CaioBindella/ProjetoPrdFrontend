@@ -55,9 +55,11 @@ function Indicador({ navigation, route }) {
         
         let ScoreAtual = ((response[0].Pontuacao / (indicadorDetails.maxScore)) * 100).toFixed();
         
-        if (ScoreAtual < 20) {
+        if (ScoreAtual == 0) {
+            setScoreStar(0);
+        } else if (ScoreAtual >= 1 && ScoreAtual < 20) {
             setScoreStar(1);
-        } else if (ScoreAtual >= 20 && ScoreAtual < 40) {
+        }else if (ScoreAtual >= 20 && ScoreAtual < 40) {
             setScoreStar(2);
         } else if (ScoreAtual >= 40 && ScoreAtual < 60) {
             setScoreStar(3);
