@@ -29,7 +29,7 @@ import {
 import * as Linking from "expo-linking";
 import LinkModal from "./LinkModal/Index";
 import HelpModal from "./HelpModal/Index";
-import CameraComponent from "./CameraView/Index";
+// import CameraComponent from "./CameraView/Index";
 
 const updateAnaliseItemPesos = (codAvPeso, codInd, codAnalise) => {
   return new Promise((resolve, reject) => {
@@ -187,19 +187,19 @@ function IndiceCard({
   };
 
   useEffect(() => {
-		loadAnswer();
-	}, []);
+    loadAnswer();
+  }, []);
 
   const handleHelp = () => {
     setHelpModalVisible(!helpModalVisible)
   }
 
   const handleLinkDelete = async () => {
-    try{
+    try {
       await updateLink(null, codInd, codAnalise)
       setLink("")
     }
-    catch (e){
+    catch (e) {
       Alert.alert("Erro", "Erro ao excluir link!")
     }
   }
@@ -264,7 +264,7 @@ function IndiceCard({
             </ButtonLink>
           )}
 
-          <Feather name="help-circle" size={24} color="black" onPress={() => handleHelp()}/>
+          <Feather name="help-circle" size={24} color="black" onPress={() => handleHelp()} />
         </UpdateContainer>
 
         {capturedPhoto && (
@@ -288,14 +288,14 @@ function IndiceCard({
           </ButtonCamera>
         )}
 
-        <CameraComponent
+        {/* <CameraComponent
           visible={cameraVisible}
           onClose={handleCloseCamera}
           onPhotoTaken={handlePhotoTaken}
           capturedPhoto={capturedPhoto}
           codInd={codInd}
           codAnalise={codAnalise}
-        />
+        /> */}
       </ButtonContainer>
 
       <LinkModal
@@ -306,7 +306,7 @@ function IndiceCard({
         setModalVisible={setModalVisible}
       />
 
-      <HelpModal 
+      <HelpModal
         modalVisible={helpModalVisible}
         setModalVisible={setHelpModalVisible}
       />

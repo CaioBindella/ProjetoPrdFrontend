@@ -21,24 +21,24 @@ export const getGlobalScore = (codAnalise, minInterval, maxInterval) => {
     // console.log(`Pegando Score Global entre: ${minInterval} e ${maxInterval} CodAnalise ${codAnalise}`)
 
     return new Promise((resolve, reject) => {
-      indiceDb.then((data) => {
-        data.transaction((tx) => {
-          //comando SQL modificável
-          tx.executeSql(
-              `
+        indiceDb.then((data) => {
+            data.transaction((tx) => {
+                //comando SQL modificável
+                tx.executeSql(
+                    `
                   SELECT SUM(Pontuacao) AS Pontuacao from AnaliseItem AI
                   INNER JOIN AvaliacaoPeso AP ON AP.CodAvPeso = AI.CodAvPeso
                   WHERE AI.CodAnalise = ? AND (AI.CodInd BETWEEN ? AND ?)
               `,
-            [codAnalise, minInterval, maxInterval],
-            //-----------------------
-            (_, { rows }) => resolve(rows._array),
-            (_, error) => reject(error) // erro interno em tx.executeSql
-          );
+                    [codAnalise, minInterval, maxInterval],
+                    //-----------------------
+                    (_, { rows }) => resolve(rows._array),
+                    (_, error) => reject(error) // erro interno em tx.executeSql
+                );
+            });
         });
-      });
     });
-  }
+}
 
 function Indicador({ navigation, route }) {
     const indicadorType = route.params.type
@@ -55,14 +55,14 @@ function Indicador({ navigation, route }) {
     }
 
     useEffect(() => {
-		// Evita renderizar dados antigos quando voltando para trás na navigation stack
-		navigation.addListener('focus', () => {
-		  loadScore();
-		});
-	}, [navigation]);
+        // Evita renderizar dados antigos quando voltando para trás na navigation stack
+        navigation.addListener('focus', () => {
+            loadScore();
+        });
+    }, [navigation]);
 
 
-    return(
+    return (
         <Container>
             <ScrollView>
                 <Header title={`${indicadorType} - ${aterroData.Nome} ${analiseData.DataIni}`} />
@@ -75,7 +75,7 @@ function Indicador({ navigation, route }) {
                                 <Title>{eachCategory.category}</Title>
                                 {eachCategory.subCategories.map((eachSubCategory, index) => {
                                     return (
-                                        <Button key={index} onPress={() => navigation.navigate('FormIndicador', {subCategory: eachSubCategory, aterroData: aterroData, analiseData: analiseData})}>
+                                        <Button key={index} onPress={() => navigation.navigate('FormIndicador', { subCategory: eachSubCategory, aterroData: aterroData, analiseData: analiseData })}>
                                             <Text>{eachSubCategory.name}</Text>
                                         </Button>
                                     )
@@ -85,7 +85,8 @@ function Indicador({ navigation, route }) {
                     })}
 
                     <DashboardButton onPress={() => navigation.navigate('Dashboard', {
-                        aterroData: aterroData, analiseData: analiseData ,indicadorType: indicadorType, indicadorDetails: indicadorDetails})}>
+                        aterroData: aterroData, analiseData: analiseData, indicadorType: indicadorType, indicadorDetails: indicadorDetails
+                    })}>
                         <TextDashboard>Gerar DashBoard</TextDashboard>
                     </DashboardButton>
                 </Content>

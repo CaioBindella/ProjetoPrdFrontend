@@ -27,7 +27,7 @@ import SelectDate from './src/Pages/IndicesOptions/SelectDate/Index';
 import Dashboard from './src/Pages/IndicesOptions/Dashboard/Index';
 import TemporalDashboard from './src/Pages/IndicesOptions/TemporalDashboard/Index';
 import Ferramentas from './src/Pages/Ferramentas/Index';
-
+import GeralDashboard from './src/Pages/IndicesOptions/GeralDashboard/Index';
 
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -170,6 +170,11 @@ export default function App() {
 					<Stack.Screen
 						name='Dashboard'
 						component={Dashboard}
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name='GeralDashboard'
+						component={GeralDashboard}
 						options={{ headerShown: false }}
 					/>
 					<Stack.Screen
