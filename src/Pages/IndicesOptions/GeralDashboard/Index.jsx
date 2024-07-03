@@ -200,7 +200,7 @@ const GeralDashboard = ({ navigation, route }) => {
 
     const loadData = async () => {
         const technicArray = Array(8).fill(0);
-        // const economicArray = Array(8).fill(0);
+        const economicArray = Array(8).fill(0);
         // const socialArray = Array(15).fill(0);
 
         let totalScore = 0;
@@ -230,41 +230,41 @@ const GeralDashboard = ({ navigation, route }) => {
         setSectec(gensecondgrouptec)
         setThirdtec(genthirdgrouptec)
 
-        // // Lógica para pegar a pontuação do econômico
-        // const maxEcoScores = await getMaxScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios")
-        // const actualEcoScores = await getActualScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios", analiseData.CodAnalise)
-        // const PercentInadimplencia = await getActualScores("Econômico", "Inadimplência", analiseData.CodAnalise)
+        // Lógica para pegar a pontuação do econômico
+        const maxEcoScores = await getMaxScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios")
+        const actualEcoScores = await getActualScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios", analiseData.CodAnalise)
+        const PercentInadimplencia = await getActualScores("Econômico", "Inadimplência", analiseData.CodAnalise)
 
-        // const nonZeroScores = PercentInadimplencia
-        //     .map((item, index) => item.ActualScore < 0 ? index : null)
-        //     .filter(index => index !== null);
+        const nonZeroScores = PercentInadimplencia
+            .map((item, index) => item.ActualScore < 0 ? index : null)
+            .filter(index => index !== null);
 
-        // actualEcoScores.map((eachActualScore) => {
-        //     // Pega o score máximo e o índice de acordo com o nome da subcategoria
-        //     const maxScore = parseInt(maxEcoScores.find(eachScore => eachScore.Titulo === eachActualScore.Titulo).MaxScore)
-        //     const index = parseInt(maxEcoScores.findIndex(eachScore => eachScore.Titulo === eachActualScore.Titulo))
-        //     const actualScore = parseInt(eachActualScore.ActualScore)
-        //     totalScore += actualScore
-        //     economicArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
-        // })
+        actualEcoScores.map((eachActualScore) => {
+            // Pega o score máximo e o índice de acordo com o nome da subcategoria
+            const maxScore = parseInt(maxEcoScores.find(eachScore => eachScore.Titulo === eachActualScore.Titulo).MaxScore)
+            const index = parseInt(maxEcoScores.findIndex(eachScore => eachScore.Titulo === eachActualScore.Titulo))
+            const actualScore = parseInt(eachActualScore.ActualScore)
+            totalScore += actualScore
+            economicArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
+        })
 
-        // switch (nonZeroScores[0]) {
-        //     case 0:
-        //         setInadimplencia(25);
-        //         break;
-        //     case 1:
-        //         setInadimplencia(50);
-        //         break;
-        //     case 2:
-        //         setInadimplencia(75);
-        //         break;
-        //     case 3:
-        //         setInadimplencia(100);
-        //         break;
-        // }
+        switch (nonZeroScores[0]) {
+            case 0:
+                setInadimplencia(25);
+                break;
+            case 1:
+                setInadimplencia(50);
+                break;
+            case 2:
+                setInadimplencia(75);
+                break;
+            case 3:
+                setInadimplencia(100);
+                break;
+        }
 
-        // setGlobalScore(totalScore)
-        // setScoreEco(economicArray)
+        setGlobalScore(totalScore)
+        setScoreEco(economicArray)
     }
 
     useEffect(() => {
@@ -282,7 +282,7 @@ const GeralDashboard = ({ navigation, route }) => {
                     <Title style={{ marginTop: 10 }}>Indicador Técnico</Title>
                     <Content>
                         <Title>Performance Geral</Title>
-                        <Score scored={globalScore} total={tecnicoInfo.details.maxScore} />
+                        <Score scored={globalScore} total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore} />
 
                         <Line />
                         <Title>Avaliação Técnica Ambiental</Title>
@@ -354,7 +354,6 @@ const GeralDashboard = ({ navigation, route }) => {
                     </Content>
                     <Title style={{ marginVertical: 10 }}>Indicador Econômico</Title>
                     <Content>
-                        <Score scored={globalScore} total={economicoInfo.details.maxScore} />
                         <Line style={{ marginTop: 20, marginBottom: 15 }} />
                         <Title>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
                         <VictoryChart polar
@@ -430,7 +429,7 @@ const GeralDashboard = ({ navigation, route }) => {
                     </Content>
                     {/* <Title style={{ marginVertical: 10 }}>Indicador Social</Title>
                     <Content>
-                        <Score scored={globalScore} total={indicadorDetails.maxScore} />
+                        <Score scored={globalScore} total={economicoInfo.details.maxScore} />
                         <Line />
                         <Title style={{ marginBottom: -20 }}>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
                         <VictoryChart polar
@@ -452,14 +451,14 @@ const GeralDashboard = ({ navigation, route }) => {
                             <VictoryBar
                                 style={{ data: { fill: "purple", width: 25 } }}
                                 data={[
-                                    { x: "1", y: parseInt(score[0]) },
-                                    { x: "2", y: parseInt(score[1]) },
-                                    { x: "3", y: parseInt(score[2]) },
-                                    { x: "4", y: parseInt(score[3]) },
-                                    { x: "5", y: parseInt(score[4]) },
-                                    { x: "6", y: parseInt(score[5]) },
-                                    { x: "7", y: parseInt(score[6]) },
-                                    { x: "8", y: parseInt(score[7]) }
+                                    { x: "1", y: parseInt(scoreSocial[0]) },
+                                    { x: "2", y: parseInt(scoreSocial[1]) },
+                                    { x: "3", y: parseInt(scoreSocial[2]) },
+                                    { x: "4", y: parseInt(scoreSocial[3]) },
+                                    { x: "5", y: parseInt(scoreSocial[4]) },
+                                    { x: "6", y: parseInt(scoreSocial[5]) },
+                                    { x: "7", y: parseInt(scoreSocial[6]) },
+                                    { x: "8", y: parseInt(scoreSocial[7]) }
                                 ]}
                             />
                         </VictoryChart>
