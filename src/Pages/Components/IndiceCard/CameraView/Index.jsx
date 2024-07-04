@@ -40,11 +40,12 @@ const updatePhoto = (photoUri, codInd, codAnalise) => {
 const CameraComponent = ({ visible, onClose, onPhotoTaken, capturedPhoto, codInd, codAnalise }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [camera, setCamera] = useState(null);
-  const [photo, setPhoto] = useState({});
+  const [photo, setPhoto] = useState(null); // Mudança: inicializar photo como null
   const [showPreview, setShowPreview] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const previousType = useRef(type);
+  const photoRef = useRef(null);
 
   useEffect(() => {
     (async () => {
@@ -53,11 +54,20 @@ const CameraComponent = ({ visible, onClose, onPhotoTaken, capturedPhoto, codInd
     })();
   }, []);
 
+  useEffect(() => {
+    if (capturedPhoto) {
+      photoRef.current = capturedPhoto;
+      setPhoto({ uri: capturedPhoto }); 
+      setShowPreview(true);
+    }
+  }, [capturedPhoto]);
+
   const takePicture = async () => {
     if (camera) {
       const photoData = await camera.takePictureAsync();
       const compressedPhoto = await compressImage(photoData);
-      setPhoto(compressedPhoto);
+      setPhoto(compressedPhoto.uri);
+      photoRef.current = compressedPhoto.uri;
       setShowPreview(true);
     }
   };
@@ -70,11 +80,10 @@ const CameraComponent = ({ visible, onClose, onPhotoTaken, capturedPhoto, codInd
     );
     return manipResult;
   };
-  
 
   const sharePhoto = async () => {
-    if (photo) {
-      await Sharing.shareAsync(photo.uri);
+    if (photoRef.current) {
+      await Sharing.shareAsync(photoRef.current);
     }
   };
 
@@ -85,7 +94,8 @@ const CameraComponent = ({ visible, onClose, onPhotoTaken, capturedPhoto, codInd
   const confirmDeletePhoto = async () => {
     try {
       await updatePhoto("", codInd, codAnalise);
-      setPhoto({});
+      setPhoto(null);
+      photoRef.current = null;
       setShowPreview(false);
       setShowDeleteConfirmation(false);
       onPhotoTaken("");
@@ -126,10 +136,11 @@ const CameraComponent = ({ visible, onClose, onPhotoTaken, capturedPhoto, codInd
   };
 
   const handleSavePhoto = async () => {
-    if (photo || capturedPhoto) {
+    if (photoRef.current || capturedPhoto) {
       try {
-        await updatePhoto((capturedPhoto ? capturedPhoto : photo.uri), codInd, codAnalise);
-        onPhotoTaken(capturedPhoto ? capturedPhoto : photo.uri);
+        const photoToSave = capturedPhoto ? capturedPhoto : photoRef.current;
+        await updatePhoto(photoToSave, codInd, codAnalise);
+        onPhotoTaken(photoToSave);
         handleClose();
       } catch (e) {
         Alert.alert("Erro", "Erro ao salvar imagem");
@@ -148,7 +159,7 @@ const CameraComponent = ({ visible, onClose, onPhotoTaken, capturedPhoto, codInd
       <View style={{ flex: 1 }}>
         {(capturedPhoto || showPreview) ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Image source={{ uri: (capturedPhoto ? capturedPhoto : photo.uri) }} style={{ width: '90%', height: '90%', resizeMode: 'contain', borderRadius: 10 }} />
+            <Image source={{ uri: (capturedPhoto ? capturedPhoto : photo) }} style={{ width: '90%', height: '90%', resizeMode: 'contain', borderRadius: 10 }} />
             <ButtonContainer>
               <ButtonPhoto onPress={sharePhoto}>
                 <Text>Compartilhar</Text>
