@@ -151,15 +151,6 @@ const Dashboard = ({ navigation, route }) => {
         quality: 0.8,
       });
 
-      // Gerar PDF da imagem
-      // PDF DE UMA PAGINA
-      // const pdf = await Print.printToFileAsync({
-      //   html: `<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 210mm; height: 297mm; margin: auto; margin-top: -80; margin-bottom: 0; font-family: Poppins">
-      //           <h1 style="font-weight: bold; font-size: 24;">Dashboard ${tipoind} - ${aterroData.Nome} - ${analiseData.DataIni}</h1>    
-      //           <img src="${uri}" style="width: 50%; height: 75%;" />
-      //          </div>`,
-      // });
-
       const pdf = await Print.printToFileAsync({
         html: `<html>
                  <head>
@@ -301,9 +292,6 @@ const Dashboard = ({ navigation, route }) => {
         setGlobalScore(totalScore)
         setScore(socialArray)
         break;
-      case 'Geral':
-
-        break;
     }
   }
 
@@ -319,11 +307,11 @@ const Dashboard = ({ navigation, route }) => {
             </Button>
             <ViewShot ref={viewRef} options={{ format: 'png', quality: 0.8 }}>
               <Content>
-                <Title>Performance Geral</Title>
+                {/* <Title>Performance Geral</Title> */}
                 <Score scored={globalScore} total={indicadorDetails.maxScore} />
 
-                <Line />
-                <Title>Avaliação Técnica Ambiental</Title>
+                <Line style={{ marginTop: 20, marginBottom: 15 }} />
+                <Title style={{ marginBottom: -10 }}>Avaliação Técnica Ambiental</Title>
 
                 <VictoryChart
                   theme={VictoryTheme.material}
@@ -377,7 +365,7 @@ const Dashboard = ({ navigation, route }) => {
                   />
                 </VictoryChart>
 
-                <DescriptionContent>
+                <DescriptionContent style={{ marginTop: 30 }}>
                   <Title>Número relacionado a Sub-área</Title>
                   <Description>1: Características fisiográficas</Description>
                   <Description>2: Interface socioambiental</Description>
@@ -406,7 +394,7 @@ const Dashboard = ({ navigation, route }) => {
               <Content>
                 <Score scored={globalScore} total={indicadorDetails.maxScore} />
                 <Line />
-                <Title>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
+                <Title style={{ marginBottom: -15 }}>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
                 <VictoryChart polar
                   theme={VictoryTheme.material}
                 >
@@ -450,7 +438,7 @@ const Dashboard = ({ navigation, route }) => {
                   <Description>8: CMO Praticado em função do Porte</Description>
                 </DescriptionContent>
                 <Line />
-                <Title>Avaliação da Inadimplência</Title>
+                <Title style={{ marginBottom: -10 }}>Avaliação da Inadimplência</Title>
                 <VictoryChart
                   theme={VictoryTheme.material}
                   domainPadding={{ x: 10 }}
@@ -556,7 +544,7 @@ const Dashboard = ({ navigation, route }) => {
           </ScrollView>
         </ContentCharts>
       break;
-    case 'Geral':
+
       chartComponent =
         <>
           <ContentCharts>

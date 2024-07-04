@@ -16,7 +16,7 @@ import * as Sharing from 'expo-sharing';
 import ViewShot, { captureRef } from 'react-native-view-shot';
 import * as FileSystem from 'expo-file-system';
 
-import { tecnicoInfo, economicoInfo } from '../../../Configs/Fonts/IndicadorInfo';
+import { tecnicoInfo, economicoInfo, socialInfoInterview } from '../../../Configs/Fonts/IndicadorInfo';
 
 const getMaxTecScores = () => {
     return new Promise((resolve, reject) => {
@@ -145,15 +145,6 @@ const GeralDashboard = ({ navigation, route }) => {
                 quality: 0.8,
             });
 
-            // Gerar PDF da imagem
-            // PDF DE UMA PAGINA
-            // const pdf = await Print.printToFileAsync({
-            //   html: `<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 210mm; height: 297mm; margin: auto; margin-top: -80; margin-bottom: 0; font-family: Poppins">
-            //           <h1 style="font-weight: bold; font-size: 24;">Dashboard ${tipoind} - ${aterroData.Nome} - ${analiseData.DataIni}</h1>    
-            //           <img src="${uri}" style="width: 50%; height: 75%;" />
-            //          </div>`,
-            // });
-
             const pdf = await Print.printToFileAsync({
                 html: `<html>
                     <head>
@@ -161,7 +152,7 @@ const GeralDashboard = ({ navigation, route }) => {
                     </head>
                     <body>
                     <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: auto; margin-top: -20px; margin-bottom: 0; font-family: 'Poppins', sans-serif;">
-                        <h1 style="font-weight: bold; font-size: 36px; margin-bottom: -10px;">Dashboard ${tipoind} - ${analiseData.DataIni}</h1>    
+                        <h1 style="font-weight: bold; font-size: 36px; margin-bottom: -10px;">Dashboard Geral - ${analiseData.DataIni}</h1>    
                         <img src="${uri}" style="width: 100%; height: 90%;" />
                     </div>
                     </body>
@@ -174,7 +165,7 @@ const GeralDashboard = ({ navigation, route }) => {
             }
 
             // Criar o PDF
-            const newFileName = normalizeFilename(`Dashboard-${tipoind}-${analiseData.DataIni}.pdf`);
+            const newFileName = normalizeFilename(`Dashboard-Geral-${analiseData.DataIni}.pdf`);
             const newPath = `${FileSystem.documentDirectory}${newFileName}`;
 
             // Renomear o arquivo PDF
@@ -201,9 +192,11 @@ const GeralDashboard = ({ navigation, route }) => {
     const loadData = async () => {
         const technicArray = Array(8).fill(0);
         const economicArray = Array(8).fill(0);
-        // const socialArray = Array(15).fill(0);
+        const socialArray = Array(15).fill(0);
 
-        let totalScore = 0;
+        let tecTotalScore = 0;
+        let ecoTotalScore = 0;
+        let socialTotalScore = 0;
 
         // Lógica para pegar a pontuação do técnico
         const maxTecScores = await getMaxTecScores()
@@ -214,7 +207,7 @@ const GeralDashboard = ({ navigation, route }) => {
             const maxScore = parseInt(maxTecScores.find(eachScore => eachScore.DescSubCat === eachActualScore.DescSubCat).MaxScore)
             const index = parseInt(maxTecScores.findIndex(eachScore => eachScore.DescSubCat === eachActualScore.DescSubCat))
             const actualScore = parseInt(eachActualScore.ActualScore)
-            totalScore += actualScore
+            tecTotalScore += actualScore
             technicArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
         })
 
@@ -223,12 +216,13 @@ const GeralDashboard = ({ navigation, route }) => {
         const gensecondgrouptec = ((technicArray[3] + technicArray[4]) / 2).toFixed()
         const genthirdgrouptec = ((technicArray[5] + technicArray[6] + technicArray[7]) / 3).toFixed()
 
-        setGlobalScore(totalScore)
         setScoreTec(technicArray)
 
         setFirsttec(genfirstgrouptec)
         setSectec(gensecondgrouptec)
         setThirdtec(genthirdgrouptec)
+
+        console.log(`Porcentagem Técnico: ${(tecTotalScore / tecnicoInfo.details.maxScore) * 100} %`)
 
         // Lógica para pegar a pontuação do econômico
         const maxEcoScores = await getMaxScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios")
@@ -244,7 +238,7 @@ const GeralDashboard = ({ navigation, route }) => {
             const maxScore = parseInt(maxEcoScores.find(eachScore => eachScore.Titulo === eachActualScore.Titulo).MaxScore)
             const index = parseInt(maxEcoScores.findIndex(eachScore => eachScore.Titulo === eachActualScore.Titulo))
             const actualScore = parseInt(eachActualScore.ActualScore)
-            totalScore += actualScore
+            ecoTotalScore += actualScore
             economicArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
         })
 
@@ -263,8 +257,29 @@ const GeralDashboard = ({ navigation, route }) => {
                 break;
         }
 
-        setGlobalScore(totalScore)
         setScoreEco(economicArray)
+
+        console.log(`Porcentagem Econômico: ${(ecoTotalScore / economicoInfo.details.maxScore) * 100} %`)
+
+        // Lógica para pegar a pontuação do social
+        maxSocialScores = await getMaxScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Entrevista")
+        actualSocialScores = await getActualScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Entrevista", analiseData.CodAnalise)
+
+        actualSocialScores.map((eachActualScore) => {
+            // Pega o score máximo e o índice de acordo com o nome da subcategoria
+            const maxScore = parseInt(maxSocialScores.find(eachScore => eachScore.Titulo === eachActualScore.Titulo).MaxScore)
+            const index = parseInt(maxSocialScores.findIndex(eachScore => eachScore.Titulo === eachActualScore.Titulo))
+            const actualScore = parseInt(eachActualScore.ActualScore)
+            socialTotalScore += actualScore
+            socialArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
+        })
+
+        console.log(`Porcentagem Social: ${(socialTotalScore / socialInfoInterview.details.maxScore) * 100} %`)
+
+        setGlobalScore(tecTotalScore + ecoTotalScore + socialTotalScore)
+        setScoreSocial(socialArray)
+
+        console.log(`Porcentagem Geral: ${((tecTotalScore + ecoTotalScore + socialTotalScore) / (tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoInterview.details.maxScore)) * 100} %`)
     }
 
     useEffect(() => {
@@ -279,13 +294,16 @@ const GeralDashboard = ({ navigation, route }) => {
                     <TextButton>Exportar Dashboard</TextButton>
                 </Button>
                 <ViewShot ref={viewRef} options={{ format: 'png', quality: 0.8 }}>
-                    <Title style={{ marginTop: 10 }}>Indicador Técnico</Title>
                     <Content>
-                        <Title>Performance Geral</Title>
-                        <Score scored={globalScore} total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore} />
+                        {/* <Title>Performance Geral</Title> */}
+                        <Score scored={globalScore} total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoInterview.details.maxScore} />
+                        {/* <Line /> */}
+                        <Line style={{ marginTop: 20, marginBottom: 15 }} />
+
+                        <Title>Indicador Técnico</Title>
 
                         <Line />
-                        <Title>Avaliação Técnica Ambiental</Title>
+                        <Title style={{ marginTop: 5 }}>Avaliação Técnica Ambiental</Title>
 
                         <VictoryChart
                             theme={VictoryTheme.material}
@@ -303,9 +321,9 @@ const GeralDashboard = ({ navigation, route }) => {
                             />
                         </VictoryChart>
 
-                        <Description>1: Características locacionais</Description>
+                        <Description style={{ marginTop: 10 }}>1: Características locacionais</Description>
                         <Description>2: Infra estrutura implantada</Description>
-                        <Description>3: Condições operacionais</Description>
+                        <Description style={{ marginBottom: 5 }}>3: Condições operacionais</Description>
 
                         <Line style={{ marginTop: 20 }} />
                         <Title style={{ marginVertical: 5 }}>Avaliação da Sub-área</Title>
@@ -340,7 +358,7 @@ const GeralDashboard = ({ navigation, route }) => {
                             />
                         </VictoryChart>
 
-                        <DescriptionContent>
+                        <DescriptionContent style={{ marginTop: 10 }}>
                             <Title>Número relacionado a Sub-área</Title>
                             <Description>1: Características fisiográficas</Description>
                             <Description>2: Interface socioambiental</Description>
@@ -351,11 +369,10 @@ const GeralDashboard = ({ navigation, route }) => {
                             <Description>7: Avaliação da Eficiência dos Sistemas de Controle</Description>
                             <Description>8: Documentos básicos e diretrizes operacionais</Description>
                         </DescriptionContent>
-                    </Content>
-                    <Title style={{ marginVertical: 10 }}>Indicador Econômico</Title>
-                    <Content>
-                        <Line style={{ marginTop: 20, marginBottom: 15 }} />
-                        <Title>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
+                        <Line style={{ marginTop: 30, marginBottom: 15 }} />
+                        <Title>Indicador Econômico</Title>
+                        <Line style={{ marginTop: 20, marginBottom: 40 }} />
+                        <Title style={{ marginBottom: 10 }}>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
                         <VictoryChart polar
                             theme={VictoryTheme.material}
 
@@ -388,7 +405,7 @@ const GeralDashboard = ({ navigation, route }) => {
                             />
                         </VictoryChart>
 
-                        <DescriptionContent style={{ marginTop: 8 }}>
+                        <DescriptionContent style={{ marginTop: 0 }}>
                             <Title>Número relacionado a Sub-ítem</Title>
                             <Description>1: Trator Esteira D6K 13,4t 125HP</Description>
                             <Description>2: Escavadeira 90HP</Description>
@@ -426,11 +443,10 @@ const GeralDashboard = ({ navigation, route }) => {
                             <Description>100%: Inadimplência acima de 75%</Description>
                         </DescriptionContent>
 
-                    </Content>
-                    {/* <Title style={{ marginVertical: 10 }}>Indicador Social</Title>
-                    <Content>
-                        <Score scored={globalScore} total={economicoInfo.details.maxScore} />
-                        <Line />
+                        <Line style={{ marginTop: 20, marginBottom: 15 }} />
+                        <Title>Indicador Social</Title>
+                        <Line style={{ marginTop: 20, marginBottom: 15 }} />
+
                         <Title style={{ marginBottom: -20 }}>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
                         <VictoryChart polar
                             theme={VictoryTheme.material}
@@ -474,8 +490,8 @@ const GeralDashboard = ({ navigation, route }) => {
                             <Description>7: Disponibilidade de Lâmina Raspadora</Description>
                             <Description>8: CMO Praticado em função do Porte</Description>
                         </DescriptionContent>
-                        <Line style={{ marginTop: 0, marginBottom: 0 }} />
-                        <Title style={{ marginBottom: -20 }}>Avaliação da Inadimplência</Title>
+                        <Line style={{ marginTop: 20, marginBottom: 0 }} />
+                        <Title style={{ marginBottom: -20, marginTop: 10 }}>Avaliação da Inadimplência</Title>
                         <VictoryChart
                             theme={VictoryTheme.material}
                             domainPadding={{ x: 10 }}
@@ -492,7 +508,7 @@ const GeralDashboard = ({ navigation, route }) => {
                             />
                         </VictoryChart>
 
-                        <DescriptionContent>
+                        <DescriptionContent style={{ marginTop: 20 }}>
                             <Title>Representação do nível de Inadimplência</Title>
                             <Description>25%: Inadimplência entre 5% e 25%</Description>
                             <Description>50%: Inadimplência entre 25% e 50%</Description>
@@ -500,7 +516,7 @@ const GeralDashboard = ({ navigation, route }) => {
                             <Description>100%: Inadimplência acima de 75%</Description>
                         </DescriptionContent>
 
-                    </Content> */}
+                    </Content>
                 </ViewShot>
 
             </ScrollView>
