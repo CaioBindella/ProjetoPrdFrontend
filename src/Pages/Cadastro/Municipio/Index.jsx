@@ -18,20 +18,24 @@ import Header from '../../Components/Header/Index';
 
 const CadastroMunicipio = ({ navigation }) => {
 	const [nome, setNome] = useState('');
+	{/*
 	const [tamPop, setTamPop] = useState(0);
 	const [taxGerPerCap, setTaxGerPerCap] = useState(0);
 	const [precipMedAnual, setPrecipMedAnual] = useState(0);
+	*/}
 
 	async function createMunicipio() {
 	
 		const data = {
 			Nome: nome,
+			/*
 			Tam_Pop: parseInt(tamPop),
 			Taxa_Ger_Per_Cap: parseFloat(taxGerPerCap),
 			Precip_Med_Anual: parseFloat(precipMedAnual),
+			*/
 		};
 
-		if (nome && tamPop && taxGerPerCap && precipMedAnual) {
+		if (nome) {
 			inclui('municipio', data)
 				
 			navigation.navigate('Home');
@@ -59,6 +63,7 @@ const CadastroMunicipio = ({ navigation }) => {
 						/>
 					</InputGroup>
 
+					{/*
 					<InputGroup>
 						<Text>Tamanho da População</Text>
 						<Input
@@ -86,6 +91,7 @@ const CadastroMunicipio = ({ navigation }) => {
 							value={precipMedAnual}
 						/>
 					</InputGroup>
+					*/}
 				</ContainerInputGroup>
 
 				<ButtonGroup>

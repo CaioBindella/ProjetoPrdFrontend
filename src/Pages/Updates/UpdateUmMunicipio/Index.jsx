@@ -20,19 +20,23 @@ import { atualiza } from '../../../Services/Networks/atualiza';
 const UpdateUmMunicipio = ({ navigation, route }) => {
 	const Item = route.params.item
 	const [nome, setNome] = useState(Item.Nome);
+	{/*
 	const [tamPop, setTamPop] = useState(String(Item.TamPop));
 	const [taxGerPerCap, setTaxGerPerCap] = useState(String(Item.TaxGerPerCapita));
 	const [precipMedAnual, setPrecipMedAnual] = useState(String(Item.PrecipMedAnual));
+	*/}
 
 	async function UpUmMunicipio() {
 		const data = {
 			Nome: nome,
+			/* 
 			Tam_Pop: parseInt(tamPop),
 			Taxa_Ger_Per_Cap: parseFloat(taxGerPerCap),
 			Precip_Med_Anual: parseFloat(precipMedAnual),
+			*/
 		};
 
-		if (nome && tamPop && taxGerPerCap && precipMedAnual) {
+		if (nome) {
 			atualiza(Item.CodMunicipio, 'municipio', data)
 			
 			navigation.navigate('Home')
@@ -59,6 +63,7 @@ const UpdateUmMunicipio = ({ navigation, route }) => {
 						/>
 					</InputGroup>
 
+					{/*
 					<InputGroup>
 						<Text>Tamanho da População </Text>
 						<Input
@@ -85,6 +90,7 @@ const UpdateUmMunicipio = ({ navigation, route }) => {
 							value={precipMedAnual}
 						/>
 					</InputGroup>
+					*/}
 				</ContainerInputGroup>
 
 				<ButtonGroup>
