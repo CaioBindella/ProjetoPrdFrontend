@@ -135,7 +135,7 @@ const CadastroAterro = ({ navigation, route }) => {
 				</InputGroup>
 
 				<InputGroup>
-					<Text>Recebimento Bruto: </Text>
+					<Text>Recebimento Bruto (t/dia): </Text>
 					<Input
 						placeholder='Digite aqui o recebimento bruto'
 						onChangeText={setRecebimentoBruto}
