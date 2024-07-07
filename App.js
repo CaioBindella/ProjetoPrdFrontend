@@ -28,6 +28,7 @@ import Ferramentas from './src/Pages/Ferramentas/Index';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import GeralDashboard from './src/Pages/IndicesOptions/GeralDashboard/Index';
 
 
 export default function App() {
@@ -157,6 +158,11 @@ export default function App() {
 					<Stack.Screen
 						name='Dashboard'
 						component={Dashboard}
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name='GeralDashboard'
+						component={GeralDashboard}
 						options={{ headerShown: false }}
 					/>
 					<Stack.Screen

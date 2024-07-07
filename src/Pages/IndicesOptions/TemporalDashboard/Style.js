@@ -20,9 +20,9 @@ export const Description = styled.Text`
 
 `;
 
-export const DescriptionContent =styled.View`
+export const DescriptionContent = styled.View`
     margin: 10px;
-    margin-top: 0px;
+    margin-top: 8px;
 `;
 
 export const Title = styled.Text`
@@ -34,7 +34,7 @@ export const Title = styled.Text`
 
 export const Button = styled.TouchableOpacity`
     margin-top: 10px;
-	margin-bottom: 10px;
+	margin-bottom: 5px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -60,7 +60,7 @@ export const Line = styled.View`
 `;
 
 export const ColorBox = styled.Text`
-    color: ${({color}) => color};
+    color: ${({ color }) => color};
     font-size: 20px;
     margin-right: 10px;
 `;

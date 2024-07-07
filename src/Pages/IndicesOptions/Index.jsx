@@ -16,7 +16,7 @@ import Score from "../Components/Score/Index";
 import { getGlobalScore } from "./Indicador/Index";
 
 function IndicesOptions({ navigation, route }) {
-    const aterroData = route.params.aterroData;
+	const aterroData = route.params.aterroData;
 	const analiseData = route.params.analiseData;
 	const [selectedScore, setSelectedScore] = useState(0)
 	const [modalVisible, setModalVisible] = useState(false);
@@ -25,74 +25,80 @@ function IndicesOptions({ navigation, route }) {
 	const loadScore = async () => {
 		var response
 		response = await getGlobalScore(analiseData.CodAnalise, tecnicoInfo.details.firstQuestion, socialInfoRisc.details.lastQuestion)
-		
+
 		let ScoreAtual = ((response[0].Pontuacao / (tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore)) * 100).toFixed()
 		console.log(ScoreAtual)
-		if (ScoreAtual == 0) {
+		if (ScoreAtual <= 50) {
 			setScoreStar(0);
-		} else if (ScoreAtual >= 1 && ScoreAtual < 20) {
+		} else if (ScoreAtual > 50 && ScoreAtual <= 60) {
 			setScoreStar(1);
-		}else if (ScoreAtual >= 20 && ScoreAtual < 40) {
+		} else if (ScoreAtual > 60 && ScoreAtual <= 70) {
 			setScoreStar(2);
-		} else if (ScoreAtual >= 40 && ScoreAtual < 60) {
+		} else if (ScoreAtual > 70 && ScoreAtual <= 80) {
 			setScoreStar(3);
-		} else if (ScoreAtual >= 60 && ScoreAtual < 80) {
+		} else if (ScoreAtual > 80 && ScoreAtual <= 90) {
 			setScoreStar(4);
-		} else if (ScoreAtual >= 80 && ScoreAtual <= 100) {
+		} else if (ScoreAtual > 90 && ScoreAtual <= 100) {
 			setScoreStar(5);
 		} else {
 			setScoreStar(0);
 		}
 
-        setSelectedScore(response[0].Pontuacao)
+		setSelectedScore(response[0].Pontuacao)
 	}
 
 	const deleteData = async () => {
 		await excluir(analiseData.CodAnalise, 'analise')
 	}
 
-	
+
 	useEffect(() => {
 		loadScore()
 	}, [])
 
 
-    return(
-        <Container>
-            <Header title={`Índices de ${aterroData.Nome} ${analiseData.DataIni}`}/>
-			<Score 
-				scored={selectedScore} 
+	return (
+		<Container>
+			<Header title={`Índices de ${aterroData.Nome} ${analiseData.DataIni}`} />
+			<Score
+				scored={selectedScore}
 				total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore}
 			/>
 			<StarRating initialRating={scoreStar} />
 
-            <Content>
+			<Content>
+				<Button onPress={() => navigation.navigate('GeralDashboard', {
+					aterroData: aterroData,
+					analiseData: analiseData,
+				})}>
+					<Text>Gerar Dashboard Geral</Text>
+				</Button>
 				<Button onPress={() => navigation.navigate('Indicador', {
-					type: "Técnico", 
-					aterroData: aterroData, 
-					analiseData: analiseData, 
-					indicadorData: tecnicoInfo.data, 
+					type: "Técnico",
+					aterroData: aterroData,
+					analiseData: analiseData,
+					indicadorData: tecnicoInfo.data,
 					indicadorDetails: tecnicoInfo.details
 				})}>
 					<Text>Cadastrar Indicador Técnico</Text>
 				</Button>
 
 				<Button onPress={() => navigation.navigate('Indicador', {
-					type: "Econômico", 
-					aterroData: aterroData, 
-					analiseData: analiseData, 
-					indicadorData: economicoInfo.data, 
+					type: "Econômico",
+					aterroData: aterroData,
+					analiseData: analiseData,
+					indicadorData: economicoInfo.data,
 					indicadorDetails: economicoInfo.details
 				})}>
 					<Text>Cadastrar Indicador Econômico</Text>
 				</Button>
 
 				<Button onPress={() => navigation.navigate('Indicador', {
-					type: "Social", 
-					aterroData: aterroData, 
-					analiseData: analiseData, 
-					indicadorData: socialInfoRisc.data, 
-					indicadorDetails: socialInfoRisc.details, 
+					type: "Social",
+					aterroData: aterroData,
+					analiseData: analiseData,
+					indicadorData: socialInfoRisc.data,
+					indicadorDetails: socialInfoRisc.details,
 				})}>
 					<Text>Cadastrar Indicador Social</Text>
 				</Button>
@@ -102,10 +108,10 @@ function IndicesOptions({ navigation, route }) {
 					<Text>Excluir Analise {analiseData.DataIni}</Text>
 				</Button>
 			</Content>
-			
-			<DeleteModal modalVisible={modalVisible} setModalVisible={setModalVisible} navigation={navigation} deleteFunction={deleteData}/>
-        </Container>
-    );
+
+			<DeleteModal modalVisible={modalVisible} setModalVisible={setModalVisible} navigation={navigation} deleteFunction={deleteData} />
+		</Container>
+	);
 };
 
 export default IndicesOptions;
