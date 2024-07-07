@@ -70,11 +70,13 @@ const MeusPortes = ({ navigation }) => {
 				}
 			</ScrollView>
 
+			{/*	Botão para criar novo porte desabilitado */}
+			{/*
 			<Button onPress={() => navigation.navigate('Porte')}>
 				<AntDesign name="plus" size={24} color="black" />
 				<Text>Incluir novo Porte </Text>
 			</Button>
-
+			*/}
 		</Container>
 	);
 };

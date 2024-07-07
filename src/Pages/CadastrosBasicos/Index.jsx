@@ -25,9 +25,12 @@ function CadastrosBasicos({navigation}){
                         <Text>Cadastrar Organização</Text>
                     </Button>
 
+                    {/* Botão para acessar portes desabilitado*/}
+                    {/*
                     <Button onPress={() => navigation.navigate('MeusPortes')}>
                         <Text>Cadastrar Porte</Text>
                     </Button>
+                    */}
 
                 </ButtonsHome>
             </Content>  

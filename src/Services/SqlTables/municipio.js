@@ -14,9 +14,9 @@ const create = (obj) => {
         //comando SQL modificável
         tx.executeSql(
           `
-            INSERT INTO Municipio (Nome, TamPop, TaxGerPerCapita, PrecipMedAnual) values (?, ?, ?, ?);
+            INSERT INTO Municipio (Nome) values (?);
             `,
-          [obj.Nome, obj.Tam_Pop, obj.Taxa_Ger_Per_Cap, obj.Precip_Med_Anual],
+          [obj.Nome],
           //-----------------------
           (_, { rowsAffected, insertId }) => {
             if (rowsAffected > 0) resolve(insertId);
@@ -43,9 +43,9 @@ const update = (id, obj) => {
         //comando SQL modificável
         tx.executeSql(
           `
-            UPDATE Municipio SET Nome=?, TamPop=?, TaxGerPerCapita=?, PrecipMedAnual=? WHERE CodMunicipio=?;
+            UPDATE Municipio SET Nome=? WHERE CodMunicipio=?;
             `,
-          [obj.Nome, obj.Tam_Pop, obj.Taxa_Ger_Per_Cap, obj.Precip_Med_Anual, id],
+          [obj.Nome, id],
           //-----------------------
           (_, { rowsAffected, insertId }) => {
             if (rowsAffected > 0) resolve(insertId);

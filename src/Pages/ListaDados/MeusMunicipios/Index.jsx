@@ -28,9 +28,11 @@ const Item = ({ Nome, TamPop, TaxGerPerCapita, PrecipMedAnual, item, navigation 
 			<Feather name='home' size={44} color='black' />
 			<Card>
 				<Title>{Nome}</Title>
+				{/*
 				<Text>População: {TamPop}</Text>
 				<Text>Geração Per Capita: {TaxGerPerCapita}</Text>
 				<Text>Precipitação Média Anual: {PrecipMedAnual}</Text>
+				*/}
 			</Card>
 		</ItemContainer>
 	</TouchableOpacity>

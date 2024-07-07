@@ -46,9 +46,12 @@ const PainelBasicos = ({ navigation, route }) => {
 		case 'municipio':
 			updateRoute = "UpdateUmMunicipio";
 			break;
-		case 'porte':
+
+		/* //Função de atualizar portes desabilitada!
+			case 'porte':
 			updateRoute = "UpdatePorte";
 			break;
+		*/
 	}
 
 	return (
