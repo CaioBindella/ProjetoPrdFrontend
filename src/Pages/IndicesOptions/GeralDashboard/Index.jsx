@@ -149,7 +149,7 @@ const GeralDashboard = ({ navigation, route }) => {
 
     const [scoreTec, setScoreTec] = useState(Array(8).fill(0));
     const [scoreEco, setScoreEco] = useState(Array(8).fill(0));
-    const [scoreSocial, setScoreSocial] = useState(Array(8).fill(0));
+    const [scoreSocial, setScoreSocial] = useState(Array(15).fill(0));
 
     //Tecnico
     const [firsttec, setFirsttec] = useState(0);
@@ -326,8 +326,8 @@ const GeralDashboard = ({ navigation, route }) => {
         console.log(`Porcentagem Econômico: ${(ecoTotalScore / economicoInfo.details.maxScore) * 100} %`)
 
         // Lógica para pegar a pontuação do social
-        maxSocialScores = await getMaxScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Entrevista")
-        actualSocialScores = await getActualScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Entrevista", analiseData.CodAnalise)
+        maxSocialScores = await getMaxScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Análise de Risco")
+        actualSocialScores = await getActualScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Análise de Risco", analiseData.CodAnalise)
 
         actualSocialScores.map((eachActualScore) => {
             // Pega o score máximo e o índice de acordo com o nome da subcategoria
@@ -515,77 +515,65 @@ const GeralDashboard = ({ navigation, route }) => {
                         <Title>Indicador Social</Title>
                         <Line style={{ marginTop: 20, marginBottom: 15 }} />
 
-                        <Title style={{ marginBottom: -20 }}>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
+                        <Title style={{ marginBottom: -30 }}>Avaliação da percepção social dos impactos ambientais negativos da atividade</Title>
+
                         <VictoryChart polar
-                            theme={VictoryTheme.material}
-                            width={330}
+                        theme={VictoryTheme.material}
+                        width={330}
                         >
-                            {
-                                ["1", "2", "3", "4", "5", "6", "7", "8"].map((d, i) => {
-                                    return (
-                                        <VictoryPolarAxis dependentAxis
-                                            key={i}
-                                            label={d}
-                                            labelPlacement="perpendicular"
-                                            style={{ tickLabels: { fill: "none" } }}
-                                            axisValue={d}
-                                        />
-                                    );
-                                })
-                            }
-                            <VictoryBar
-                                style={{ data: { fill: "purple", width: 25 } }}
-                                data={[
-                                    { x: "1", y: parseInt(scoreSocial[0]) },
-                                    { x: "2", y: parseInt(scoreSocial[1]) },
-                                    { x: "3", y: parseInt(scoreSocial[2]) },
-                                    { x: "4", y: parseInt(scoreSocial[3]) },
-                                    { x: "5", y: parseInt(scoreSocial[4]) },
-                                    { x: "6", y: parseInt(scoreSocial[5]) },
-                                    { x: "7", y: parseInt(scoreSocial[6]) },
-                                    { x: "8", y: parseInt(scoreSocial[7]) }
-                                ]}
-                            />
+                        {
+                            ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"].map((d, i) => {
+                            return (
+                                <VictoryPolarAxis dependentAxis
+                                key={i}
+                                label={d}
+                                labelPlacement="perpendicular"
+                                style={{ tickLabels: { fill: "none" } }}
+                                axisValue={d}
+                                />
+                            );
+                            })
+                        }
+                        <VictoryBar
+                            style={{ data: { fill: "darkgreen", width: 15 } }}
+                            data={[
+                            { x: "1", y: parseInt(scoreSocial[0]) },
+                            { x: "2", y: parseInt(scoreSocial[1]) },
+                            { x: "3", y: parseInt(scoreSocial[2]) },
+                            { x: "4", y: parseInt(scoreSocial[3]) },
+                            { x: "5", y: parseInt(scoreSocial[4]) },
+                            { x: "6", y: parseInt(scoreSocial[5]) },
+                            { x: "7", y: parseInt(scoreSocial[6]) },
+                            { x: "8", y: parseInt(scoreSocial[7]) },
+                            { x: "9", y: parseInt(scoreSocial[0]) },
+                            { x: "10", y: parseInt(scoreSocial[1]) },
+                            { x: "11", y: parseInt(scoreSocial[2]) },
+                            { x: "12", y: parseInt(scoreSocial[3]) },
+                            { x: "13", y: parseInt(scoreSocial[4]) },
+                            { x: "14", y: parseInt(scoreSocial[5]) },
+                            { x: "15", y: parseInt(scoreSocial[6]) },
+                            ]}
+                        />
                         </VictoryChart>
 
-                        <DescriptionContent style={{ marginTop: 10 }}>
-                            <Title>Número relacionado a Sub-ítem</Title>
-                            <Description>1: Trator Esteira D6K 13,4t 125HP</Description>
-                            <Description>2: Escavadeira 90HP</Description>
-                            <Description>3: Caminhão Tanque</Description>
-                            <Description>4: Compactador de solo 130HP</Description>
-                            <Description>5: Moto nivelador 125HP</Description>
-                            <Description>6: Carregadeira de rodas 128HP</Description>
-                            <Description>7: Disponibilidade de Lâmina Raspadora</Description>
-                            <Description>8: CMO Praticado em função do Porte</Description>
+                        <DescriptionContent style={{ marginTop: -15 }}>
+                        <Title>Número relacionado a Sub-ítem</Title>
+                        <Description>1: Foi percebido cheiro de lixo nas redondezas do aterro ?</Description>
+                        <Description>2: Foi percebido barulho de caminhões transitando no entorno do aterro?</Description>
+                        <Description>3: Foi percebida fumaça oriunda de caminhões transitando no entorno do aterro?</Description>
+                        <Description>4: Foi constatada a presença de resíduos volantes oriundos dos caminhões?</Description>
+                        <Description>5: Foi constatada fila de caminhões no acesso à balança do aterro?</Description>
+                        <Description>6: Foi constatado chorume oriundo dos caminhões no entorno do aterro?</Description>
+                        <Description>7: Foi percebido barulho do maquinário pesado da operação do aterro na entorno do aterro? </Description>
+                        <Description>8: Foi percebido o aumento de poeira e material particulado no interior das resídências devido ao trânsito de caminhões no  entorno do aterro?</Description>
+                        <Description>9: Foi constatada aproliferação de ratos e outros vetores terrestres após a instalação do aterro?</Description>
+                        <Description>10: Foi constatada alteração de odor/sabor caracteristico na água de poço após a instalação do aterro?</Description>
+                        <Description>11: Foi constatada aproliferação de moscas e outros vetores aéreos após a instalação do aterro?</Description>
+                        <Description>12: Quantos entrevistados afirmaram haver, ao menos, 3 benefícios em função das operações normais do aterro?</Description>
+                        <Description>13: Quanto à duração dos impacos constatdos, quantos foram considerados constantes?</Description>
+                        <Description>14: Quanto à frequência dos impacos constatdos, quantos foram considerados diários?</Description>
+                        <Description>15: Quantos entrevistados afirmaram haver, ao menos, 3 prejuizos ao bem-estar em função das operações normais do aterro?</Description>
                         </DescriptionContent>
-                        <Line style={{ marginTop: 20, marginBottom: 0 }} />
-                        <Title style={{ marginBottom: -20, marginTop: 10 }}>Avaliação da Inadimplência</Title>
-                        <VictoryChart
-                            theme={VictoryTheme.material}
-                            domainPadding={{ x: 10 }}
-                            width={300}
-                            height={275}
-                        >
-                            <VictoryBar horizontal
-                                style={{
-                                    data: { fill: "darkblue" }
-                                }}
-                                barWidth={40}
-                                domain={{ x: [0, 3], y: [0, 100] }}
-                                data={[{ x: "%", y: inadimplencia },
-                                ]}
-                            />
-                        </VictoryChart>
-
-                        <DescriptionContent style={{ marginTop: 10 }}>
-                            <Title>Representação do nível de Inadimplência</Title>
-                            <Description>25%: Inadimplência entre 5% e 25%</Description>
-                            <Description>50%: Inadimplência entre 25% e 50%</Description>
-                            <Description>75%: Inadimplência entre 50% e 75%</Description>
-                            <Description>100%: Inadimplência acima de 75%</Description>
-                        </DescriptionContent>
-
                     </Content>
                 </ViewShot>
 

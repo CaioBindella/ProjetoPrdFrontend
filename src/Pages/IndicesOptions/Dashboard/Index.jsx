@@ -330,8 +330,8 @@ const Dashboard = ({ navigation, route }) => {
       case 'Social':
         var maxSocialScores, actualSocialScores
 
-        maxSocialScores = await getMaxScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Social")
-        actualSocialScores = await getActualScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Social", analiseData.CodAnalise)
+        maxSocialScores = await getMaxScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Análise de Risco")
+        actualSocialScores = await getActualScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Análise de Risco", analiseData.CodAnalise)
 
 
         actualSocialScores.map((eachActualScore) => {
@@ -561,7 +561,7 @@ const Dashboard = ({ navigation, route }) => {
                     })
                   }
                   <VictoryBar
-                    style={{ data: { fill: "darkgreen", width: 25 } }}
+                    style={{ data: { fill: "darkgreen", width: 15 } }}
                     data={[
                       { x: "1", y: parseInt(score[0]) },
                       { x: "2", y: parseInt(score[1]) },
