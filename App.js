@@ -4,12 +4,10 @@ import CadastroIsoas from './src/Pages/CadastroIsoas/Index';
 import CadastroAterro from './src/Pages/Cadastro/Aterro/Index';
 import CadastrosBasicos from './src/Pages/CadastrosBasicos/Index';
 import CadastroMunicipio from './src/Pages/Cadastro/Municipio/Index';
-import Profissional from './src/Pages/Cadastro/Profissional/Index';
 import Organizacao from './src/Pages/Cadastro/Organizacao/Index';
 import MeusAterros from './src/Pages/ListaDados/MeusAterros/Index';
 import UpdateUmMunicipio from './src/Pages/Updates/UpdateUmMunicipio/Index';
 import UpdateOrg from './src/Pages/Updates/UpdateOrg/Index';
-import UpdateProf from './src/Pages/Updates/UpdateProf/Index';
 import UpdatePorte from './src/Pages/Updates/UpdatePorte/Index'
 import IndicesOptions from './src/Pages/IndicesOptions/Index';
 import Porte from './src/Pages/Cadastro/Porte/Index';
@@ -66,11 +64,6 @@ export default function App() {
 						options={{ headerShown: false }}
 					/>
 					<Stack.Screen
-						name='Profissional'
-						component={Profissional}
-						options={{ headerShown: false }}
-					/>
-					<Stack.Screen
 						name='Organizacao'
 						component={Organizacao}
 						options={{ headerShown: false }}
@@ -98,11 +91,6 @@ export default function App() {
 					<Stack.Screen
 						name='UpdatePorte'
 						component={UpdatePorte}
-						options={{ headerShown: false }}
-					/>
-					<Stack.Screen
-						name='UpdateProf'
-						component={UpdateProf}
 						options={{ headerShown: false }}
 					/>
 					<Stack.Screen

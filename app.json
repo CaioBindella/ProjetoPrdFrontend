@@ -14,7 +14,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -23,12 +25,15 @@
         "foregroundImage": "./src/Assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.vphix.isoas"
+      "package": "com.vphix.isoas",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./src/Assets/icon.png"
     },
-
     "plugins": [
       [
         "expo-camera",
@@ -36,6 +41,11 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "5e9524e0-f76a-4606-8c3c-ece6caf26b66"
+      }
+    }
   }
 }
