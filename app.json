@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "isoas",
-    "slug": "isoas",
+    "name": "ISOAS",
+    "slug": "ISOAS",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/Assets/icon.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./src/Assets/splash.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#381704"
     },
@@ -22,7 +22,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/Assets/icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.vphix.isoas",
@@ -32,7 +32,7 @@
       ]
     },
     "web": {
-      "favicon": "./src/Assets/icon.png"
+      "favicon": "./assets/icon.png"
     },
     "plugins": [
       [

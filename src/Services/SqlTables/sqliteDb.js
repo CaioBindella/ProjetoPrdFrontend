@@ -9,7 +9,7 @@ export async function openDatabase() {
   // }
 
   // await FileSystem.downloadAsync(
-  //   Asset.fromModule(require('../../Assets/DatabaseFile/indicesDatabase.db')).uri,
+  //   Asset.fromModule(require("../../../assets/DatabaseFile/indicesDatabase.db")).uri,
   //   FileSystem.documentDirectory + 'SQLite/indicesDatabase.db'
   // );
 
@@ -19,7 +19,7 @@ export async function openDatabase() {
       await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
     }
 
-    const asset = await Asset.fromModule(require("../../Assets/DatabaseFile/indicesDatabase.db")).downloadAsync();
+    const asset = await Asset.fromModule(require("../../../assets/DatabaseFile/indicesDatabase.db")).downloadAsync();
     await FileSystem.copyAsync({
       from: asset.localUri,
       to: FileSystem.documentDirectory + 'SQLite/indicesDatabase.db',

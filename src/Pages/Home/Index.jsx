@@ -12,7 +12,6 @@ import {
 	SubTitleText,
 } from './Style';
 import { StatusBar, Image, View } from 'react-native';
-import { EvilIcons } from '@expo/vector-icons';
 
 const Home = ({ navigation }) => {
 	return (
@@ -26,7 +25,7 @@ const Home = ({ navigation }) => {
 			<Main>
 				<Image
 					style={{ width: 150, height: 150 }}
-					source={require('../../Assets/heavy-machinery.png')}
+					source={require('../../../assets/heavy-machinery.png')}
 				/>
 
 
