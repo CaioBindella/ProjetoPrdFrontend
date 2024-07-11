@@ -6,7 +6,7 @@ import {
 	Text,
 } from './Style'
 
-import StarRating from "../Components/star";
+import StarRating from "../Components/StarRating/Index";
 import Header from "../Components/Header/Index";
 import { AntDesign } from '@expo/vector-icons';
 import { excluir } from "../../Services/Networks/excluir";
@@ -18,53 +18,36 @@ import { getGlobalScore } from "./Indicador/Index";
 function IndicesOptions({ navigation, route }) {
 	const aterroData = route.params.aterroData;
 	const analiseData = route.params.analiseData;
-	const [selectedScore, setSelectedScore] = useState(0)
+
+	const [globalScore, setGlobalScore] = useState(0)
 	const [modalVisible, setModalVisible] = useState(false);
-	const [scoreStar, setScoreStar] = useState(0)
 
 	const loadScore = async () => {
-		var response
-		response = await getGlobalScore(analiseData.CodAnalise, tecnicoInfo.details.firstQuestion, socialInfoRisc.details.lastQuestion)
-
-		let ScoreAtual = ((response[0].Pontuacao / (tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore)) * 100).toFixed()
-		console.log(ScoreAtual)
-		if (ScoreAtual <= 50) {
-			setScoreStar(0);
-		} else if (ScoreAtual > 50 && ScoreAtual <= 60) {
-			setScoreStar(1);
-		} else if (ScoreAtual > 60 && ScoreAtual <= 70) {
-			setScoreStar(2);
-		} else if (ScoreAtual > 70 && ScoreAtual <= 80) {
-			setScoreStar(3);
-		} else if (ScoreAtual > 80 && ScoreAtual <= 90) {
-			setScoreStar(4);
-		} else if (ScoreAtual > 90 && ScoreAtual <= 100) {
-			setScoreStar(5);
-		} else {
-			setScoreStar(0);
-		}
-
-		setSelectedScore(response[0].Pontuacao)
+		// Lógica para pegar a pontuação geral
+        const globalPoints = await getGlobalScore(analiseData.CodAnalise, tecnicoInfo.details.firstQuestion, socialInfoRisc.details.lastQuestion)
+        setGlobalScore(globalPoints[0].Pontuacao)
 	}
 
 	const deleteData = async () => {
 		await excluir(analiseData.CodAnalise, 'analise')
 	}
 
-
 	useEffect(() => {
-		loadScore()
-	}, [])
+        // Evita renderizar dados antigos quando voltando para trás na navigation stack
+        navigation.addListener('focus', () => {
+            loadScore();
+        });
+    }, [navigation]);
 
 
 	return (
 		<Container>
 			<Header title={`Índices de ${aterroData.Nome} ${analiseData.DataIni}`} />
 			<Score
-				scored={selectedScore}
+				scored={globalScore}
 				total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore}
 			/>
-			<StarRating initialRating={scoreStar} />
+			<StarRating scored={globalScore} total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore}/>
 
 			<Content>
 				<Button onPress={() => navigation.navigate('GeralDashboard', {

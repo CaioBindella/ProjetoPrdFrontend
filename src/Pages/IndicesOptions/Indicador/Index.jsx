@@ -16,7 +16,8 @@ import { ScrollView } from "react-native";
 import Header from "../../Components/Header/Index";
 import Score from "../../Components/Score/Index";
 import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
-import StarRating from "../../Components/star";
+
+import StarRating from "../../Components/StarRating/Index";
 
 export const getGlobalScore = (codAnalise, minInterval, maxInterval) => {
     // console.log(`Pegando Score Global entre: ${minInterval} e ${maxInterval} CodAnalise ${codAnalise}`)
@@ -47,31 +48,12 @@ function Indicador({ navigation, route }) {
     const analiseData = route.params.analiseData
     const indicadorData = route.params.indicadorData
     const indicadorDetails = route.params.indicadorDetails
-    const [selectedScore, setSelectedScore] = useState(0)
-    const [scoreStar, setScoreStar] = useState(0)
+
+    const [globalScore, setGlobalScore] = useState(0)
 
     const loadScore = async () => {
-        const response = await getGlobalScore(analiseData.CodAnalise, indicadorDetails.firstQuestion, indicadorDetails.lastQuestion);
-
-        let ScoreAtual = ((response[0].Pontuacao / (indicadorDetails.maxScore)) * 100).toFixed();
-
-        if (ScoreAtual <= 50) {
-            setScoreStar(0);
-        } else if (ScoreAtual > 50 && ScoreAtual <= 60) {
-            setScoreStar(1);
-        } else if (ScoreAtual > 60 && ScoreAtual <= 70) {
-            setScoreStar(2);
-        } else if (ScoreAtual > 70 && ScoreAtual <= 80) {
-            setScoreStar(3);
-        } else if (ScoreAtual > 80 && ScoreAtual <= 90) {
-            setScoreStar(4);
-        } else if (ScoreAtual > 90 && ScoreAtual <= 100) {
-            setScoreStar(5);
-        } else {
-            setScoreStar(0);
-        }
-
-        setSelectedScore(response[0].Pontuacao)
+        const globalPoints = await getGlobalScore(analiseData.CodAnalise, indicadorDetails.firstQuestion, indicadorDetails.lastQuestion);
+        setGlobalScore(globalPoints[0].Pontuacao)
     }
 
     useEffect(() => {
@@ -86,8 +68,8 @@ function Indicador({ navigation, route }) {
         <Container>
             <ScrollView>
                 <Header title={`${indicadorType} - ${aterroData.Nome} ${analiseData.DataIni}`} />
-                <Score scored={selectedScore} total={indicadorDetails.maxScore} />
-                <StarRating initialRating={scoreStar} />
+                <Score scored={globalScore} total={indicadorDetails.maxScore} />
+                <StarRating scored={globalScore} total={indicadorDetails.maxScore} />
 
                 <Content>
                     <DashboardButton onPress={() => navigation.navigate('Dashboard', {

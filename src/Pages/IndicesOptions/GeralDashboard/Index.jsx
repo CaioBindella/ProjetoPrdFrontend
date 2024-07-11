@@ -1,14 +1,14 @@
 // React
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native';
 
 // Native Components
-import { Container, Content, ContentCharts, Description, DescriptionContent, Title, Button, TextButton, Line } from './Style';
+import { Content, ContentCharts, Description, DescriptionContent, Title, Button, TextButton, Line } from './Style';
 
 import Header from '../../Components/Header/Index';
 import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
 
-import { VictoryBar, VictoryChart, VictoryTheme, VictoryPolarAxis, VictoryPie } from "victory-native";
+import { VictoryBar, VictoryChart, VictoryTheme, VictoryPolarAxis } from "victory-native";
 import Score from '../../Components/Score/Index';
 
 import * as Print from 'expo-print';
@@ -17,7 +17,7 @@ import ViewShot, { captureRef } from 'react-native-view-shot';
 import * as FileSystem from 'expo-file-system';
 
 import { tecnicoInfo, economicoInfo, socialInfoRisc } from '../../../Configs/Fonts/IndicadorInfo';
-import StarRating from '../../Components/star';
+import StarRating from '../../Components/StarRating/Index';
 
 const getMaxTecScores = () => {
     return new Promise((resolve, reject) => {
@@ -145,7 +145,11 @@ const GeralDashboard = ({ navigation, route }) => {
     const aterroData = route.params.aterroData;
     const analiseData = route.params.analiseData;
 
-    const [globalScore, setGlobalScore] = useState();
+    const [globalScore, setGlobalScore] = useState(0);
+
+    const [totalTecScore, setTotalTecScore] = useState(0);
+    const [totalEcoScore, setTotalEcoScore] = useState(0);
+    const [totalSocScore, setTotalSocScore] = useState(0);
 
     const [scoreTec, setScoreTec] = useState(Array(8).fill(0));
     const [scoreEco, setScoreEco] = useState(Array(8).fill(0));
@@ -159,10 +163,6 @@ const GeralDashboard = ({ navigation, route }) => {
     //Economico
     const [firstEco, setFirstEco] = useState(0)
     const [inadimplencia, setInadimplencia] = useState([])
-
-    // Estrelas
-    const [selectedScore, setSelectedScore] = useState(0)
-    const [scoreStar, setScoreStar] = useState(0)
 
     const viewRef = useRef();
     const exportComponentAsPDF = async (viewRef) => {
@@ -217,50 +217,17 @@ const GeralDashboard = ({ navigation, route }) => {
         await exportComponentAsPDF(viewRef.current);
     };
 
-    // STARS
-
-    const loadScore = async () => {
-        var response
-        response = await getGlobalScore(analiseData.CodAnalise, tecnicoInfo.details.firstQuestion, socialInfoRisc.details.lastQuestion)
-
-        let ScoreAtual = ((response[0].Pontuacao / (tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore)) * 100).toFixed()
-        console.log(ScoreAtual)
-        if (ScoreAtual <= 50) {
-            setScoreStar(0);
-        } else if (ScoreAtual > 50 && ScoreAtual <= 60) {
-            setScoreStar(1);
-        } else if (ScoreAtual > 60 && ScoreAtual <= 70) {
-            setScoreStar(2);
-        } else if (ScoreAtual > 70 && ScoreAtual <= 80) {
-            setScoreStar(3);
-        } else if (ScoreAtual > 80 && ScoreAtual <= 90) {
-            setScoreStar(4);
-        } else if (ScoreAtual > 90 && ScoreAtual <= 100) {
-            setScoreStar(5);
-        } else {
-            setScoreStar(0);
-        }
-
-        setSelectedScore(response[0].Pontuacao)
-    }
-
-    const deleteData = async () => {
-        await excluir(analiseData.CodAnalise, 'analise')
-    }
-
-
-    useEffect(() => {
-        loadScore()
-    }, [])
-
     const loadData = async () => {
         const technicArray = Array(8).fill(0);
         const economicArray = Array(8).fill(0);
         const socialArray = Array(15).fill(0);
 
         let tecTotalScore = 0;
-        let ecoTotalScore = 0;
         let socialTotalScore = 0;
+
+        // Lógica para pegar a pontuação geral
+        const globalPoints = await getGlobalScore(analiseData.CodAnalise, tecnicoInfo.details.firstQuestion, socialInfoRisc.details.lastQuestion)
+        setGlobalScore(globalPoints[0].Pontuacao)
 
         // Lógica para pegar a pontuação do técnico
         const maxTecScores = await getMaxTecScores()
@@ -286,9 +253,12 @@ const GeralDashboard = ({ navigation, route }) => {
         setSectec(gensecondgrouptec)
         setThirdtec(genthirdgrouptec)
 
+        setTotalTecScore(tecTotalScore)
+
         console.log(`Porcentagem Técnico: ${(tecTotalScore / tecnicoInfo.details.maxScore) * 100} %`)
 
         // Lógica para pegar a pontuação do econômico
+        const totalEcoPoints = await getGlobalScore(analiseData.CodAnalise, economicoInfo.details.firstQuestion, economicoInfo.details.lastQuestion)
         const maxEcoScores = await getMaxScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios")
         const actualEcoScores = await getActualScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios", analiseData.CodAnalise)
         const PercentInadimplencia = await getActualScores("Econômico", "Inadimplência", analiseData.CodAnalise)
@@ -302,7 +272,7 @@ const GeralDashboard = ({ navigation, route }) => {
             const maxScore = parseInt(maxEcoScores.find(eachScore => eachScore.Titulo === eachActualScore.Titulo).MaxScore)
             const index = parseInt(maxEcoScores.findIndex(eachScore => eachScore.Titulo === eachActualScore.Titulo))
             const actualScore = parseInt(eachActualScore.ActualScore)
-            ecoTotalScore += actualScore
+
             economicArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
         })
 
@@ -322,8 +292,9 @@ const GeralDashboard = ({ navigation, route }) => {
         }
 
         setScoreEco(economicArray)
+        setTotalEcoScore(totalEcoPoints[0].Pontuacao)
 
-        console.log(`Porcentagem Econômico: ${(ecoTotalScore / economicoInfo.details.maxScore) * 100} %`)
+        console.log(`Porcentagem Econômico: ${(totalEcoPoints[0].Pontuacao / economicoInfo.details.maxScore) * 100} %`)
 
         // Lógica para pegar a pontuação do social
         maxSocialScores = await getMaxScores("Social", "Percepção social dos impactos ambientais negativos da atividade - Análise de Risco")
@@ -340,10 +311,10 @@ const GeralDashboard = ({ navigation, route }) => {
 
         console.log(`Porcentagem Social: ${(socialTotalScore / socialInfoRisc.details.maxScore) * 100} %`)
 
-        setGlobalScore(tecTotalScore + ecoTotalScore + socialTotalScore)
         setScoreSocial(socialArray)
+        setTotalSocScore(socialTotalScore)
 
-        console.log(`Porcentagem Geral: ${((tecTotalScore + ecoTotalScore + socialTotalScore) / (tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore)) * 100} %`)
+        console.log(`Porcentagem Geral: ${(globalPoints[0].Pontuacao/(tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore)) * 100} %`)
     }
 
     useEffect(() => {
@@ -359,13 +330,13 @@ const GeralDashboard = ({ navigation, route }) => {
                 </Button>
                 <ViewShot ref={viewRef} options={{ format: 'png', quality: 0.8 }}>
                     <Content>
-                        {/* <Title>Performance Geral</Title> */}
-                        <Score scored={globalScore} total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore} />
+                        <Score title={"Performance Geral"} scored={globalScore} total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore} />
                         {/* <Line /> */}
-                        <StarRating initialRating={scoreStar} />
+                        <StarRating scored={globalScore} total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore}/>
+                        
                         <Line style={{ marginTop: 20, marginBottom: 15 }} />
-
-                        <Title>Indicador Técnico</Title>
+                        <Score title={"Indicador Técnico"} scored={totalTecScore} total={tecnicoInfo.details.maxScore} />
+                        <StarRating scored={totalTecScore} total={tecnicoInfo.details.maxScore} />
 
                         <Line />
                         <Title style={{ marginTop: 5, marginBottom: -25 }}>Avaliação Técnica Ambiental</Title>
@@ -436,9 +407,13 @@ const GeralDashboard = ({ navigation, route }) => {
                             <Description>7: Avaliação da Eficiência dos Sistemas de Controle</Description>
                             <Description>8: Documentos básicos e diretrizes operacionais</Description>
                         </DescriptionContent>
+
                         <Line style={{ marginTop: 30, marginBottom: 15 }} />
-                        <Title>Indicador Econômico</Title>
+                        <Score title={"Indicador Econômico"} scored={totalEcoScore} total={economicoInfo.details.maxScore} />
+                        <StarRating scored={totalEcoScore} total={economicoInfo.details.maxScore} />
+
                         <Line style={{ marginTop: 20, marginBottom: 40 }} />
+
                         <Title style={{ marginBottom: 10 }}>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
                         <VictoryChart polar
                             theme={VictoryTheme.material}
@@ -512,7 +487,8 @@ const GeralDashboard = ({ navigation, route }) => {
                         </DescriptionContent>
 
                         <Line style={{ marginTop: 50, marginBottom: 15 }} />
-                        <Title>Indicador Social</Title>
+                        <Score title={"Indicador Social"} scored={totalSocScore} total={socialInfoRisc.details.maxScore} />
+                        <StarRating scored={totalSocScore} total={socialInfoRisc.details.maxScore} />
                         <Line style={{ marginTop: 20, marginBottom: 15 }} />
 
                         <Title style={{ marginBottom: -30 }}>Avaliação da percepção social dos impactos ambientais negativos da atividade</Title>

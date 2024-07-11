@@ -1,6 +1,6 @@
 // React
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native';
 
 // Native Components
 import { Container, Content, ContentCharts, Description, DescriptionContent, Title, Button, TextButton, Line } from './Style';
@@ -9,14 +9,16 @@ import Header from '../../Components/Header/Index';
 import { indiceDb } from "../../../Services/SqlTables/sqliteDb";
 
 
-import { VictoryBar, VictoryChart, VictoryTheme, VictoryPolarAxis, VictoryPie } from "victory-native";
+import { VictoryBar, VictoryChart, VictoryTheme, VictoryPolarAxis } from "victory-native";
 import Score from '../../Components/Score/Index';
 
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import ViewShot, { captureRef } from 'react-native-view-shot';
 import * as FileSystem from 'expo-file-system';
-import StarRating from '../../Components/star';
+
+import StarRating from '../../Components/StarRating/Index';
+import { economicoInfo } from '../../../Configs/Fonts/IndicadorInfo';
 
 const getMaxTecScores = () => {
   return new Promise((resolve, reject) => {
@@ -145,9 +147,9 @@ const Dashboard = ({ navigation, route }) => {
   const tipoind = route.params.indicadorType
   const indicadorDetails = route.params.indicadorDetails
   const analiseData = route.params.analiseData
-  const [score, setScore] = useState(Array(8).fill(0))
-  const [globalScore, setGlobalScore] = useState()
 
+  const [score, setScore] = useState(Array(8).fill(0))
+  const [globalScore, setGlobalScore] = useState(0)
 
   //Tecnico
   const [firsttec, setFirsttec] = useState(0)
@@ -157,11 +159,6 @@ const Dashboard = ({ navigation, route }) => {
   //Economico
   const [firstEco, setFirstEco] = useState(0)
   const [inadimplencia, setInadimplencia] = useState([])
-
-  // Geral
-  const [genfirsttec, setGenFirsttec] = useState(0)
-  const [gensectec, setGenSectec] = useState(0)
-  const [genthirdtec, setGenThirdtec] = useState(0)
 
   //Social
   const [firstSocial, setFirstSocial] = useState(0)
@@ -219,32 +216,9 @@ const Dashboard = ({ navigation, route }) => {
     await exportComponentAsPDF(viewRef.current);
   };
 
-  // Stars
-  const [selectedScore, setSelectedScore] = useState(0)
-  const [scoreStar, setScoreStar] = useState(0)
-
   const loadScore = async () => {
-    const response = await getGlobalScore(analiseData.CodAnalise, indicadorDetails.firstQuestion, indicadorDetails.lastQuestion);
-
-    let ScoreAtual = ((response[0].Pontuacao / (indicadorDetails.maxScore)) * 100).toFixed();
-
-    if (ScoreAtual <= 50) {
-      setScoreStar(0);
-    } else if (ScoreAtual > 50 && ScoreAtual <= 60) {
-      setScoreStar(1);
-    } else if (ScoreAtual > 60 && ScoreAtual <= 70) {
-      setScoreStar(2);
-    } else if (ScoreAtual > 70 && ScoreAtual <= 80) {
-      setScoreStar(3);
-    } else if (ScoreAtual > 80 && ScoreAtual <= 90) {
-      setScoreStar(4);
-    } else if (ScoreAtual > 90 && ScoreAtual <= 100) {
-      setScoreStar(5);
-    } else {
-      setScoreStar(0);
-    }
-
-    setSelectedScore(response[0].Pontuacao)
+    const globalPoints = await getGlobalScore(analiseData.CodAnalise, indicadorDetails.firstQuestion, indicadorDetails.lastQuestion)
+    setGlobalScore(globalPoints[0].Pontuacao)
   }
 
   useEffect(() => {
@@ -280,7 +254,6 @@ const Dashboard = ({ navigation, route }) => {
         const gensecondgrouptec = ((technicArray[3] + technicArray[4]) / 2).toFixed()
         const genthirdgrouptec = ((technicArray[5] + technicArray[6] + technicArray[7]) / 3).toFixed()
 
-        setGlobalScore(totalScore)
         setScore(technicArray)
 
         setFirsttec(genfirstgrouptec)
@@ -289,7 +262,6 @@ const Dashboard = ({ navigation, route }) => {
         break;
 
       case 'Econômico':
-
         const maxEcoScores = await getMaxScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios")
         const actualEcoScores = await getActualScores("Econômico", "Disponibilidade de Equipamentos Mínimos Obrigatórios", analiseData.CodAnalise)
         const PercentInadimplencia = await getActualScores("Econômico", "Inadimplência", analiseData.CodAnalise)
@@ -321,10 +293,7 @@ const Dashboard = ({ navigation, route }) => {
             setInadimplencia(100);
             break;
         }
-
-        setGlobalScore(totalScore)
         setScore(economicArray)
-
         break;
 
       case 'Social':
@@ -343,7 +312,6 @@ const Dashboard = ({ navigation, route }) => {
           socialArray[index] = parseInt((100 * (actualScore / maxScore)).toFixed())
         })
 
-        setGlobalScore(totalScore)
         setScore(socialArray)
         break;
     }
@@ -363,7 +331,7 @@ const Dashboard = ({ navigation, route }) => {
               <Content>
                 {/* <Title>Performance Geral</Title> */}
                 <Score scored={globalScore} total={indicadorDetails.maxScore} />
-                <StarRating initialRating={scoreStar} />
+                <StarRating scored={globalScore} total={indicadorDetails.maxScore} />
 
                 <Line style={{ marginTop: 20, marginBottom: 15 }} />
                 <Title style={{ marginBottom: -40 }}>Avaliação Técnica Ambiental</Title>
@@ -448,7 +416,7 @@ const Dashboard = ({ navigation, route }) => {
             <ViewShot ref={viewRef} options={{ format: 'png', quality: 0.8 }}>
               <Content>
                 <Score scored={globalScore} total={indicadorDetails.maxScore} />
-                <StarRating initialRating={scoreStar} />
+                <StarRating scored={globalScore} total={indicadorDetails.maxScore} />
 
                 <Line />
                 <Title style={{ marginBottom: -30 }}>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
@@ -538,7 +506,7 @@ const Dashboard = ({ navigation, route }) => {
             <ViewShot ref={viewRef} options={{ format: 'png', quality: 0.8 }}>
               <Content>
                 <Score scored={globalScore} total={indicadorDetails.maxScore} />
-                <StarRating initialRating={scoreStar} />
+                <StarRating scored={globalScore} total={indicadorDetails.maxScore} />
 
                 <Line></Line>
                 <Title style={{ marginBottom: -30 }}>Avaliação da percepção social dos impactos ambientais negativos da atividade</Title>
