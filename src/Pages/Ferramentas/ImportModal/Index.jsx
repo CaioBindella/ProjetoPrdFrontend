@@ -10,8 +10,8 @@ import {
 } from "./Style";
 
 import { Feather } from '@expo/vector-icons';
-
 import { Modal } from "react-native-paper";
+import { Alert } from "react-native";
 
 import * as DocumentPicker from "expo-document-picker"
 import * as FileSystem from 'expo-file-system';
@@ -21,14 +21,14 @@ const ImportModal = ({ modalVisible, setModalVisible }) => {
 	const [firstAlert, setFirstAlert] = useState(true)
 
 	const pickDocument = async () => {
-		let result = await DocumentPicker.getDocumentAsync({});
+		let result = await DocumentPicker.getDocumentAsync({type: ["application/octet-stream", "application/x-sqlite3"], multiple: false});
 
-		if(result.type === "cancel"){
+		if(result.canceled){
+			setFirstAlert(true)
 			return
 		}
 
-		// Verifica se o tipo de arquivo é equivalente a .db e se ocorreu tudo certo
-		if (result.assets[0].mimeType === "application/octet-stream"){
+		try {
 			// Deleta o arquivo .db atual
 			if ((await FileSystem.getInfoAsync(FileSystem.documentDirectory + "SQLite/indicesDatabase.db")).exists) {
 				await FileSystem.deleteAsync(FileSystem.documentDirectory + "SQLite/indicesDatabase.db")
@@ -40,13 +40,12 @@ const ImportModal = ({ modalVisible, setModalVisible }) => {
 				to: FileSystem.documentDirectory + 'SQLite/indicesDatabase.db'
 			})
 
-			alert("Importação concluída com sucesso!")
+			Alert.alert("Sucesso", "Importação concluída com sucesso!")
 			
 			// Reinicia o aplicativo em produção
 			Updates.reloadAsync()
-		}
-		else{
-			alert("Escolha um arquivo com a extensão .db")
+		} catch (error) {
+			Alert.alert("Erro", "Erro ao importar banco de dados.")
 		}
 	};
 
@@ -57,7 +56,7 @@ const ImportModal = ({ modalVisible, setModalVisible }) => {
 		}
 
 		pickDocument()
-		setModalVisible(!modalVisible);
+		setModalVisible(!modalVisible)
 	}
 
     return (
@@ -66,10 +65,12 @@ const ImportModal = ({ modalVisible, setModalVisible }) => {
 			transparent={true}
 			visible={modalVisible}
 			onRequestClose={() => {
-				setModalVisible(!modalVisible);
+				setModalVisible(!modalVisible)
+				setFirstAlert(true)
 			}}
 			onDismiss={() => {
 				setModalVisible(!modalVisible)
+				setFirstAlert(true)
 			}}
 		>
 			<ModalView>
@@ -95,7 +96,10 @@ const ImportModal = ({ modalVisible, setModalVisible }) => {
 						</ModalButton>
 						<ModalButton
 							background="#E13F33"
-							onPress={() => setModalVisible(!modalVisible)}>
+							onPress={() => {
+								setModalVisible(!modalVisible)
+								setFirstAlert(true)
+							}}>
 							<ModalButtonText>Cancelar</ModalButtonText>
 						</ModalButton>
 					</ModalButtonGroup>
