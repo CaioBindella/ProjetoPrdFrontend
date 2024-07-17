@@ -122,37 +122,50 @@ const TemporalDashboard = ({ navigation, route }) => {
     }
   }, [])
 
-  const viewRef = useRef();
+  const viewShot = useRef(null);
 
-  const exportComponentAsPDF = async (viewRef) => {
+  const exportComponentAsPDF = async () => {
     try {
-      // Transformar View em imagem
-      const uri = await captureRef(viewRef, {
-        format: 'png',
-        quality: 0.8,
+      // Capture a imagem da view
+      const uri = await viewShot.current.capture();
+      const base64Image = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
       });
+
+      const base64DataURL = `data:image/png;base64,${base64Image}`;
 
       const pdf = await Print.printToFileAsync({
         html: `<html>
-                    <head>
-                    <link href="https://fonts.googleapis.com/css2?family=Medula+One&display=swap" rel="stylesheet">
-                    </head>
-                    <body>
-                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: auto; margin-top: -20px; margin-bottom: 0; font-family: 'Poppins', sans-serif;">
-                        <h1 style="font-weight: bold; font-size: 36px; margin-bottom: -10px;">Dashboard Temporal</h1>    
-                        <img src="${uri}" style="width: 100%; height: 90%;" />
+                <head>
+                  <link href="https://fonts.googleapis.com/css2?family=Medula+One&display=swap" rel="stylesheet">
+                  <style>
+                    body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+                    .container { display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; }
+                    .image-container { width: 100%; display: flex; justify-content: center; align-items: center; }
+                    .image { width: 100%; height: auto; }
+                    @page { size: A4; margin: 10mm; }
+                    @media print {
+                      .container { page-break-inside: avoid; }
+                    }
+                  </style>
+                </head>
+                <body>
+                  <div class="container">
+                    <div class="image-container">
+                      <img src="${base64DataURL}" class="image" />
                     </div>
-                    </body>
-                </html>`,
+                  </div>
+                </body>
+              </html>`,
       });
 
-      // Função pra remover acento dos arquivos - evitar erro de exportação
+      // Função para remover acento dos arquivos - evitar erro de exportação
       function normalizeFilename(filename) {
         return filename.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       }
 
       // Criar o PDF
-      const newFileName = normalizeFilename(`Dashboard-Temporal-${aterroData.Nome}.pdf`);
+      const newFileName = normalizeFilename(`Dashboard-Temporal.pdf`);
       const newPath = `${FileSystem.documentDirectory}${newFileName}`;
 
       // Renomear o arquivo PDF
@@ -172,137 +185,137 @@ const TemporalDashboard = ({ navigation, route }) => {
     }
   };
 
-  const handleExport = async () => {
-    await exportComponentAsPDF(viewRef.current);
-  };
-
   return (
     <Container>
-      <Header title={`Dashboard Temporal - ${aterroData.Nome}`} />
-      <Button onPress={handleExport}>
-        <TextButton>Exportar Dashboard</TextButton>
-      </Button>
-      <ViewShot ref={viewRef} options={{ format: 'png', quality: 0.8 }}>
+      <ScrollView>
 
-        <Content>
-          <Title>Performance Temporal</Title>
-          <Line />
-          <ScrollView>
-            <VictoryChart
-              theme={VictoryTheme.material}
-            >
-              <VictoryAxis
-                label="Mês do Ano"
-                axisLabelComponent={<VictoryLabel dy={24} />}
-              />
-              <VictoryAxis
-                dependentAxis
-                label="Pontuação (%)"
-                axisLabelComponent={<VictoryLabel dy={-24} />}
-              />
-              <VictoryScatter
-                style={{
-                  data: { fill: "#fe8a71" }
-                }}
-                size={5}
-                data={tecScoreList}
-                labels={({ datum }) => datum.y}
-              />
-              <VictoryLine
-                style={{
-                  data: { stroke: "#fe8a71" },
-                  parent: { border: "1px solid #ccc" }
-                }}
-                categories={{
-                  x: dataIniList
-                }}
+        <Header title={`Dashboard Temporal - ${aterroData.Nome}`} />
+        <Button onPress={exportComponentAsPDF}>
+          <TextButton>Exportar Dashboard</TextButton>
+        </Button>
+        <ViewShot ref={viewShot} options={{ format: 'png', quality: 0.8 }}>
 
-                animate={{
-                  duration: 2000,
-                  onLoad: { duration: 3000 }
-                }}
-                data={tecScoreList}
-              />
-              <VictoryScatter
-                style={{
-                  data: { fill: "#f6cd61" }
-                }}
-                size={5}
-                data={ecoScoreList}
-                labels={({ datum }) => datum.y}
-              />
-              <VictoryLine
-                style={{
-                  data: { stroke: "#f6cd61" },
-                  parent: { border: "1px solid #ccc" }
-                }}
-                categories={{
-                  x: dataIniList
-                }}
-                animate={{
-                  duration: 2000,
-                  onLoad: { duration: 3000 }
-                }}
-                data={ecoScoreList}
-              />
-              <VictoryScatter
-                style={{
-                  data: { fill: "#3da4ab" }
-                }}
-                size={5}
-                data={socScoreList}
-                labels={({ datum }) => datum.y}
-              />
-              <VictoryLine
-                style={{
-                  data: { stroke: "#3da4ab" },
-                  parent: { border: "1px solid #ccc" }
-                }}
-                categories={{
-                  x: dataIniList
-                }}
-                animate={{
-                  duration: 2000,
-                  onLoad: { duration: 3000 }
-                }}
-                data={socScoreList}
-              />
-              <VictoryScatter
-                style={{
-                  data: { fill: "#381704" }
-                }}
-                size={5}
-                data={totalScoreList}
-                labels={({ datum }) => datum.y}
-              />
-              <VictoryLine
-                style={{
-                  data: { stroke: "#381704" },
-                  parent: { border: "1px solid #ccc" }
-                }}
-                categories={{
-                  x: dataIniList
-                }}
-                animate={{
-                  duration: 2000,
-                  onLoad: { duration: 3000 }
-                }}
-                data={totalScoreList}
-              />
+          <Content>
+            <Title style={{ fontSize: 18 }}>Dashboard Temporal</Title>
+            <Title>Performance Temporal</Title>
+            <Line style={{ marginBottom: -15 }} />
+            <ScrollView>
+              <VictoryChart
+                theme={VictoryTheme.material}
+              >
+                <VictoryAxis
+                  label="Mês do Ano"
+                  axisLabelComponent={<VictoryLabel dy={24} />}
+                />
+                <VictoryAxis
+                  dependentAxis
+                  label="Pontuação (%)"
+                  axisLabelComponent={<VictoryLabel dy={-24} />}
+                />
+                <VictoryScatter
+                  style={{
+                    data: { fill: "#fe8a71" }
+                  }}
+                  size={5}
+                  data={tecScoreList}
+                  labels={({ datum }) => datum.y}
+                />
+                <VictoryLine
+                  style={{
+                    data: { stroke: "#fe8a71" },
+                    parent: { border: "1px solid #ccc" }
+                  }}
+                  categories={{
+                    x: dataIniList
+                  }}
 
-            </VictoryChart>
+                  animate={{
+                    duration: 2000,
+                    onLoad: { duration: 3000 }
+                  }}
+                  data={tecScoreList}
+                />
+                <VictoryScatter
+                  style={{
+                    data: { fill: "#f6cd61" }
+                  }}
+                  size={5}
+                  data={ecoScoreList}
+                  labels={({ datum }) => datum.y}
+                />
+                <VictoryLine
+                  style={{
+                    data: { stroke: "#f6cd61" },
+                    parent: { border: "1px solid #ccc" }
+                  }}
+                  categories={{
+                    x: dataIniList
+                  }}
+                  animate={{
+                    duration: 2000,
+                    onLoad: { duration: 3000 }
+                  }}
+                  data={ecoScoreList}
+                />
+                <VictoryScatter
+                  style={{
+                    data: { fill: "#3da4ab" }
+                  }}
+                  size={5}
+                  data={socScoreList}
+                  labels={({ datum }) => datum.y}
+                />
+                <VictoryLine
+                  style={{
+                    data: { stroke: "#3da4ab" },
+                    parent: { border: "1px solid #ccc" }
+                  }}
+                  categories={{
+                    x: dataIniList
+                  }}
+                  animate={{
+                    duration: 2000,
+                    onLoad: { duration: 3000 }
+                  }}
+                  data={socScoreList}
+                />
+                <VictoryScatter
+                  style={{
+                    data: { fill: "#381704" }
+                  }}
+                  size={5}
+                  data={totalScoreList}
+                  labels={({ datum }) => datum.y}
+                />
+                <VictoryLine
+                  style={{
+                    data: { stroke: "#381704" },
+                    parent: { border: "1px solid #ccc" }
+                  }}
+                  categories={{
+                    x: dataIniList
+                  }}
+                  animate={{
+                    duration: 2000,
+                    onLoad: { duration: 3000 }
+                  }}
+                  data={totalScoreList}
+                />
 
-            <DescriptionContent>
-              <Description>Legenda: </Description>
-              <Description><ColorBox color={"#381704"}>&#x2587;</ColorBox> Total</Description>
-              <Description><ColorBox color={"#fe8a71"}>&#x2587;</ColorBox> Técnico</Description>
-              <Description><ColorBox color={"#f6cd61"}>&#x2587;</ColorBox> Econômico</Description>
-              <Description><ColorBox color={"#3da4ab"}>&#x2587;</ColorBox> Social</Description>
-            </DescriptionContent>
-          </ScrollView>
-        </Content>
+              </VictoryChart>
 
-      </ViewShot>
+              <DescriptionContent style={{ marginTop: -4 }}>
+                <Description>Legenda: </Description>
+                <Description><ColorBox color={"#381704"}>&#x2587;</ColorBox> Total</Description>
+                <Description><ColorBox color={"#fe8a71"}>&#x2587;</ColorBox> Técnico</Description>
+                <Description><ColorBox color={"#f6cd61"}>&#x2587;</ColorBox> Econômico</Description>
+                <Description><ColorBox color={"#3da4ab"}>&#x2587;</ColorBox> Social</Description>
+              </DescriptionContent>
+            </ScrollView>
+          </Content>
+
+        </ViewShot>
+      </ScrollView>
     </Container>
   )
 }

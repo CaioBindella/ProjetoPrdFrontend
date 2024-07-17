@@ -163,36 +163,50 @@ const Dashboard = ({ navigation, route }) => {
   //Social
   const [firstSocial, setFirstSocial] = useState(0)
 
-  const viewRef = useRef();
-  const exportComponentAsPDF = async (viewRef) => {
+  const viewShot = useRef(null);
+
+  const exportComponentAsPDF = async () => {
     try {
-      // Transformar View em imagem
-      const uri = await captureRef(viewRef, {
-        format: 'png',
-        quality: 0.8,
+      // Capture a imagem da view
+      const uri = await viewShot.current.capture();
+      const base64Image = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
       });
+
+      const base64DataURL = `data:image/png;base64,${base64Image}`;
 
       const pdf = await Print.printToFileAsync({
         html: `<html>
-                 <head>
+                <head>
                   <link href="https://fonts.googleapis.com/css2?family=Medula+One&display=swap" rel="stylesheet">
-                 </head>
-                 <body>
-                   <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: auto; margin-top: -20px; margin-bottom: 0; font-family: 'Poppins', sans-serif;">
-                     <h1 style="font-weight: bold; font-size: 36px; margin-bottom: -10px;">Dashboard ${tipoind} - ${analiseData.DataIni}</h1>    
-                     <img src="${uri}" style="width: 100%; height: 90%;" />
-                   </div>
-                 </body>
-               </html>`,
+                  <style>
+                    body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+                    .container { display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; }
+                    .image-container { width: 100%; display: flex; justify-content: center; align-items: center; }
+                    .image { width: 100%; height: auto; }
+                    @page { size: A4; margin: 10mm; }
+                    @media print {
+                      .container { page-break-inside: avoid; }
+                    }
+                  </style>
+                </head>
+                <body>
+                  <div class="container">
+                    <div class="image-container">
+                      <img src="${base64DataURL}" class="image" />
+                    </div>
+                  </div>
+                </body>
+              </html>`,
       });
 
-      // Função pra remover acento dos arquivos - evitar erro de exportação
+      // Função para remover acento dos arquivos - evitar erro de exportação
       function normalizeFilename(filename) {
         return filename.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       }
 
       // Criar o PDF
-      const newFileName = normalizeFilename(`Dashboard-${tipoind}-${analiseData.DataIni}.pdf`);
+      const newFileName = normalizeFilename(`Dashboard-${tipoind}.pdf`);
       const newPath = `${FileSystem.documentDirectory}${newFileName}`;
 
       // Renomear o arquivo PDF
@@ -210,10 +224,6 @@ const Dashboard = ({ navigation, route }) => {
     } catch (error) {
       console.error("Erro ao exportar PDF:", error);
     }
-  };
-
-  const handleExport = async () => {
-    await exportComponentAsPDF(viewRef.current);
   };
 
   const loadScore = async () => {
@@ -324,16 +334,17 @@ const Dashboard = ({ navigation, route }) => {
         <ContentCharts>
           <ScrollView>
             <Header title={`Dashboard Técnico - ${aterroData.Nome} - ${analiseData.DataIni}`} />
-            <Button onPress={handleExport}>
+            <Button onPress={exportComponentAsPDF}>
               <TextButton>Exportar Dashboard</TextButton>
             </Button>
-            <ViewShot ref={viewRef} options={{ format: 'png', quality: 0.8 }}>
+            <ViewShot ref={viewShot} options={{ format: 'png', quality: 0.8 }}>
               <Content>
                 {/* <Title>Performance Geral</Title> */}
+                <Title style={{ fontSize: 18 }}>Dashboard Técnico</Title>
                 <Score scored={globalScore} total={indicadorDetails.maxScore} />
                 <StarRating scored={globalScore} total={indicadorDetails.maxScore} />
 
-                <Line style={{ marginTop: 20, marginBottom: 15 }} />
+                <Line style={{ marginTop: 15, marginBottom: 10 }} />
                 <Title style={{ marginBottom: -40 }}>Avaliação Técnica Ambiental</Title>
 
                 <VictoryChart
@@ -410,11 +421,12 @@ const Dashboard = ({ navigation, route }) => {
         <ContentCharts>
           <ScrollView>
             <Header title={`Dashboard Econômico - ${aterroData.Nome} - ${analiseData.DataIni}`} />
-            <Button onPress={handleExport}>
+            <Button onPress={exportComponentAsPDF}>
               <TextButton>Exportar Dashboard</TextButton>
             </Button>
-            <ViewShot ref={viewRef} options={{ format: 'png', quality: 0.8 }}>
+            <ViewShot ref={viewShot} options={{ format: 'png', quality: 0.8 }}>
               <Content>
+                <Title style={{ fontSize: 18 }}>Dashboard Econômico</Title>
                 <Score scored={globalScore} total={indicadorDetails.maxScore} />
                 <StarRating scored={globalScore} total={indicadorDetails.maxScore} />
 
@@ -452,7 +464,7 @@ const Dashboard = ({ navigation, route }) => {
                   />
                 </VictoryChart>
 
-                <DescriptionContent style={{ marginTop: -30 }}>
+                <DescriptionContent style={{ marginTop: -26 }}>
                   <Title>Número relacionado a Sub-ítem</Title>
                   <Description>1: Trator Esteira D6K 13,4t 125HP</Description>
                   <Description>2: Escavadeira 90HP</Description>
@@ -464,7 +476,7 @@ const Dashboard = ({ navigation, route }) => {
                   <Description>8: CMO Praticado em função do Porte</Description>
                 </DescriptionContent>
                 <Line />
-                <Title style={{ marginBottom: -10 }}>Avaliação da Inadimplência</Title>
+                <Title style={{ marginBottom: -30 }}>Avaliação da Inadimplência</Title>
                 <VictoryChart
                   theme={VictoryTheme.material}
                   domainPadding={{ x: 10 }}
@@ -500,11 +512,12 @@ const Dashboard = ({ navigation, route }) => {
         <ContentCharts>
           <ScrollView>
             <Header title={`Dashboard Social - ${aterroData.Nome} - ${analiseData.DataIni}`} />
-            <Button onPress={handleExport}>
+            <Button onPress={exportComponentAsPDF}>
               <TextButton>Exportar Dashboard</TextButton>
             </Button>
-            <ViewShot ref={viewRef} options={{ format: 'png', quality: 0.8 }}>
+            <ViewShot ref={viewShot} options={{ format: 'png', quality: 0.8 }}>
               <Content>
+                <Title style={{ fontSize: 18 }}>Dashboard Social</Title>
                 <Score scored={globalScore} total={indicadorDetails.maxScore} />
                 <StarRating scored={globalScore} total={indicadorDetails.maxScore} />
 
@@ -550,7 +563,7 @@ const Dashboard = ({ navigation, route }) => {
                   />
                 </VictoryChart>
 
-                <DescriptionContent style={{ marginTop: -15 }}>
+                <DescriptionContent style={{ marginTop: -10 }}>
                   <Title>Número relacionado a Sub-ítem</Title>
                   <Description>1: Foi percebido cheiro de lixo nas redondezas do aterro ?</Description>
                   <Description>2: Foi percebido barulho de caminhões transitando no entorno do aterro?</Description>

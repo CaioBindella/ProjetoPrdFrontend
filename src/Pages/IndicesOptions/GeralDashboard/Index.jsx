@@ -1,6 +1,6 @@
 // React
 import React, { useEffect, useRef, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 // Native Components
 import { Content, ContentCharts, Description, DescriptionContent, Title, Button, TextButton, Line } from './Style';
@@ -164,36 +164,50 @@ const GeralDashboard = ({ navigation, route }) => {
     const [firstEco, setFirstEco] = useState(0)
     const [inadimplencia, setInadimplencia] = useState([])
 
-    const viewRef = useRef();
-    const exportComponentAsPDF = async (viewRef) => {
+    const viewShot = useRef(null);
+
+    const exportComponentAsPDF = async () => {
         try {
-            // Transformar View em imagem
-            const uri = await captureRef(viewRef, {
-                format: 'png',
-                quality: 0.8,
+            // Capture a imagem da view
+            const uri = await viewShot.current.capture();
+            const base64Image = await FileSystem.readAsStringAsync(uri, {
+                encoding: FileSystem.EncodingType.Base64,
             });
+
+            const base64DataURL = `data:image/png;base64,${base64Image}`;
 
             const pdf = await Print.printToFileAsync({
                 html: `<html>
-                    <head>
-                    <link href="https://fonts.googleapis.com/css2?family=Medula+One&display=swap" rel="stylesheet">
-                    </head>
-                    <body>
-                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: auto; margin-top: -20px; margin-bottom: 0; font-family: 'Poppins', sans-serif;">
-                        <h1 style="font-weight: bold; font-size: 36px; margin-bottom: -10px;">Dashboard Geral - ${analiseData.DataIni}</h1>    
-                        <img src="${uri}" style="width: 100%; height: 90%;" />
-                    </div>
-                    </body>
-                </html>`,
+                        <head>
+                          <link href="https://fonts.googleapis.com/css2?family=Medula+One&display=swap" rel="stylesheet">
+                          <style>
+                            body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+                            .container { display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; }
+                            .image-container { width: 100%; display: flex; justify-content: center; align-items: center; }
+                            .image { width: 100%; height: auto; }
+                            @page { size: A4; margin: 10mm; }
+                            @media print {
+                              .container { page-break-inside: avoid; }
+                            }
+                          </style>
+                        </head>
+                        <body>
+                          <div class="container">
+                            <div class="image-container">
+                              <img src="${base64DataURL}" class="image" />
+                            </div>
+                          </div>
+                        </body>
+                      </html>`,
             });
 
-            // Função pra remover acento dos arquivos - evitar erro de exportação
+            // Função para remover acento dos arquivos - evitar erro de exportação
             function normalizeFilename(filename) {
                 return filename.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
             }
 
             // Criar o PDF
-            const newFileName = normalizeFilename(`Dashboard-Geral-${analiseData.DataIni}.pdf`);
+            const newFileName = normalizeFilename(`Dashboard-Geral.pdf`);
             const newPath = `${FileSystem.documentDirectory}${newFileName}`;
 
             // Renomear o arquivo PDF
@@ -211,10 +225,6 @@ const GeralDashboard = ({ navigation, route }) => {
         } catch (error) {
             console.error("Erro ao exportar PDF:", error);
         }
-    };
-
-    const handleExport = async () => {
-        await exportComponentAsPDF(viewRef.current);
     };
 
     const loadData = async () => {
@@ -314,7 +324,7 @@ const GeralDashboard = ({ navigation, route }) => {
         setScoreSocial(socialArray)
         setTotalSocScore(socialTotalScore)
 
-        console.log(`Porcentagem Geral: ${(globalPoints[0].Pontuacao/(tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore)) * 100} %`)
+        console.log(`Porcentagem Geral: ${(globalPoints[0].Pontuacao / (tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore)) * 100} %`)
     }
 
     useEffect(() => {
@@ -325,27 +335,28 @@ const GeralDashboard = ({ navigation, route }) => {
         <ContentCharts>
             <ScrollView>
                 <Header title={`Dashboard Geral - ${aterroData.Nome} - ${analiseData.DataIni}`} />
-                <Button onPress={handleExport}>
+                <Button onPress={exportComponentAsPDF}>
                     <TextButton>Exportar Dashboard</TextButton>
                 </Button>
-                <ViewShot ref={viewRef} options={{ format: 'png', quality: 0.8 }}>
+                <ViewShot ref={viewShot} options={{ format: 'png', quality: 0.8 }}>
                     <Content>
+                        <Title style={{ fontSize: 18 }}>Dashboard Geral</Title>
                         <Score title={"Performance Geral"} scored={globalScore} total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore} />
                         {/* <Line /> */}
-                        <StarRating scored={globalScore} total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore}/>
-                        
-                        <Line style={{ marginTop: 20, marginBottom: 15 }} />
+                        <StarRating scored={globalScore} total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore} />
+
+                        <Line style={{ marginBottom: -5 }} />
                         <Score title={"Indicador Técnico"} scored={totalTecScore} total={tecnicoInfo.details.maxScore} />
                         <StarRating scored={totalTecScore} total={tecnicoInfo.details.maxScore} />
 
                         <Line />
-                        <Title style={{ marginTop: 5, marginBottom: -25 }}>Avaliação Técnica Ambiental</Title>
+                        <Title style={{ marginBottom: -35 }}>Avaliação Técnica Ambiental</Title>
 
                         <VictoryChart
                             theme={VictoryTheme.material}
                             domainPadding={{ x: 100 }}
                             width={300}
-                            height={275}
+                            height={255}
                         >
                             <VictoryBar horizontal
                                 style={{
@@ -358,15 +369,15 @@ const GeralDashboard = ({ navigation, route }) => {
                             />
                         </VictoryChart>
 
-                        <Description style={{ marginTop: 10 }}>1: Características locacionais</Description>
+                        <Description style={{ marginTop: 15 }}>1: Características locacionais</Description>
                         <Description>2: Infra estrutura implantada</Description>
-                        <Description style={{ marginBottom: 5 }}>3: Condições operacionais</Description>
+                        <Description>3: Condições operacionais</Description>
 
-                        <Line style={{ marginTop: 20 }} />
-                        <Title style={{ marginVertical: 5 }}>Avaliação da Sub-área</Title>
+                        <Line style={{ marginTop: 50, marginBottom: 50 }} />
+                        <Title style={{ marginTop: -15, marginBottom: -45 }}>Avaliação da Sub-área</Title>
                         <VictoryChart polar
                             theme={VictoryTheme.material}
-                            width={330}
+                            width={300}
                         >
                             {
                                 ["1", "2", "3", "4", "5", "6", "7", "8"].map((d, i) => {
@@ -396,7 +407,7 @@ const GeralDashboard = ({ navigation, route }) => {
                             />
                         </VictoryChart>
 
-                        <DescriptionContent style={{ marginTop: 10 }}>
+                        <DescriptionContent style={{ marginTop: 0, marginBottom: 10 }}>
                             <Title>Número relacionado a Sub-área</Title>
                             <Description>1: Características fisiográficas</Description>
                             <Description>2: Interface socioambiental</Description>
@@ -408,16 +419,16 @@ const GeralDashboard = ({ navigation, route }) => {
                             <Description>8: Documentos básicos e diretrizes operacionais</Description>
                         </DescriptionContent>
 
-                        <Line style={{ marginTop: 30, marginBottom: 15 }} />
+                        <Line />
                         <Score title={"Indicador Econômico"} scored={totalEcoScore} total={economicoInfo.details.maxScore} />
                         <StarRating scored={totalEcoScore} total={economicoInfo.details.maxScore} />
 
-                        <Line style={{ marginTop: 20, marginBottom: 40 }} />
+                        <Line />
 
-                        <Title style={{ marginBottom: 10 }}>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
+                        <Title style={{ marginBottom: -20 }}>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
                         <VictoryChart polar
                             theme={VictoryTheme.material}
-                            width={330}
+                            width={300}
                         >
                             {
                                 ["1", "2", "3", "4", "5", "6", "7", "8"].map((d, i) => {
@@ -447,7 +458,7 @@ const GeralDashboard = ({ navigation, route }) => {
                             />
                         </VictoryChart>
 
-                        <DescriptionContent style={{ marginTop: 0 }}>
+                        <DescriptionContent style={{ marginTop: -28 }}>
                             <Title>Número relacionado a Sub-ítem</Title>
                             <Description>1: Trator Esteira D6K 13,4t 125HP</Description>
                             <Description>2: Escavadeira 90HP</Description>
@@ -458,13 +469,13 @@ const GeralDashboard = ({ navigation, route }) => {
                             <Description>7: Disponibilidade de Lâmina Raspadora</Description>
                             <Description>8: CMO Praticado em função do Porte</Description>
                         </DescriptionContent>
-                        <Line />
-                        <Title style={{ marginBottom: -10 }}>Avaliação da Inadimplência</Title>
+                        <Line style={{ marginTop: 30, marginBottom: 20 }} />
+                        <Title>Avaliação da Inadimplência</Title>
                         <VictoryChart
                             theme={VictoryTheme.material}
                             domainPadding={{ x: 10 }}
                             width={300}
-                            height={275}
+                            height={255}
                             style={{ marginTop: -20 }}
                         >
                             <VictoryBar horizontal
@@ -478,7 +489,7 @@ const GeralDashboard = ({ navigation, route }) => {
                             />
                         </VictoryChart>
 
-                        <DescriptionContent>
+                        <DescriptionContent style={{ marginTop: 10 }}>
                             <Title>Representação do nível de Inadimplência</Title>
                             <Description>25%: Inadimplência entre 5% e 25%</Description>
                             <Description>50%: Inadimplência entre 25% e 50%</Description>
@@ -486,69 +497,69 @@ const GeralDashboard = ({ navigation, route }) => {
                             <Description>100%: Inadimplência acima de 75%</Description>
                         </DescriptionContent>
 
-                        <Line style={{ marginTop: 50, marginBottom: 15 }} />
+                        <Line style={{ marginTop: 24 }} />
                         <Score title={"Indicador Social"} scored={totalSocScore} total={socialInfoRisc.details.maxScore} />
                         <StarRating scored={totalSocScore} total={socialInfoRisc.details.maxScore} />
-                        <Line style={{ marginTop: 20, marginBottom: 15 }} />
+                        <Line />
 
-                        <Title style={{ marginBottom: -30 }}>Avaliação da percepção social dos impactos ambientais negativos da atividade</Title>
+                        <Title >Avaliação da percepção social dos impactos ambientais negativos da atividade</Title>
 
                         <VictoryChart polar
-                        theme={VictoryTheme.material}
-                        width={330}
+                            theme={VictoryTheme.material}
+                            width={300}
                         >
-                        {
-                            ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"].map((d, i) => {
-                            return (
-                                <VictoryPolarAxis dependentAxis
-                                key={i}
-                                label={d}
-                                labelPlacement="perpendicular"
-                                style={{ tickLabels: { fill: "none" } }}
-                                axisValue={d}
-                                />
-                            );
-                            })
-                        }
-                        <VictoryBar
-                            style={{ data: { fill: "darkgreen", width: 15 } }}
-                            data={[
-                            { x: "1", y: parseInt(scoreSocial[0]) },
-                            { x: "2", y: parseInt(scoreSocial[1]) },
-                            { x: "3", y: parseInt(scoreSocial[2]) },
-                            { x: "4", y: parseInt(scoreSocial[3]) },
-                            { x: "5", y: parseInt(scoreSocial[4]) },
-                            { x: "6", y: parseInt(scoreSocial[5]) },
-                            { x: "7", y: parseInt(scoreSocial[6]) },
-                            { x: "8", y: parseInt(scoreSocial[7]) },
-                            { x: "9", y: parseInt(scoreSocial[0]) },
-                            { x: "10", y: parseInt(scoreSocial[1]) },
-                            { x: "11", y: parseInt(scoreSocial[2]) },
-                            { x: "12", y: parseInt(scoreSocial[3]) },
-                            { x: "13", y: parseInt(scoreSocial[4]) },
-                            { x: "14", y: parseInt(scoreSocial[5]) },
-                            { x: "15", y: parseInt(scoreSocial[6]) },
-                            ]}
-                        />
+                            {
+                                ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"].map((d, i) => {
+                                    return (
+                                        <VictoryPolarAxis dependentAxis
+                                            key={i}
+                                            label={d}
+                                            labelPlacement="perpendicular"
+                                            style={{ tickLabels: { fill: "none" } }}
+                                            axisValue={d}
+                                        />
+                                    );
+                                })
+                            }
+                            <VictoryBar
+                                style={{ data: { fill: "darkgreen", width: 15 } }}
+                                data={[
+                                    { x: "1", y: parseInt(scoreSocial[0]) },
+                                    { x: "2", y: parseInt(scoreSocial[1]) },
+                                    { x: "3", y: parseInt(scoreSocial[2]) },
+                                    { x: "4", y: parseInt(scoreSocial[3]) },
+                                    { x: "5", y: parseInt(scoreSocial[4]) },
+                                    { x: "6", y: parseInt(scoreSocial[5]) },
+                                    { x: "7", y: parseInt(scoreSocial[6]) },
+                                    { x: "8", y: parseInt(scoreSocial[7]) },
+                                    { x: "9", y: parseInt(scoreSocial[0]) },
+                                    { x: "10", y: parseInt(scoreSocial[1]) },
+                                    { x: "11", y: parseInt(scoreSocial[2]) },
+                                    { x: "12", y: parseInt(scoreSocial[3]) },
+                                    { x: "13", y: parseInt(scoreSocial[4]) },
+                                    { x: "14", y: parseInt(scoreSocial[5]) },
+                                    { x: "15", y: parseInt(scoreSocial[6]) },
+                                ]}
+                            />
                         </VictoryChart>
 
-                        <DescriptionContent style={{ marginTop: -15 }}>
-                        <Title>Número relacionado a Sub-ítem</Title>
-                        <Description>1: Foi percebido cheiro de lixo nas redondezas do aterro ?</Description>
-                        <Description>2: Foi percebido barulho de caminhões transitando no entorno do aterro?</Description>
-                        <Description>3: Foi percebida fumaça oriunda de caminhões transitando no entorno do aterro?</Description>
-                        <Description>4: Foi constatada a presença de resíduos volantes oriundos dos caminhões?</Description>
-                        <Description>5: Foi constatada fila de caminhões no acesso à balança do aterro?</Description>
-                        <Description>6: Foi constatado chorume oriundo dos caminhões no entorno do aterro?</Description>
-                        <Description>7: Foi percebido barulho do maquinário pesado da operação do aterro na entorno do aterro? </Description>
-                        <Description>8: Foi percebido o aumento de poeira e material particulado no interior das resídências devido ao trânsito de caminhões no  entorno do aterro?</Description>
-                        <Description>9: Foi constatada aproliferação de ratos e outros vetores terrestres após a instalação do aterro?</Description>
-                        <Description>10: Foi constatada alteração de odor/sabor caracteristico na água de poço após a instalação do aterro?</Description>
-                        <Description>11: Foi constatada aproliferação de moscas e outros vetores aéreos após a instalação do aterro?</Description>
-                        <Description>12: Quantos entrevistados afirmaram haver, ao menos, 3 benefícios em função das operações normais do aterro?</Description>
-                        <Description>13: Quanto à duração dos impacos constatdos, quantos foram considerados constantes?</Description>
-                        <Description>14: Quanto à frequência dos impacos constatdos, quantos foram considerados diários?</Description>
-                        <Description>15: Quantos entrevistados afirmaram haver, ao menos, 3 prejuizos ao bem-estar em função das operações normais do aterro?</Description>
+                        <DescriptionContent>
+                            <Title>Número relacionado a Sub-ítem</Title>
+                            <Description>1: Foi percebido cheiro de lixo nas redondezas do aterro ?</Description>
+                            <Description>2: Foi percebido barulho de caminhões transitando no entorno do aterro?</Description>
+                            <Description>3: Foi percebida fumaça oriunda de caminhões transitando no entorno do aterro?</Description>
+                            <Description>4: Foi constatada a presença de resíduos volantes oriundos dos caminhões?</Description>
+                            <Description>5: Foi constatada fila de caminhões no acesso à balança do aterro?</Description>
+                            <Description>6: Foi constatado chorume oriundo dos caminhões no entorno do aterro?</Description>
+                            <Description>7: Foi percebido barulho do maquinário pesado da operação do aterro na entorno do aterro? </Description>
+                            <Description>8: Foi percebido o aumento de poeira e material particulado no interior das resídências devido ao trânsito de caminhões no  entorno do aterro?</Description>
+                            <Description>9: Foi constatada aproliferação de ratos e outros vetores terrestres após a instalação do aterro?</Description>
+                            <Description>10: Foi constatada alteração de odor/sabor caracteristico na água de poço após a instalação do aterro?</Description>
+                            <Description>11: Foi constatada aproliferação de moscas e outros vetores aéreos após a instalação do aterro?</Description>
+                            <Description>12: Quantos entrevistados afirmaram haver, ao menos, 3 benefícios em função das operações normais do aterro?</Description>
+                            <Description>13: Quanto à duração dos impacos constatdos, quantos foram considerados constantes?</Description>
+                            <Description>14: Quanto à frequência dos impacos constatdos, quantos foram considerados diários?</Description>
+                            <Description>15: Quantos entrevistados afirmaram haver, ao menos, 3 prejuizos ao bem-estar em função das operações normais do aterro?</Description>
                         </DescriptionContent>
                     </Content>
                 </ViewShot>

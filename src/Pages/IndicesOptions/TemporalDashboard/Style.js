@@ -29,7 +29,7 @@ export const Title = styled.Text`
     font-size: 16px;
     font-weight: bold;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 13px;
 `;
 
 export const Button = styled.TouchableOpacity`

@@ -11,6 +11,8 @@ export const Content = styled.View`
     background-color: #d9d9d9;
     border-radius: 10px;
     width: 200px;
+    transform: ${({ hasTitle, isDefaultTitle }) =>
+        hasTitle && !isDefaultTitle ? 'scale(0.8)' : 'scale(1)'};
 `;
 
 export const Title = styled.Text`

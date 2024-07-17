@@ -33,7 +33,7 @@ const StarRating = ({ scored, total }) => {
         <TouchableOpacity key={star} >
           <FontAwesome
             name="star"
-            size={30}
+            size={27}
             color={star <= scoreStar ? 'gold' : 'black'}
           />
         </TouchableOpacity>
