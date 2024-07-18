@@ -35,7 +35,7 @@ const PainelAterro = ({ navigation, route }) => {
 	const aterroData = route.params.aterroData;
 
 	async function deleteData () {
-		await excluir(aterroData.CodAterro, 'aterro')
+		return await excluir(aterroData.CodAterro, 'aterro')
 	}
 
 	return (
