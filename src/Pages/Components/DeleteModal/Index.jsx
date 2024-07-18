@@ -15,6 +15,19 @@ import { Modal } from "react-native-paper";
 import { Alert } from "react-native";
 
 const DeleteModal = ({ modalVisible, setModalVisible, deleteFunction, navigation }) => {
+
+    const handleDelete = async () => {
+        const result = await deleteFunction();
+        console.log(result);
+        if (result == 0) {
+          Alert.alert('Erro', 'Falha ao excluir o dado. Verifique se não há registros dependentes desse item.');
+        } else {
+          Alert.alert('Sucesso', 'Dado excluído com sucesso.');
+        }
+        setModalVisible(false);
+        navigation.navigate('Home');
+    };
+
     return (
       <Modal
         animationType='slide'
@@ -35,13 +48,7 @@ const DeleteModal = ({ modalVisible, setModalVisible, deleteFunction, navigation
             <ModalButtonGroup>
              <ModalButton
                 background="#E13F33"
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-									deleteFunction();
-                  navigation.navigate('Home')
-									Alert.alert("Sucesso", "Dado excluído com sucesso.")
-									
-                }}
+                onPress = {handleDelete}
               >
                 <ModalButtonText>Excluir</ModalButtonText>
               </ModalButton>
