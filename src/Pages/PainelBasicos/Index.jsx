@@ -36,7 +36,11 @@ const PainelBasicos = ({ navigation, route }) => {
 	let updateRoute;
 
 	async function deleteData () {
-		excluir(Item.id, table)
+		if (table === "organizacao") {
+			excluir(Item.CodOrganizacao, table);
+		} else if (table === "municipio") {
+			excluir(Item.CodMunicipio, table);
+		}
 	}
 
 	switch(table){

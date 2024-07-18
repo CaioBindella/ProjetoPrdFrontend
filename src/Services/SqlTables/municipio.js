@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 import { indiceDb } from "./sqliteDb";
 
 /**
@@ -121,26 +122,65 @@ const all = () => {
  *  - O resultado da Promise a quantidade de registros removidos (zero indica que nada foi removido);
  *  - Pode retornar erro (reject) caso o ID não exista ou então caso ocorra erro no SQL.
  */
+// const remove = (id) => {
+//   return new Promise((resolve, reject) => {
+//     indiceDb.then((data) => {
+//       data.transaction((tx) => {
+//         //comando SQL modificável
+//         tx.executeSql(
+//           `
+//           DELETE FROM Municipio WHERE CodMunicipio=?;
+//           `,
+//           [id],
+//           //-----------------------
+//           (_, { rowsAffected }) => {
+//             resolve(rowsAffected);
+//           },
+//           (_, error) => reject(error) // erro interno em tx.executeSql
+//         );
+//       });
+//     });
+//   })
+// };
+
 const remove = (id) => {
   return new Promise((resolve, reject) => {
     indiceDb.then((data) => {
       data.transaction((tx) => {
-        //comando SQL modificável
+        // Primeiro, verificamos se existem aterros cadastrados com o município especificado
         tx.executeSql(
           `
-          DELETE FROM Municipio WHERE CodMunicipio=?;
+          SELECT COUNT(*) as count FROM Aterro WHERE CodMunicipio=?;
           `,
           [id],
-          //-----------------------
-          (_, { rowsAffected }) => {
-            resolve(rowsAffected);
+          (_, { rows: { _array } }) => {
+            const { count } = _array[0];
+            if (count > 0) {
+              // Se houver aterros cadastrados, rejeitamos a promessa
+              reject(new Error(`Existem ${count} aterro(s) cadastrado(s) com o município ${id}.`));
+              Alert.alert("Erro", `Existem ${count} aterro(s) cadastrado(s) com o município ${id}.`)
+            } else {
+              // Caso contrário, prosseguimos com a exclusão do município
+              tx.executeSql(
+                `
+                DELETE FROM Municipio WHERE CodMunicipio=?;
+                `,
+                [id],
+                (_, { rowsAffected }) => {
+                  resolve(rowsAffected);
+                },
+                (_, error) => reject(error) // erro interno em tx.executeSql
+              );
+              Alert.alert("Sucesso", `Município excluído.`)
+            }
           },
-          (_, error) => reject(error) // erro interno em tx.executeSql
+          (_, error) => reject(error) // erro interno em tx.executeSql para a verificação
         );
       });
     });
-  })
+  });
 };
+
 
 export default {
   create,

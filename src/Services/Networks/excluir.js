@@ -26,6 +26,7 @@ export const excluir = async (id, table) => {
             });
         });
     }
+
     
     switch (table) {
         case 'aterro':
@@ -60,6 +61,7 @@ export const excluir = async (id, table) => {
                 	.get(`${baseUrl}/municipio`, data)
                 	.then((response) => {
                 		console.log(response);
+                    Alert.alert("Sucesso", "Município deletado!");
                 	})
                 	.catch((error) => console.log(JSON.stringify(error)));
             }

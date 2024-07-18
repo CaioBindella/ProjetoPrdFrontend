@@ -39,7 +39,6 @@ const DeleteModal = ({ modalVisible, setModalVisible, deleteFunction, navigation
                   setModalVisible(!modalVisible);
 									deleteFunction();
                   navigation.navigate('Home')
-									Alert.alert("Sucesso", "Dado excluído com sucesso.")
 									
                 }}
               >
