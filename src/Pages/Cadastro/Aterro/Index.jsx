@@ -154,8 +154,8 @@ const CadastroAterro = ({ navigation, route }) => {
 						setValue={setValueMunicipio}
 						setItems={setItemsMunicipio}
 						placeholder="Selecione o município"
-						zIndex={3000}
-						zIndexInverse={1000}
+						zIndex={5000}
+						zIndexInverse={3000}
 						listMode='SCROLLVIEW'
 					/>
 				</InputGroup>
@@ -169,8 +169,8 @@ const CadastroAterro = ({ navigation, route }) => {
 						setValue={setValueOrganizacao}
 						setItems={setItemsOrganizacao}
 						placeholder="Selecione a Organização"
-						zIndex={2000}
-						zIndexInverse={2000}
+						zIndex={4000}
+						zIndexInverse={5000}
 						listMode='SCROLLVIEW'
 					/>
 				</InputGroup>
@@ -184,8 +184,8 @@ const CadastroAterro = ({ navigation, route }) => {
 						setValue={setValuePorte}
 						setItems={setItemsPorte}
 						placeholder="Selecione o Porte"
-						zIndex={1000}
-						zIndexInverse={3000}
+						zIndex={3000}
+						zIndexInverse={5000}
 						listMode='SCROLLVIEW'
 					/>
 				</InputGroup>
