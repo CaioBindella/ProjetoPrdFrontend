@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ISOAS",
-    "slug": "ISOAS",
+    "name": "isoas",
+    "slug": "isoas",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -41,6 +41,11 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "5e9524e0-f76a-4606-8c3c-ece6caf26b66"
+      }
+    }
   }
 }
