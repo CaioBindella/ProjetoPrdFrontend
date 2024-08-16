@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	Container,
 	Button,
@@ -12,8 +12,11 @@ import {
 	SubTitleText,
 } from './Style';
 import { StatusBar, Image, View } from 'react-native';
+import AboutModal from '../Components/AboutModal/Index';
 
 const Home = ({ navigation }) => {
+
+	const [aboutModalVisible, setAboutModalVisible] = useState(false);
 	return (
 		<Container>
 			<StatusBar />
@@ -59,7 +62,12 @@ const Home = ({ navigation }) => {
 						<Text>Ferramentas</Text>
 					</Button>
 				</ButtonsHome>
+
+				<SubTitleText style={{margin: 20, fontSize: 14, textDecorationLine: 'underline'}} onPress={() => setAboutModalVisible(!aboutModalVisible)}>Sobre o ISOAS</SubTitleText>
+				
 			</Main>
+
+			<AboutModal modalVisible={aboutModalVisible} setModalVisible={setAboutModalVisible}/>
 		</Container>
 	);
 };
