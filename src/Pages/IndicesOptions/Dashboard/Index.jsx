@@ -344,8 +344,8 @@ const Dashboard = ({ navigation, route }) => {
                 <Score scored={globalScore} total={indicadorDetails.maxScore} />
                 <StarRating scored={globalScore} total={indicadorDetails.maxScore} />
 
-                <Line style={{ marginTop: 15, marginBottom: 10 }} />
-                <Title style={{ marginBottom: -40 }}>Avaliação Técnica Ambiental</Title>
+                <Line />
+                <Title>Avaliação Técnica Ambiental</Title>
 
                 <VictoryChart
                   theme={VictoryTheme.material}
@@ -399,7 +399,7 @@ const Dashboard = ({ navigation, route }) => {
                   />
                 </VictoryChart>
 
-                <DescriptionContent style={{ marginTop: 30 }}>
+                <DescriptionContent>
                   <Title>Número relacionado a Sub-área</Title>
                   <Description>1: Características fisiográficas</Description>
                   <Description>2: Interface socioambiental</Description>
@@ -431,10 +431,9 @@ const Dashboard = ({ navigation, route }) => {
                 <StarRating scored={globalScore} total={indicadorDetails.maxScore} />
 
                 <Line />
-                <Title style={{ marginBottom: -30 }}>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
+                <Title>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
                 <VictoryChart polar
                   theme={VictoryTheme.material}
-                  width={330}
                 >
                   {
                     ["1", "2", "3", "4", "5", "6", "7", "8"].map((d, i) => {
@@ -464,7 +463,7 @@ const Dashboard = ({ navigation, route }) => {
                   />
                 </VictoryChart>
 
-                <DescriptionContent style={{ marginTop: -26 }}>
+                <DescriptionContent>
                   <Title>Número relacionado a Sub-ítem</Title>
                   <Description>1: Trator Esteira D6K 13,4t 125HP</Description>
                   <Description>2: Escavadeira 90HP</Description>
@@ -476,12 +475,10 @@ const Dashboard = ({ navigation, route }) => {
                   <Description>8: CMO Praticado em função do Porte</Description>
                 </DescriptionContent>
                 <Line />
-                <Title style={{ marginBottom: -30 }}>Avaliação da Inadimplência</Title>
+                <Title>Avaliação da Inadimplência</Title>
                 <VictoryChart
                   theme={VictoryTheme.material}
                   domainPadding={{ x: 10 }}
-                  width={300}
-                  height={275}
                 >
                   <VictoryBar horizontal
                     style={{
@@ -522,11 +519,10 @@ const Dashboard = ({ navigation, route }) => {
                 <StarRating scored={globalScore} total={indicadorDetails.maxScore} />
 
                 <Line></Line>
-                <Title style={{ marginBottom: -30 }}>Avaliação da percepção social dos impactos ambientais negativos da atividade</Title>
+                <Title>Avaliação da percepção social dos impactos ambientais negativos da atividade</Title>
 
                 <VictoryChart polar
                   theme={VictoryTheme.material}
-                  width={330}
                 >
                   {
                     ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"].map((d, i) => {
@@ -563,7 +559,7 @@ const Dashboard = ({ navigation, route }) => {
                   />
                 </VictoryChart>
 
-                <DescriptionContent style={{ marginTop: -10 }}>
+                <DescriptionContent>
                   <Title>Número relacionado a Sub-ítem</Title>
                   <Description>1: Foi percebido cheiro de lixo nas redondezas do aterro ?</Description>
                   <Description>2: Foi percebido barulho de caminhões transitando no entorno do aterro?</Description>

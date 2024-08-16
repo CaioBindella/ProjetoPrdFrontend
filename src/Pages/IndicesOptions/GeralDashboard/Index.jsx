@@ -345,18 +345,16 @@ const GeralDashboard = ({ navigation, route }) => {
                         {/* <Line /> */}
                         <StarRating scored={globalScore} total={tecnicoInfo.details.maxScore + economicoInfo.details.maxScore + socialInfoRisc.details.maxScore} />
 
-                        <Line style={{ marginBottom: -5 }} />
+                        <Line />
                         <Score title={"Indicador Técnico"} scored={totalTecScore} total={tecnicoInfo.details.maxScore} />
                         <StarRating scored={totalTecScore} total={tecnicoInfo.details.maxScore} />
 
                         <Line />
-                        <Title style={{ marginBottom: -35 }}>Avaliação Técnica Ambiental</Title>
+                        <Title>Avaliação Técnica Ambiental</Title>
 
                         <VictoryChart
                             theme={VictoryTheme.material}
                             domainPadding={{ x: 100 }}
-                            width={300}
-                            height={255}
                         >
                             <VictoryBar horizontal
                                 style={{
@@ -369,15 +367,14 @@ const GeralDashboard = ({ navigation, route }) => {
                             />
                         </VictoryChart>
 
-                        <Description style={{ marginTop: 15 }}>1: Características locacionais</Description>
+                        <Description>1: Características locacionais</Description>
                         <Description>2: Infra estrutura implantada</Description>
                         <Description>3: Condições operacionais</Description>
 
-                        <Line style={{ marginTop: 50, marginBottom: 50 }} />
-                        <Title style={{ marginTop: -15, marginBottom: -45 }}>Avaliação da Sub-área</Title>
+                        <Line />
+                        <Title>Avaliação da Sub-área</Title>
                         <VictoryChart polar
                             theme={VictoryTheme.material}
-                            width={300}
                         >
                             {
                                 ["1", "2", "3", "4", "5", "6", "7", "8"].map((d, i) => {
@@ -407,7 +404,7 @@ const GeralDashboard = ({ navigation, route }) => {
                             />
                         </VictoryChart>
 
-                        <DescriptionContent style={{ marginTop: 0, marginBottom: 10 }}>
+                        <DescriptionContent>
                             <Title>Número relacionado a Sub-área</Title>
                             <Description>1: Características fisiográficas</Description>
                             <Description>2: Interface socioambiental</Description>
@@ -425,10 +422,9 @@ const GeralDashboard = ({ navigation, route }) => {
 
                         <Line />
 
-                        <Title style={{ marginBottom: -20 }}>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
+                        <Title>Avaliação da Disponibilidade de Equipamentos Mínimos Obrigatórios</Title>
                         <VictoryChart polar
                             theme={VictoryTheme.material}
-                            width={300}
                         >
                             {
                                 ["1", "2", "3", "4", "5", "6", "7", "8"].map((d, i) => {
@@ -458,7 +454,7 @@ const GeralDashboard = ({ navigation, route }) => {
                             />
                         </VictoryChart>
 
-                        <DescriptionContent style={{ marginTop: -28 }}>
+                        <DescriptionContent>
                             <Title>Número relacionado a Sub-ítem</Title>
                             <Description>1: Trator Esteira D6K 13,4t 125HP</Description>
                             <Description>2: Escavadeira 90HP</Description>
@@ -469,14 +465,11 @@ const GeralDashboard = ({ navigation, route }) => {
                             <Description>7: Disponibilidade de Lâmina Raspadora</Description>
                             <Description>8: CMO Praticado em função do Porte</Description>
                         </DescriptionContent>
-                        <Line style={{ marginTop: 30, marginBottom: 20 }} />
+                        <Line />
                         <Title>Avaliação da Inadimplência</Title>
                         <VictoryChart
                             theme={VictoryTheme.material}
                             domainPadding={{ x: 10 }}
-                            width={300}
-                            height={255}
-                            style={{ marginTop: -20 }}
                         >
                             <VictoryBar horizontal
                                 style={{
@@ -489,7 +482,7 @@ const GeralDashboard = ({ navigation, route }) => {
                             />
                         </VictoryChart>
 
-                        <DescriptionContent style={{ marginTop: 10 }}>
+                        <DescriptionContent>
                             <Title>Representação do nível de Inadimplência</Title>
                             <Description>25%: Inadimplência entre 5% e 25%</Description>
                             <Description>50%: Inadimplência entre 25% e 50%</Description>
@@ -497,7 +490,7 @@ const GeralDashboard = ({ navigation, route }) => {
                             <Description>100%: Inadimplência acima de 75%</Description>
                         </DescriptionContent>
 
-                        <Line style={{ marginTop: 24 }} />
+                        <Line />
                         <Score title={"Indicador Social"} scored={totalSocScore} total={socialInfoRisc.details.maxScore} />
                         <StarRating scored={totalSocScore} total={socialInfoRisc.details.maxScore} />
                         <Line />
@@ -506,7 +499,6 @@ const GeralDashboard = ({ navigation, route }) => {
 
                         <VictoryChart polar
                             theme={VictoryTheme.material}
-                            width={300}
                         >
                             {
                                 ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"].map((d, i) => {
