@@ -7,6 +7,7 @@ export const Container = styled.View`
     flex: 1;
     align-items: center;
     justify-content: center;
+    z-index: 1;
 `;
 
 export const Title = styled.Text`
@@ -35,6 +36,7 @@ export const InputGroup = styled.View`
     width: 90%;
 	padding: 10px;
     gap: 5px;
+    z-index: 1;
 `;
 
 export const Input = styled.TextInput`
@@ -64,11 +66,11 @@ export const Button = styled.TouchableOpacity`
 	padding: 10px;
 	width: 35%;
 	border-radius: 10px;
+    z-index: 1;
 `;
 
 export const PickerContainer = styled.View`
-    width: 90%;
-    background-color: red;
+    z-index: 3000;
 `;
 
 export const Picker = styled(DropDownPicker)`

@@ -10,16 +10,19 @@ export const Button = styled.TouchableOpacity`
 	align-items: center;
 	margin-bottom: 20px;
 	flex-direction: row;
+	z-index: 1;
 `;
 
 export const ContentPicker = styled.View`
     width: 100%;
 	margin-bottom: 20px;
+	z-index: 3000;
 `;
 
 export const Container = styled.View`
 	flex: 1;
 	align-items: center;
+	z-index: 1;
 `;
 
 export const Content = styled.View`
@@ -27,6 +30,7 @@ export const Content = styled.View`
 	align-items: center;
 	justify-content: center;
 	width: 70%;
+	z-index: 1;
 `;
 
 export const Text = styled.Text`

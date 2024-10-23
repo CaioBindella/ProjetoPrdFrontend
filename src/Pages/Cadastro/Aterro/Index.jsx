@@ -9,7 +9,8 @@ import {
 	ViewTitle,
 	ButtonGroup,
 	TextButton,
-	Picker
+	Picker,
+	PickerContainer
 } from './Style';
 
 import { Alert, ScrollView } from 'react-native';
@@ -144,50 +145,59 @@ const CadastroAterro = ({ navigation, route }) => {
 					/>
 				</InputGroup>
 
-				<InputGroup>
+				<InputGroup style={{ zIndex: 5000 }}>
 					<Text>Município do Aterro:</Text>
-					<Picker
-						open={openMunicipio}
-						value={valueMunicipio}
-						items={itemsMunicipio}
-						setOpen={setOpenMunicipio}
-						setValue={setValueMunicipio}
-						setItems={setItemsMunicipio}
-						placeholder="Selecione o município"
-						zIndex={5000}
-						zIndexInverse={3000}
-						listMode='SCROLLVIEW'
-					/>
+					<PickerContainer style={{ zIndex: 5000 }}>
+						<Picker
+							open={openMunicipio}
+							value={valueMunicipio}
+							items={itemsMunicipio}
+							setOpen={setOpenMunicipio}
+							setValue={setValueMunicipio}
+							setItems={setItemsMunicipio}
+							placeholder="Selecione o município"
+							zIndex={5000}
+							zIndexInverse={3000}
+							listMode='SCROLLVIEW'
+							usePortal={true}
+						/>
+					</PickerContainer>
 				</InputGroup>
-				<InputGroup>
+				<InputGroup style={{ zIndex: 4000 }}>
 					<Text>Organização do Aterro:</Text>
-					<Picker
-						open={openOrganizacao}
-						value={valueOrganizacao}
-						items={itemsOrganizacao}
-						setOpen={setOpenOrganizacao}
-						setValue={setValueOrganizacao}
-						setItems={setItemsOrganizacao}
-						placeholder="Selecione a Organização"
-						zIndex={4000}
-						zIndexInverse={5000}
-						listMode='SCROLLVIEW'
-					/>
+					<PickerContainer style={{ zIndex: 4000 }}>
+						<Picker
+							open={openOrganizacao}
+							value={valueOrganizacao}
+							items={itemsOrganizacao}
+							setOpen={setOpenOrganizacao}
+							setValue={setValueOrganizacao}
+							setItems={setItemsOrganizacao}
+							placeholder="Selecione a Organização"
+							zIndex={4000}
+							zIndexInverse={5000}
+							listMode='SCROLLVIEW'
+							usePortal={true}
+						/>
+					</PickerContainer>
 				</InputGroup>
-				<InputGroup>
+				<InputGroup style={{ zIndex: 3000 }}>
 					<Text>Porte do Aterro:</Text>
-					<Picker
-						open={openPorte}
-						value={valuePorte}
-						items={itemsPorte}
-						setOpen={setOpenPorte}
-						setValue={setValuePorte}
-						setItems={setItemsPorte}
-						placeholder="Selecione o Porte"
-						zIndex={3000}
-						zIndexInverse={5000}
-						listMode='SCROLLVIEW'
-					/>
+					<PickerContainer style={{ zIndex: 3000 }}>
+						<Picker
+							open={openPorte}
+							value={valuePorte}
+							items={itemsPorte}
+							setOpen={setOpenPorte}
+							setValue={setValuePorte}
+							setItems={setItemsPorte}
+							placeholder="Selecione o Porte"
+							zIndex={3000}
+							zIndexInverse={5000}
+							listMode='SCROLLVIEW'
+							usePortal={true}
+						/>
+					</PickerContainer>
 				</InputGroup>
 
 				<ButtonGroup>

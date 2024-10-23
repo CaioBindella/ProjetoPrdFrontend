@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@expo/cli": "^0.18.19",
+    "@expo/metro-runtime": "~3.2.3",
     "@react-native-community/datetimepicker": "8.0.1",
     "@react-navigation/native": "^6.1.1",
     "@react-navigation/native-stack": "^6.9.8",
@@ -31,6 +32,7 @@
     "expo-updates": "^0.25.18",
     "link": "^1.5.1",
     "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-native": "^0.74.3",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-paper": "^5.3.1",
@@ -39,6 +41,7 @@
     "react-native-svg": "15.2.0",
     "react-native-uuid": "^2.0.1",
     "react-native-view-shot": "^3.8.0",
+    "react-native-web": "~0.19.10",
     "styled-components": "^5.3.6",
     "victory-native": "^36.6.11",
     "xlsx": "^0.18.5"
